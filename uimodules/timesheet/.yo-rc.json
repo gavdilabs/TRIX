@@ -1,0 +1,19 @@
+{
+  "generator-ui5-ts-app": {
+    "namespace": "local.ui5template",
+    "framework": "SAPUI5",
+    "frameworkVersion": "1.121.0",
+    "author": "Gavdi Labs",
+    "initrepo": false,
+    "tstypes": "@sapui5/types",
+    "tstypesVersion": "1.121.0",
+    "appId": "local.ui5template",
+    "appURI": "local/ui5template",
+    "cdnDomain": "ui5.sap.com",
+    "defaultTheme": "sap_horizon",
+    "gte1_98_0": true,
+    "gte1_104_0": true,
+    "gte1_115_0": true,
+    "setupCompleted": true
+  }
+}

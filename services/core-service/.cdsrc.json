@@ -1,0 +1,79 @@
+{
+    "requires": {
+        "[development]": {
+            "auth": {
+                "strategy": "mocked",
+                "users": {
+                    "EMP": {
+                        "password": "emp1234",
+                        "id": "EMP",
+                        "roles": [
+                            "Employee"
+                        ]
+                    },
+                    "BLU": {
+                        "password": "blu1234",
+                        "id": "BLU",
+                        "roles": [
+                            "Employee",
+                            "BlueCollar"
+                        ]
+                    },
+                    "WHT": {
+                        "password": "wht1234",
+                        "id": "WHT",
+                        "roles": [
+                            "Employee",
+                            "WhiteCollar"
+                        ]
+                    },
+                    "MGR": {
+                        "password": "mgr1234",
+                        "id": "MGR",
+                        "roles": [
+                            "Employee",
+                            "Manager"
+                        ]
+                    },
+                    "APR": {
+                        "password": "apr1234",
+                        "id": "APR",
+                        "roles": [
+                            "Employee",
+                            "Approver"
+                        ]
+                    },
+                    "AUD": {
+                        "password": "aud1234",
+                        "id": "AUD",
+                        "roles": [
+                            "Employee",
+                            "Auditer"
+                        ]
+                    },
+                    "ADM": {
+                        "password": "adm1234",
+                        "id": "ADM",
+                        "roles": [
+                            "Employee",
+                            "Admin"
+                        ]
+                    },
+                    "GOD": {
+                        "password": "god1234",
+                        "id": "GOD",
+                        "roles": [
+                            "Employee",
+                            "WhiteCollar",
+                            "BlueCollar",
+                            "Approver",
+                            "Manager",
+                            "Auditer",
+                            "Admin"
+                        ]
+                    }
+                }
+            }
+        }
+    }
+}
