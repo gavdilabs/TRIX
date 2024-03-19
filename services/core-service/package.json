@@ -31,6 +31,7 @@
     "@cap-js/postgres": "^1.4.1",
     "@cap-js/telemetry": "^0.0.4",
     "@dxfrontier/cds-ts-dispatcher": "^1.0.3",
+    "@dxfrontier/cds-ts-repository": "^1.0.12",
     "@gavdi/cap-service-core": "^1.1.6",
     "@gavdi/caplog": "^2.4.6",
     "@grpc/grpc-js": "^1.10.1",

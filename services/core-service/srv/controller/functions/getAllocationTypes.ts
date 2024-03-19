@@ -5,10 +5,13 @@ import {
   ActionRequest,
   ActionReturn,
   UnboundActions,
+  Use,
 } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
+import LoggingMiddleware from "../../middleware/LoggingMiddleware";
 
 @UnboundActions()
+@Use(LoggingMiddleware)
 export default class AllocationTypesHandler {
   private _logger: Logger;
 
