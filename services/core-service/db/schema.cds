@@ -78,7 +78,7 @@ entity TimeRegistration : cuid, managed {
   startTime          : Time;
   endTime            : Time;
   wholeDay           : Boolean;
-  amount             : Decimal(1, 2);
+  amount             : Decimal(2, 1);
   registrationStatus : RegistrationStatus;
   registrationType   : RegistrationType;
   comment            : String(255);
