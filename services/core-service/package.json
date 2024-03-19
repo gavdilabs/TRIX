@@ -5,8 +5,10 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "cds-serve",
-    "dev": "cds-ts watch --profile pg",
-    "debug": "cds-ts run --profile pg",
+    "dev": "cds-ts watch",
+    "dev:psql": "cds-ts watch --profile pg",
+    "debug": "cds-ts run",
+    "debug:psql": "cds-ts run --profile pg",
     "test": "mocha -r ts-node/register tests/**/*.spec.ts",
     "test:integration": "mocha -r ts-node/register tests/integration/**/*.spec.ts",
     "test:unit": "mocha -r ts-node/register tests/unit/**/*.spec.ts",
@@ -76,6 +78,14 @@
   },
   "cds": {
     "requires": {
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      },
       "cats": {
         "kind": "odata",
         "model": "srv/external/cats",

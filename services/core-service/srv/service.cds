@@ -1,5 +1,6 @@
 using {trix.core as model} from '../db/schema';
 
+@path    : 'core'
 @requires: 'authenticated-user'
 service TrixCoreService {
 
@@ -166,9 +167,8 @@ service TrixCoreService {
   /** FUNCTION IMPORTS **/
   function getRecordStatuses()       returns many model.EnumPair;
   function getRegistrationStatuses() returns many model.EnumPair;
-  function getRegistrationTypes()    returns many model.RegistrationType;
+  function getRegistrationTypes()    returns many model.EnumPair;
   function getAllocationTypes()      returns many model.AllocationType;
-  function ping(msg : String null)   returns String;
 
 /** ACTION IMPORTS **/
 // NOTE: All unbound actions should go here
