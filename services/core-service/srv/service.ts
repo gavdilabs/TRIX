@@ -1,9 +1,15 @@
 import { CDSDispatcher } from "@dxfrontier/cds-ts-dispatcher";
-import PingHandler from "./controller/functions/ping";
+import AllocationTypesHandler from "./controller/functions/getAllocationTypes";
+import RecordStatusHandler from "./controller/functions/getRecordStatuses";
+import RegistrationTypesHandler from "./controller/functions/getRegistrationTypes";
+import RegistrationStatusHandler from "./controller/functions/getRegistrationStatuses";
 
 export = new CDSDispatcher([
-    // Entities
-    // Functions
-    PingHandler
-    // Actions
+  // Entities
+  // Functions
+  AllocationTypesHandler,
+  RecordStatusHandler,
+  RegistrationStatusHandler,
+  RegistrationTypesHandler,
+  // Actions
 ]).initialize();
