@@ -1,0 +1,330 @@
+{
+ "meta": {
+  "creator": "cds-dk 7.0.3"
+ },
+ "$version": "2.0",
+ "definitions": {
+  "cats.I_TimeSheet": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "TimeSheetRecordUUID": {
+     "key": true,
+     "type": "cds.Integer",
+     "notNull": true
+    },
+    "WorkAssignment": {
+     "key": true,
+     "type": "cds.Integer",
+     "notNull": true
+    },
+    "TimeSheetRecord": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetDate": {
+     "type": "cds.Date"
+    },
+    "RecordedHours": {
+     "type": "cds.Integer"
+    },
+    "HoursUnitOfMeasure": {
+     "type": "cds.Integer"
+    },
+    "TimeSheetRecordLongText": {
+     "type": "cds.String",
+     "length": 1000
+    },
+    "WBSElementInternalID": {
+     "type": "cds.Integer"
+    },
+    "ActivityType": {
+     "type": "cds.String",
+     "length": 6
+    },
+    "WorkItem": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "BillableControl": {
+     "type": "cds.String",
+     "length": 2
+    },
+    "TimeSheetStatus": {
+     "type": "cds.String",
+     "length": 2
+    },
+    "TimeSheetPredecessorRecord": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetAccountingDocument": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "WorkflowTaskInternalID": {
+     "type": "cds.Integer"
+    },
+    "CreatedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "LastChangedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetApprovedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetApprovedDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetCreationDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetEntryTime": {
+     "type": "cds.Time"
+    },
+    "LastChangeDateTime": {
+     "type": "cds.DateTime",
+     "@odata.Precision": 0,
+     "@odata.Type": "Edm.DateTimeOffset"
+    },
+    "TimeSheetLastChangedDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetLastChangedTime": {
+     "type": "cds.Time"
+    }
+   }
+  },
+  "cats.I_TimeSheetStatusText": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "Language": {
+     "key": true,
+     "type": "cds.String",
+     "length": 1,
+     "notNull": true
+    },
+    "TimeSheetStatus": {
+     "key": true,
+     "type": "cds.String",
+     "length": 10,
+     "notNull": true
+    },
+    "TimeSheetStatusText": {
+     "type": "cds.String",
+     "length": 60
+    }
+   }
+  },
+  "cats.I_TimeSheetRecord": {
+   "kind": "entity",
+   "@cds.external": true,
+   "@cds.persistence.skip": true,
+   "elements": {
+    "TimeSheetRecord": {
+     "key": true,
+     "type": "cds.String",
+     "length": 12,
+     "notNull": true
+    },
+    "PersonWorkAgreement": {
+     "key": true,
+     "type": "cds.Integer",
+     "notNull": true
+    },
+    "TimeSheetDate": {
+     "type": "cds.Date"
+    },
+    "WBSElementInternalID": {
+     "type": "cds.Integer"
+    },
+    "ActivityType": {
+     "type": "cds.String",
+     "length": 6
+    },
+    "WorkItem": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "RecordedHours": {
+     "type": "cds.Integer"
+    },
+    "HoursUnitOfMeasure": {
+     "type": "cds.Integer"
+    },
+    "PurchaseOrder": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "PurchaseOrderItem": {
+     "type": "cds.Integer"
+    },
+    "RecordedAmount": {
+     "type": "cds.Integer"
+    },
+    "Currency": {
+     "type": "cds.String",
+     "length": 5
+    },
+    "RecordedQuantity": {
+     "type": "cds.Integer"
+    },
+    "UnitOfMeasure": {
+     "type": "cds.Integer"
+    },
+    "ReceiverCostCenter": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "SenderCostCenter": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "InternalOrder": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "ServiceDocumentType": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "ServiceDocument": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "ServiceDocumentItem": {
+     "type": "cds.Integer"
+    },
+    "ControllingArea": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetTaskType": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetTaskLevel": {
+     "type": "cds.String",
+     "length": 8
+    },
+    "TimeSheetTaskComponent": {
+     "type": "cds.String",
+     "length": 8
+    },
+    "CompanyCode": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetNote": {
+     "type": "cds.String",
+     "length": 40
+    },
+    "TimeSheetStatus": {
+     "type": "cds.String",
+     "length": 2
+    },
+    "RejectionReason": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetPredecessorRecord": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetCreationDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetEntryTime": {
+     "type": "cds.Time"
+    },
+    "CreatedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "LastChangedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetApprovedByUser": {
+     "type": "cds.String",
+     "length": 12
+    },
+    "TimeSheetApprovedDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetLastChangedDate": {
+     "type": "cds.Date"
+    },
+    "TimeSheetLastChangedTime": {
+     "type": "cds.Time"
+    },
+    "AccountingIndicatorCode": {
+     "type": "cds.String",
+     "length": 2
+    },
+    "WorkflowTaskInternalID": {
+     "type": "cds.Integer"
+    },
+    "TimeSheetWrkLocCode": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetOvertimeCategory": {
+     "type": "cds.String",
+     "length": 4
+    },
+    "TimeSheetHasLongText": {
+     "type": "cds.String",
+     "length": 1
+    },
+    "TimeSheetAccountingDocument": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "SenderPubSecFund": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "SendingPubSecFunctionalArea": {
+     "type": "cds.String",
+     "length": 16
+    },
+    "SenderPubSecGrant": {
+     "type": "cds.String",
+     "length": 20
+    },
+    "SenderPubSecBudgetPeriod": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "ReceiverPubSecFund": {
+     "type": "cds.String",
+     "length": 10
+    },
+    "ReceiverPubSecFuncnlArea": {
+     "type": "cds.String",
+     "length": 16
+    },
+    "ReceiverPubSecGrant": {
+     "type": "cds.String",
+     "length": 20
+    },
+    "ReceiverPubSecBudgetPeriod": {
+     "type": "cds.String",
+     "length": 10
+    }
+   }
+  },
+  "cats": {
+   "kind": "service",
+   "@cds.external": true
+  }
+ }
+}

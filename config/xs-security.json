@@ -1,0 +1,164 @@
+{
+  "xsappname": "trix-xsuaa",
+  "tenant-mode": "dedicated",
+  "description": "TRIX Security Roles",
+  "scopes": [
+    {
+      "name": "$XSAPPNAME.Admin",
+      "description": "Admin"
+    },
+    {
+      "name": "$XSAPPNAME.UserManagement",
+      "description": "UserManagement"
+    },
+    {
+      "name": "$XSAPPNAME.AllocationManagement",
+      "description": "AllocationManagement"
+    },
+    {
+      "name": "$XSAPPNAME.TimeUser",
+      "description": "TimeUser"
+    },
+    {
+      "name": "$XSAPPNAME.TeamLead",
+      "description": "TeamLead"
+    },
+    {
+      "name": "$XSAPPNAME.TimeRegistration",
+      "description": "TimeRegistration"
+    },
+    {
+      "name": "$XSAPPNAME.TimeManagement",
+      "description": "TimeManagement"
+    },
+    {
+      "name": "$XSAPPNAME.WorkScheduleManagement",
+      "description": "WorkScheduleManagement"
+    },
+    {
+      "name": "$XSAPPNAME.TeamManagement",
+      "description": "TeamManagement"
+    },
+    {
+      "name": "$XSAPPNAME.SolutionManagement",
+      "description": "TRIX Solution Manager"
+    },
+    {
+      "name": "$XSAPPNAME.SolutionAdmin",
+      "description": "TRiX Admin Role"
+    }
+  ],
+  "attributes": [],
+  "role-templates": [
+    {
+      "name": "SolutionManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.SolutionManagement"],
+      "attribute-references": []
+    },
+    {
+      "name": "SolutionAdmin",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.SolutionAdmin"],
+      "attribute-references": []
+    },
+    {
+      "name": "UserManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.UserManagement"],
+      "attribute-references": []
+    },
+    {
+      "name": "AllocationManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.AllocationManagement"],
+      "attribute-references": []
+    },
+    {
+      "name": "TimeUser",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.TimeUser"],
+      "attribute-references": []
+    },
+    {
+      "name": "TeamLead",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.TeamLead"],
+      "attribute-references": []
+    },
+    {
+      "name": "TimeRegistration",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.TimeRegistration"],
+      "attribute-references": []
+    },
+    {
+      "name": "TimeManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.TimeManagement"],
+      "attribute-references": []
+    },
+    {
+      "name": "WorkScheduleManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.WorkScheduleManagement"],
+      "attribute-references": []
+    },
+    {
+      "name": "TeamManagement",
+      "description": "generated",
+      "scope-references": ["$XSAPPNAME.TeamManagement"],
+      "attribute-references": []
+    }
+  ],
+  "role-collections": [
+    {
+      "name": "TRIX-TimeUser",
+      "description": "Time registration access for TRIX",
+      "role-template-references": [
+        "$XSAPPNAME.TimeUser",
+        "$XSAPPNAME.TimeRegistration"
+      ]
+    },
+    {
+      "name": "TRIX-TeamLeader",
+      "description": "Team Lead access for managers in TRIX",
+      "role-template-references": [
+        "$XSAPPNAME.TimeUser",
+        "$XSAPPNAME.TeamLead",
+        "$XSAPPNAME.TimeRegistration"
+      ]
+    },
+    {
+      "name": "TRIX-WorkScheduleManagement",
+      "description": "Access to manage work schedules within solution",
+      "role-template-references": ["$XSAPPNAME.WorkScheduleManagement"]
+    },
+    {
+      "name": "TRIX-UserManagement",
+      "description": "Access to manage users within solution",
+      "role-template-references": ["$XSAPPNAME.UserManagement"]
+    },
+    {
+      "name": "TRIX-AllocationManagement",
+      "description": "Access to manage allocations within solution",
+      "role-template-references": ["$XSAPPNAME.AllocationManagement"]
+    },
+    {
+      "name": "TRIX-SolutionManagement",
+      "description": "Access to manage the TRIX solution configurations",
+      "role-template-references": ["$XSAPPNAME.SolutionManagement"]
+    },
+    {
+      "name": "TRIX-Administrator",
+      "description": "TRIX administrator level access",
+      "role-template-references": [
+        "$XSAPPNAME.UserManagement",
+        "$XSAPPNAME.AllocationManagement",
+        "$XSAPPNAME.WorkScheduleManagement",
+        "$XSAPPNAME.SolutionManagement",
+        "$XSAPPNAME.SolutionAdmin"
+      ]
+    }
+  ]
+}

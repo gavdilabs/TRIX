@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="4.0" xmlns:edmx="http://docs.oasis-open.org/odata/ns/edmx">
+  <edmx:Reference Uri="https://sap.github.io/odata-vocabularies/vocabularies/Common.xml">
+    <edmx:Include Alias="Common" Namespace="com.sap.vocabularies.Common.v1"/>
+  </edmx:Reference>
+  <edmx:Reference Uri="https://oasis-tcs.github.io/odata-vocabularies/vocabularies/Org.OData.Core.V1.xml">
+    <edmx:Include Alias="Core" Namespace="Org.OData.Core.V1"/>
+  </edmx:Reference>
+  <edmx:DataServices>
+    <Schema Namespace="CATS" xmlns="http://docs.oasis-open.org/odata/ns/edm">
+      <EntityContainer Name="EntityContainer">
+        <EntitySet Name="I_TimeSheet" EntityType="CATS.I_TimeSheet"/>
+        <EntitySet Name="I_TimeSheetStatusText" EntityType="CATS.I_TimeSheetStatusText"/>
+        <EntitySet Name="I_TimeSheetRecord" EntityType="CATS.I_TimeSheetRecord"/>
+      </EntityContainer>
+      <EntityType Name="I_TimeSheet">
+        <Key>
+          <PropertyRef Name="TimeSheetRecordUUID"/>
+          <PropertyRef Name="WorkAssignment"/>
+        </Key>
+        <Property Name="TimeSheetRecordUUID" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="WorkAssignment" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="TimeSheetRecord" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetDate" Type="Edm.Date"/>
+        <Property Name="RecordedHours" Type="Edm.Int32"/>
+        <Property Name="HoursUnitOfMeasure" Type="Edm.Int32"/>
+        <Property Name="TimeSheetRecordLongText" Type="Edm.String" MaxLength="1000"/>
+        <Property Name="WBSElementInternalID" Type="Edm.Int32"/>
+        <Property Name="ActivityType" Type="Edm.String" MaxLength="6"/>
+        <Property Name="WorkItem" Type="Edm.String" MaxLength="10"/>
+        <Property Name="BillableControl" Type="Edm.String" MaxLength="2"/>
+        <Property Name="TimeSheetStatus" Type="Edm.String" MaxLength="2"/>
+        <Property Name="TimeSheetPredecessorRecord" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetAccountingDocument" Type="Edm.String" MaxLength="10"/>
+        <Property Name="WorkflowTaskInternalID" Type="Edm.Int32"/>
+        <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetApprovedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetApprovedDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetCreationDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetEntryTime" Type="Edm.TimeOfDay"/>
+        <Property Name="LastChangeDateTime" Type="Edm.DateTimeOffset"/>
+        <Property Name="TimeSheetLastChangedDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetLastChangedTime" Type="Edm.TimeOfDay"/>
+      </EntityType>
+      <EntityType Name="I_TimeSheetStatusText">
+        <Key>
+          <PropertyRef Name="Language"/>
+          <PropertyRef Name="TimeSheetStatus"/>
+        </Key>
+        <Property Name="Language" Type="Edm.String" MaxLength="1" Nullable="false"/>
+        <Property Name="TimeSheetStatus" Type="Edm.String" MaxLength="10" Nullable="false"/>
+        <Property Name="TimeSheetStatusText" Type="Edm.String" MaxLength="60"/>
+      </EntityType>
+      <EntityType Name="I_TimeSheetRecord">
+        <Key>
+          <PropertyRef Name="TimeSheetRecord"/>
+          <PropertyRef Name="PersonWorkAgreement"/>
+        </Key>
+        <Property Name="TimeSheetRecord" Type="Edm.String" MaxLength="12" Nullable="false"/>
+        <Property Name="PersonWorkAgreement" Type="Edm.Int32" Nullable="false"/>
+        <Property Name="TimeSheetDate" Type="Edm.Date"/>
+        <Property Name="WBSElementInternalID" Type="Edm.Int32"/>
+        <Property Name="ActivityType" Type="Edm.String" MaxLength="6"/>
+        <Property Name="WorkItem" Type="Edm.String" MaxLength="10"/>
+        <Property Name="RecordedHours" Type="Edm.Int32"/>
+        <Property Name="HoursUnitOfMeasure" Type="Edm.Int32"/>
+        <Property Name="PurchaseOrder" Type="Edm.String" MaxLength="10"/>
+        <Property Name="PurchaseOrderItem" Type="Edm.Int32"/>
+        <Property Name="RecordedAmount" Type="Edm.Int32"/>
+        <Property Name="Currency" Type="Edm.String" MaxLength="5"/>
+        <Property Name="RecordedQuantity" Type="Edm.Int32"/>
+        <Property Name="UnitOfMeasure" Type="Edm.Int32"/>
+        <Property Name="ReceiverCostCenter" Type="Edm.String" MaxLength="10"/>
+        <Property Name="SenderCostCenter" Type="Edm.String" MaxLength="10"/>
+        <Property Name="InternalOrder" Type="Edm.String" MaxLength="12"/>
+        <Property Name="ServiceDocumentType" Type="Edm.String" MaxLength="4"/>
+        <Property Name="ServiceDocument" Type="Edm.String" MaxLength="10"/>
+        <Property Name="ServiceDocumentItem" Type="Edm.Int32"/>
+        <Property Name="ControllingArea" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetTaskType" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetTaskLevel" Type="Edm.String" MaxLength="8"/>
+        <Property Name="TimeSheetTaskComponent" Type="Edm.String" MaxLength="8"/>
+        <Property Name="CompanyCode" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetNote" Type="Edm.String" MaxLength="40"/>
+        <Property Name="TimeSheetStatus" Type="Edm.String" MaxLength="2"/>
+        <Property Name="RejectionReason" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetPredecessorRecord" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetCreationDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetEntryTime" Type="Edm.TimeOfDay"/>
+        <Property Name="CreatedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="LastChangedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetApprovedByUser" Type="Edm.String" MaxLength="12"/>
+        <Property Name="TimeSheetApprovedDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetLastChangedDate" Type="Edm.Date"/>
+        <Property Name="TimeSheetLastChangedTime" Type="Edm.TimeOfDay"/>
+        <Property Name="AccountingIndicatorCode" Type="Edm.String" MaxLength="2"/>
+        <Property Name="WorkflowTaskInternalID" Type="Edm.Int32"/>
+        <Property Name="TimeSheetWrkLocCode" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetOvertimeCategory" Type="Edm.String" MaxLength="4"/>
+        <Property Name="TimeSheetHasLongText" Type="Edm.String" MaxLength="1"/>
+        <Property Name="TimeSheetAccountingDocument" Type="Edm.String" MaxLength="10"/>
+        <Property Name="SenderPubSecFund" Type="Edm.String" MaxLength="10"/>
+        <Property Name="SendingPubSecFunctionalArea" Type="Edm.String" MaxLength="16"/>
+        <Property Name="SenderPubSecGrant" Type="Edm.String" MaxLength="20"/>
+        <Property Name="SenderPubSecBudgetPeriod" Type="Edm.String" MaxLength="10"/>
+        <Property Name="ReceiverPubSecFund" Type="Edm.String" MaxLength="10"/>
+        <Property Name="ReceiverPubSecFuncnlArea" Type="Edm.String" MaxLength="16"/>
+        <Property Name="ReceiverPubSecGrant" Type="Edm.String" MaxLength="20"/>
+        <Property Name="ReceiverPubSecBudgetPeriod" Type="Edm.String" MaxLength="10"/>
+      </EntityType>
+    </Schema>
+  </edmx:DataServices>
+</edmx:Edmx>
