@@ -44,6 +44,7 @@ type EnumPair {
 // aka. Project or Worklist
 entity TimeAllocation : cuid, managed, temporal {
   description    : String(1000);
+  isAbsence      : Boolean;
   allocationType : AllocationType;
   allocatedUsers : Association to many User2Allocation
                      on allocatedUsers.allocationID = ID;
