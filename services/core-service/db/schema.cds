@@ -96,6 +96,7 @@ entity WorkSchedule : cuid, managed {
 }
 
 entity WorkWeek : cuid, managed {
+  name      : String(255);
   monday    : Association to WorkDay;
   tuesday   : Association to WorkDay;
   wednesday : Association to WorkDay;
@@ -106,6 +107,7 @@ entity WorkWeek : cuid, managed {
 }
 
 entity WorkDay : cuid, managed {
+  name             : String(255);
   crossingMidnight : Boolean; // Cinderella rule
   startTime        : Time;
   endTime          : Time;
