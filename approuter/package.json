@@ -1,0 +1,13 @@
+{
+  "version": "1.0.0",
+  "name": "trix-approuter",
+  "engines": {
+    "node": "18.X"
+  },
+  "scripts": {
+    "start": "node node_modules/@sap/approuter/approuter.js"
+  },
+  "dependencies": {
+    "@sap/approuter": "^16.2.1"
+  }
+}

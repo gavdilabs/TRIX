@@ -1,0 +1,46 @@
+{
+  "welcomeFile": "/home/index.html",
+  "authenticationMethod": "route",
+  "logout": {
+    "logoutEndpoint": "/do/logout"
+  },
+  "routes": [
+    {
+      "source": "^/resources/(.*)$",
+      "target": "/resources/$1",
+      "authenticationType": "none",
+      "destination": "ui5-resources",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/odata/core/(.*)$",
+      "target": "$1",
+      "destination": "TRIX-CORE-API",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/odata/admin/(.*)$",
+      "target": "$1",
+      "destination": "TRIX-ADMIN-API",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/home(.*)$",
+      "target": "$1",
+      "authenticationType": "xsuaa",
+      "localDir": "home",
+      "cacheControl": "no-cache, no-store, must-revalidate",
+      "csrfProtection": false
+    },
+    {
+      "source": "^(.*)$",
+      "target": "/home$1",
+      "authenticationType": "xsuaa",
+      "localDir": "home",
+      "cacheControl": "no-cache, no-store, must-revalidate",
+      "csrfProtection": false
+    }
+  ]
+}
