@@ -22,7 +22,11 @@ service TrixCoreService {
   entity ManagerSet as
     select from UserSet
     where
-      isManager = true;
+      isManager = true
+    actions {
+      function getTeam()    returns TeamSet;
+      function getReports() returns many UserSet;
+    };
 
   entity TimeAllocationSet @(restrict: [
     {grant: ['READ']},
@@ -34,6 +38,7 @@ service TrixCoreService {
       ]
     }
   ])                as projection on model.TimeAllocation;
+
 
   entity User2AllocationSet @(restrict: [
     {
@@ -54,7 +59,12 @@ service TrixCoreService {
 
   entity TimeRegistrationSet @(restrict: [
     {
-      grant: ['READ'],
+      grant: [
+        'READ',
+        'clockIn',
+        'clockOut',
+        'elapsedTime'
+      ],
       to   : ['TimeUser']
     },
     {
@@ -66,7 +76,12 @@ service TrixCoreService {
         'TeamLead'
       ]
     }
-  ])                as projection on model.TimeRegistration;
+  ])                as projection on model.TimeRegistration actions {
+                         action   clockIn()     returns String;
+                         action   clockOut()    returns String;
+                         function elapsedTime() returns DateTime;
+                         action   validate()    returns Boolean;
+                       };
 
   entity WorkScheduleSet @(restrict: [
     {
@@ -129,7 +144,10 @@ service TrixCoreService {
   ])                as projection on model.WorkDay;
 
   entity TeamSet @(restrict: [
-    {grant: ['READ']},
+    {grant: [
+      'READ',
+      'getTeamSize'
+    ]},
     {
       grant: ['CHANGE'],
       to   : ['TeamLead']
@@ -141,10 +159,17 @@ service TrixCoreService {
         'TeamManagement'
       ]
     }
-  ])                as projection on model.Team;
+  ])                as projection on model.Team actions {
+                         function getTeamSize() returns Integer;
+                       };
 
   /** FUNCTION IMPORTS **/
-  function ping(msg : String null) returns String;
+  function getRecordStatuses()       returns many model.EnumPair;
+  function getRegistrationStatuses() returns many model.EnumPair;
+  function getRegistrationTypes()    returns many model.RegistrationType;
+  function getAllocationTypes()      returns many model.AllocationType;
+  function ping(msg : String null)   returns String;
 
 /** ACTION IMPORTS **/
+// NOTE: All unbound actions should go here
 }

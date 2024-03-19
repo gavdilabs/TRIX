@@ -36,6 +36,11 @@ type AllocationType     : String enum {
   AbsenceAttendance = 'AbsenceAttendance';
 }
 
+type EnumPair {
+  name  : String;
+  index : Integer;
+}
+
 // aka. Project or Worklist
 entity TimeAllocation : cuid, managed, temporal {
   description    : String(1000);
