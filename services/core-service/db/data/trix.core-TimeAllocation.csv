@@ -1,4 +1,4 @@
-ID;description;allocationType;isAbsence;createdBy;modifiedBy;validFrom;validTo
+ID;description;allocationType;isAbsence;createdAt;createdBy;validFrom;validTo
 6b6dec25-95eb-4a08-bea8-aaf9d71e0f48;Project Sunrise;Project;false;CLA;CLA;2024-01-01;2024-12-31
 b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31;Internal Course;AbsenceAttendance;false;SYSTEM;SYSTEM;2024-01-01;9999-12-31
 085d4aa0-d0c3-45ee-b286-bdae4e669e8d;Normal Work;AbsenceAttendance;false;SYSTEM;SYSTEM;2024-01-01;9999-12-31
