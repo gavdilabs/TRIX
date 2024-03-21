@@ -1,8 +1,8 @@
 userID;firstName;lastName;email;isManager;team_ID;manager_userID
-DON;Daniel;Onslow;don@notreal.test-mail;true;58f09c13-9f07-4262-a2fe-c17b1370a543;
-CLA;Calvin;Larson;cla@notreal.test-mail;true;cf6464c4-3208-4df5-b923-2c039a9b9dd8;
-SUP;Susan;Powell;sup@notreal.test-mail;false;86ac1478-20b2-479b-83e5-0cc881f13db6;
-POP;Polly;Parkinson;pop@notreal.test-mail;true;0fe86c77-a2c3-4de2-828b-8a84053377ff;
+DON;Daniel;Onslow;don@notreal.test-mail;true;58f09c13-9f07-4262-a2fe-c17b1370a543
+CLA;Calvin;Larson;cla@notreal.test-mail;true;cf6464c4-3208-4df5-b923-2c039a9b9dd8;DON
+POP;Polly;Parkinson;pop@notreal.test-mail;true;0fe86c77-a2c3-4de2-828b-8a84053377ff;DON
+SUP;Susan;Powell;sup@notreal.test-mail;false;86ac1478-20b2-479b-83e5-0cc881f13db6;DON
 MAL;Mary;Larson;mal@notreal.test-mail;false;0fe86c77-a2c3-4de2-828b-8a84053377ff;POP
 SON;Susan;Nielson;son@notreal.test-mail;false;0fe86c77-a2c3-4de2-828b-8a84053377ff;POP
 TEL;Thomas Edison;Law;tel@notreal.test-mail;false;0fe86c77-a2c3-4de2-828b-8a84053377ff;POP
