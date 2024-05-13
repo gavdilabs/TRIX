@@ -1,6 +1,6 @@
 ID;startDate;endDate;startTime;endTime;wholeDay;amount;registrationStatus;registrationType;comment;invalid;statusContext;recordStatus;user_userID;allocation_ID
-2992e04b-60e7-44bf-bef4-150aa3074742;04-04-2024;;07:44:00;16:22:00;false;8,63;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
-92acc332-1ed4-4238-b479-97b8bd32f2d3;05-04-2024;;08:02:00;16:02:00;false;8;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
+2992e04b-60e7-44bf-bef4-150aa3074742;2024-05-13T12:12:00.123Z;2024-05-13;07:44:00;16:22:00;false;8,63;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
+92acc332-1ed4-4238-b479-97b8bd32f2d3;2024-05-12T12:12:00.123Z;2024-05-12T13:12:00.123Z;08:02:00;16:02:00;false;8;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
 1decbe2c-a434-4e12-b390-d39650f81574;08-04-2024;;08:11:00;15:44:00;false;7,45;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
 c4ba1954-2f36-4df6-83f6-fa491c16870a;09-04-2024;;07:07:00;17:58:00;false;10,85;2;0;Management Meeting;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
 97e684d8-56c1-43e7-9c67-eaf9dce3bc3c;10-04-2024;;08:00:00;14:35:00;false;6,58;2;0;;false;;2;CLA;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31
