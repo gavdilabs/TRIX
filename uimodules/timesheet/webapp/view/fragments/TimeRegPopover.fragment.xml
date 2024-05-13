@@ -1,0 +1,6 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ResponsivePopover >
+        <Text text="Record hours"></Text>
+    </ResponsivePopover>
+</core:FragmentDefinition>

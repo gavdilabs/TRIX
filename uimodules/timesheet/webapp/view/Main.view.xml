@@ -13,7 +13,7 @@
 		title="{i18n>appTitle}"
 		id="page">
 		<content>
-			<controls:TRIXCalendar title= "TRIXY TRIX" />
+			<controls:TRIXCalendar title= "TRIXY TRIX" enableAppointmentsCreate="true" enableAppointmentsDragAndDrop="true" firstDayOfWeek="1" scaleFactor="2" stickyMode="All" appointmentSelect="onAppointmentSelect" appointmentCreate="onNewTimeReg"/>
 		</content>
 	</Page>
 
