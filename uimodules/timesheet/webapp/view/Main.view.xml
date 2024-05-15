@@ -9,9 +9,9 @@
 
 	<Page title="{i18n>appTitle}" id="page">
 		<content>
-			<controls:TRIXCalendar appointments="{path:'/TimeRegistrationSet',parameters:{$expand:'allocation'}}" title= "TRIXY TRIX">
+			<controls:TRIXCalendar appointments="{path:'PeriodRegistrations>/'}" title= "TRIXY TRIX">
 				<controls:appointments>
-					<unified:CalendarAppointment title="{allocation/description}" text="{allocation/description}" startDate="{startDate}" endDate="{endDate}">
+					<unified:CalendarAppointment title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 					</unified:CalendarAppointment>
 				</controls:appointments>
 			</controls:TRIXCalendar>
