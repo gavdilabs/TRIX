@@ -55,7 +55,7 @@ export default class TimeRegistrationSetHandler {
 		endDate: Date
 	): Partial<trix.core.ITimeRegistration> {
 		const existingData =
-			this.getModel()?.getData() as DeepPartial<ITimeRegistrationAndAllocation>[];
+			this.getModel()?.getData() as DeepPartial<ITimeRegistrationAndAllocation[]>;
 
 		const newItem: Partial<ITimeRegistrationAndAllocation> = {
 			startDate: startDate,
@@ -103,7 +103,7 @@ export default class TimeRegistrationSetHandler {
 	}
 
 	private updateData(
-		data: ITimeRegistrationAndAllocation[] | Partial<ITimeRegistrationAndAllocation>
+		data: ITimeRegistrationAndAllocation[] | Partial<ITimeRegistrationAndAllocation>[] | DeepPartial<ITimeRegistrationAndAllocation>[]
 	) {
 		TimeRegistrationSetHandler.controller
 			.getView()
