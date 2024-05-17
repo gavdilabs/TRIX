@@ -1,11 +1,11 @@
 ID;startDate;endDate;startTime;endTime;wholeDay;amount;registrationStatus;registrationType;comment;invalid;statusContext;recordStatus;user_userID;allocation_ID
-2992e04b-60e7-44bf-bef4-150aa3074742;2024-05-13T12:12:00.123Z;2024-05-13;07:44:00;16:22:00;false;8.63;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
-92acc332-1ed4-4238-b479-97b8bd32f2d3;2024-05-12T12:12:00.123Z;2024-05-12T13:12:00.123Z;08:02:00;16:02:00;false;8;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
-1decbe2c-a434-4e12-b390-d39650f81574;08-04-2024;;08:11:00;15:44:00;false;7.45;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
+2992e04b-60e7-44bf-bef4-150aa3074742;2024-05-13;2024-05-13;07:44:00;16:22:00;false;8.63;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
+92acc332-1ed4-4238-b479-97b8bd32f2d3;2024-05-12;2024-05-12;08:02:00;16:02:00;false;8;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
+1decbe2c-a434-4e12-b390-d39650f81574;2024-05-15;2024-05-15;08:11:00;15:44:00;false;7.45;2;0;;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
 c4ba1954-2f36-4df6-83f6-fa491c16870a;09-04-2024;;07:07:00;17:58:00;false;10.85;2;0;Management Meeting;false;;2;CLA;df97008f-ebbf-4b8d-8f43-dc95f19460de
 97e684d8-56c1-43e7-9c67-eaf9dce3bc3c;10-04-2024;;08:00:00;14:35:00;false;6.58;2;0;;false;;2;CLA;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31
 d8574f65-7916-444a-bc4a-826d4ce1984c;11-04-2024;;07:44:00;16:22:00;false;8.63;2;0;;false;;2;CLA;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31
-ef4ffaef-8599-4a10-813f-9b9f63a59517;12-04-2024;;08:02:00;16:02:00;false;8;2;0;Issues with Parking;false;;2;CLA;8baed15a-6e4a-403f-9fd1-d32af05b19af
+ef4ffaef-8599-4a10-813f-9b9f63a59517;2024-05-14;2024-05-14;08:02:00;16:02:00;false;8;2;0;Issues with Parking;false;;2;CLA;8baed15a-6e4a-403f-9fd1-d32af05b19af
 34e14c5d-f3fc-4618-9ef8-223c45fbcf6c;04-04-2024;;07:44:00;16:30:00;false;8.50;2;0;;false;;2;POP;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31
 7dcd9a1c-5bb9-4834-86cc-5b1a3053d4c8;05-04-2024;;08:02:00;16:02:00;false;8;2;0;;false;;2;POP;df97008f-ebbf-4b8d-8f43-dc95f19460de
 b3a9bdf2-84ea-4ef7-8ac3-fa11a1f58002;08-04-2024;;08:11:00;15:44:00;false;7.45;2;0;;false;;2;POP;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31

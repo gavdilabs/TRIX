@@ -1,10 +1,15 @@
-import TimeRegistrationSetHandler from "../model/TimeRegistrationSetHandler";
+import Event from "sap/ui/base/Event";
+import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import BaseController from "./BaseController";
 
 /**
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
+
+	
+
+
 	/**
 	 * UI5 Hook Function - Called once on initialization
 	 */
@@ -27,5 +32,9 @@ export default class Main extends BaseController {
 			new Date(),
 			new Date(2024, 6, 20)
 		));
+	}
+
+	public async onAppointmentCreate(event: Event):Promise<void> {
+
 	}
 }

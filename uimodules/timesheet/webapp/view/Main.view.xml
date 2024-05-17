@@ -9,7 +9,7 @@
 
 	<Page title="{i18n>appTitle}" id="page">
 		<content>
-			<controls:TRIXCalendar appointments="{path:'PeriodRegistrations>/'}" title= "TRIXY TRIX">
+			<controls:TRIXCalendar enableAppointmentsCreate="true" appointmentCreate="onAppointmentCreate" appointments="{path:'PeriodRegistrations>/'}" title= "TRIXY TRIX">
 				<controls:appointments>
 					<unified:CalendarAppointment title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 					</unified:CalendarAppointment>

@@ -1,13 +1,18 @@
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import { trix } from "../model/entities-core";
 import ModelDataHelper from "../utils/ModelDataHelper";
-import { ITimeRegistrationAndAllocation } from "./interfaces";
+import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 
 export default class TimeRegistrationSetHandler {
 	private static instance: TimeRegistrationSetHandler = undefined;
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
+
+	private timeRegistrations: OdataListbindingWrapper<
+    Partial<ITimeRegistration>
+  > = undefined;
 
 	public static getInstance(): TimeRegistrationSetHandler {
 		if (
@@ -31,12 +36,16 @@ export default class TimeRegistrationSetHandler {
 		TimeRegistrationSetHandler.controller = controller;
 	}
 
+	public async createAppointMent():Promise<Error | trix.core.ITimeRegistration> {
+
+	}
+
 	public async loadTimeRegistrations(
 		dateFrom: Date,
 		dateTo: Date
 	): Promise<void> {
 		let timeRegistrationsForPeriod = await ModelDataHelper.getModelData<
-			ITimeRegistrationAndAllocation[]
+			trix.core.ITimeRegistration[]
 		>(TimeRegistrationSetHandler.odataModel, "/TimeRegistrationSet", {
 			$expand: "allocation",
 		});
