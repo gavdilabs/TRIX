@@ -1,3 +1,4 @@
+import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import Event from "sap/ui/base/Event";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import BaseController from "./BaseController";
@@ -6,10 +7,6 @@ import BaseController from "./BaseController";
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
-
-	
-
-
 	/**
 	 * UI5 Hook Function - Called once on initialization
 	 */
@@ -28,13 +25,17 @@ export default class Main extends BaseController {
 		//Initialize the Data handler(s)
 		TimeRegistrationSetHandler.initialize(this.getOdataModelCore(), this);
 
-		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations(
-			new Date(),
-			new Date(2024, 6, 20)
-		));
+		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
 	}
 
-	public async onAppointmentCreate(event: Event):Promise<void> {
+	private getCalendarControl(): SinglePlanningCalendar {
+		return this.byId(this.createId("trixCalendar")) as SinglePlanningCalendar;
+	}
 
+	public onAppointmentCreate(event: Event): void {
+		TimeRegistrationSetHandler.getInstance().createAppointMent(
+			event.getParameter("startDate") as Date,
+			event.getParameter("endDate") as Date
+		);
 	}
 }
