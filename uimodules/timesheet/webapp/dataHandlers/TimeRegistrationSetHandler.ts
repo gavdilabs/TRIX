@@ -83,6 +83,7 @@ export default class TimeRegistrationSetHandler {
 
 		//Update the UI
 		const newItemUI: Partial<ITimeRegistrationAndAllocation> = {
+			ID: `TEMP#${this.uniqueId()}`,
 			startDate: startDate,
 			endDate: endDate,
 			startTime: startDate,
@@ -101,6 +102,13 @@ export default class TimeRegistrationSetHandler {
 		this.updateData(existingData);
 
 		return newItemUI;
+	}
+
+	private uniqueId(length = 16): string {
+		return Math.ceil(Math.random() * Date.now())
+			.toPrecision(length)
+			.toString()
+			.replace(".", "");
 	}
 
 	public async createAppointmentBackend(

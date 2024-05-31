@@ -11,7 +11,7 @@
 		<content>
 			<controls:TRIXCalendar id="trixCalendar" enableAppointmentsCreate="true" appointmentCreate="onAppointmentCreate" appointments="{path:'PeriodRegistrations>/'}" title= "TRIXY TRIX">
 				<controls:appointments>
-					<unified:CalendarAppointment title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+					<unified:CalendarAppointment key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 					</unified:CalendarAppointment>
 				</controls:appointments>
 			</controls:TRIXCalendar>

@@ -1,5 +1,7 @@
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import Event from "sap/ui/base/Event";
+import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
+import TRIXCalendar from "../controls/TRIXCalendar";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import BaseController from "./BaseController";
 
@@ -28,8 +30,23 @@ export default class Main extends BaseController {
 		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
 	}
 
+	/**
+	 * Function for gettting a ref to the Calendar Control
+	 * @returns an instance of a TRIXCalendar UI Control
+	 */
 	private getCalendarControl(): SinglePlanningCalendar {
-		return this.byId(this.createId("trixCalendar")) as SinglePlanningCalendar;
+		return this.byId(this.createId("trixCalendar")) as TRIXCalendar;
+	}
+
+	/**
+	 * Function for getting a specific UI Appointment control in the Calendar
+	 * @param id id = KEY of the control element to fetch
+	 * @returns CalendarAppointment or null
+	 */
+	private getCalndarAppointmentById(id: string): CalendarAppointment {
+		return this.getCalendarControl()
+			.getAppointments()
+			.find((elm) => elm.getKey() === id);
 	}
 
 	/**
@@ -43,9 +60,15 @@ export default class Main extends BaseController {
 			id: string;
 		};
 
-		void TimeRegistrationSetHandler.getInstance().createAppointMentUI(
-			parameters.startDate,
-			parameters.endDate
-		);
+		const tempUiRecord =
+			TimeRegistrationSetHandler.getInstance().createAppointMentUI(
+				parameters.startDate,
+				parameters.endDate
+			);
+
+		const appointMent = this.getCalndarAppointmentById(tempUiRecord.ID);
+		if (appointMent) {
+			console.log(appointMent.getKey());
+		}
 	}
 }
