@@ -32,9 +32,9 @@ export default abstract class BaseController extends Controller {
 	 * Convenience method for getting the i18n resource bundle of the component.
 	 * @returns The i18n resource bundle of the component
 	 */
-	public getResourceBundle(): ResourceBundle | Promise<ResourceBundle> {
+	public getResourceBundle(): ResourceBundle  {
 		const oModel = this.getOwnerComponent().getModel("i18n") as ResourceModel;
-		return oModel.getResourceBundle();
+		return oModel.getResourceBundle() as ResourceBundle;
 	}
 
 	/**

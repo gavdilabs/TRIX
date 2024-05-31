@@ -5,6 +5,7 @@ import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
+import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import BaseController from "./BaseController";
 
@@ -33,6 +34,15 @@ export default class Main extends BaseController {
 		TimeRegistrationSetHandler.initialize(this.getOdataModelCore(), this);
 
 		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
+
+		//Preload some popup lists
+		const ddHandler = new DropDownHandler(
+			this,
+			this.getOdataModelCore(),
+			this.getResourceBundle()
+		);
+		void ddHandler.refreshListAllocationTypes();
+		void ddHandler.refreshListAllocationSubTypes();
 	}
 
 	/**
@@ -85,7 +95,7 @@ export default class Main extends BaseController {
 			true
 		);
 		if (appointmentControl) {
-			void (await this.openAppointmentDialogByControl(appointmentControl,200));
+			void (await this.openAppointmentDialogByControl(appointmentControl, 200));
 		}
 	}
 

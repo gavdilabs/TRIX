@@ -8,7 +8,14 @@
             <Button text="Action-B" press="handleCloseButton" />
         </endButton>
         <content>
-            <Text text="TESTING" />
+            <VBox>
+                <Select items="{ListAllocationTypes>/}">
+                    <core:Item key="{ListAllocationTypes>key}" text="{ListAllocationTypes>value}" />
+                </Select>
+                <Select items="{ListAllocationSubTypes>/}">
+                    <core:Item key="{ListAllocationSubTypes>ID}" text="{ListAllocationSubTypes>description}" />
+                </Select>
+            </VBox>
         </content>
     </ResponsivePopover>
 </core:FragmentDefinition>
