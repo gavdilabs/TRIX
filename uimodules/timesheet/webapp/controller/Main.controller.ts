@@ -48,10 +48,19 @@ export default class Main extends BaseController {
 	 * @param id id = KEY of the control element to fetch
 	 * @returns CalendarAppointment or null
 	 */
-	private getCalndarAppointmentById(id: string): CalendarAppointment {
-		return this.getCalendarControl()
+	private getCalendarAppointmentById(
+		id: string,
+		isTemporary: boolean = false
+	): CalendarAppointment {
+		const calendarControl = this.getCalendarControl()
 			.getAppointments()
 			.find((elm) => elm.getKey() === id);
+
+		if (isTemporary) {
+			calendarControl.setColor("rgba(0, 0, 0, 0.5)");
+		}
+
+		return calendarControl;
 	}
 
 	/**
@@ -71,14 +80,22 @@ export default class Main extends BaseController {
 				parameters.endDate
 			);
 
-		const appointmentControl = this.getCalndarAppointmentById(tempUiRecord.ID);
+		const appointmentControl = this.getCalendarAppointmentById(
+			tempUiRecord.ID,
+			true
+		);
 		if (appointmentControl) {
-			void (await this.openAppointmentDialogByControl(appointmentControl));
+			void (await this.openAppointmentDialogByControl(appointmentControl,200));
 		}
 	}
 
+	/**
+	 * Function for opening the Time Registration
+	 * @param openByControl UI Control to link the popover to
+	 */
 	public async openAppointmentDialogByControl(
-		openByControl: CalendarAppointment
+		openByControl: CalendarAppointment,
+		delayInMs: number = 0
 	): Promise<void> {
 		if (!this.popoverAppointment) {
 			this.popoverAppointment = (await Fragment.load({
@@ -93,9 +110,13 @@ export default class Main extends BaseController {
 		}
 
 		if (openByControl && this.popoverAppointment) {
-			(this.popoverAppointment as ResponsivePopover).openBy(
-				openByControl as unknown as Control
-			);
+			const openFunc = () => {
+				(this.popoverAppointment as ResponsivePopover).openBy(
+					openByControl as unknown as Control
+				);
+			};
+
+			window.setTimeout(openFunc, delayInMs);
 		}
 	}
 }
