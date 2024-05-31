@@ -1,5 +1,8 @@
+import ResponsivePopover from "sap/m/ResponsivePopover";
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import Event from "sap/ui/base/Event";
+import Control from "sap/ui/core/Control";
+import Fragment from "sap/ui/core/Fragment";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
@@ -9,6 +12,8 @@ import BaseController from "./BaseController";
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
+	private popoverAppointment: Control;
+
 	/**
 	 * UI5 Hook Function - Called once on initialization
 	 */
@@ -53,7 +58,7 @@ export default class Main extends BaseController {
 	 * Event: Creates a new Appointment
 	 * @param event std. base event for UI5.
 	 */
-	public onAppointmentCreate(event: Event): void {
+	public async onAppointmentCreate(event: Event): Promise<void> {
 		const parameters = event.getParameters() as {
 			startDate: Date;
 			endDate: Date;
@@ -66,9 +71,31 @@ export default class Main extends BaseController {
 				parameters.endDate
 			);
 
-		const appointMent = this.getCalndarAppointmentById(tempUiRecord.ID);
-		if (appointMent) {
-			console.log(appointMent.getKey());
+		const appointmentControl = this.getCalndarAppointmentById(tempUiRecord.ID);
+		if (appointmentControl) {
+			void (await this.openAppointmentDialogByControl(appointmentControl));
+		}
+	}
+
+	public async openAppointmentDialogByControl(
+		openByControl: CalendarAppointment
+	): Promise<void> {
+		if (!this.popoverAppointment) {
+			this.popoverAppointment = (await Fragment.load({
+				id: this.getView().getId(),
+				name: "trix.timesheet.view.popovers.PopoverAppointment",
+				controller: this,
+			})) as Control;
+
+			if (this.popoverAppointment) {
+				this.getView().addDependent(this.popoverAppointment);
+			}
+		}
+
+		if (openByControl && this.popoverAppointment) {
+			(this.popoverAppointment as ResponsivePopover).openBy(
+				openByControl as unknown as Control
+			);
 		}
 	}
 }

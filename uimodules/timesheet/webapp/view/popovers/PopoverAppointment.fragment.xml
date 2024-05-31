@@ -1,0 +1,14 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <ResponsivePopover title="Create New Timeregistration" class="sapUiContentPadding" placement="Auto">
+        <beginButton>
+            <Button text="Action-A" press="handleCloseButton" />
+        </beginButton>
+        <endButton>
+            <Button text="Action-B" press="handleCloseButton" />
+        </endButton>
+        <content>
+            <Text text="TESTING" />
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>
