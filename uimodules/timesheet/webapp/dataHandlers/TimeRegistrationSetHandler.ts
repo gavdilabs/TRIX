@@ -16,7 +16,7 @@ export default class TimeRegistrationSetHandler {
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
 
-	private timeRegistrations: OdataListbindingWrapper<
+	private static timeRegistrations: OdataListbindingWrapper<
 		Partial<trix.core.ITimeRegistration>
 	> = undefined;
 
@@ -40,9 +40,26 @@ export default class TimeRegistrationSetHandler {
 	public static initialize(odataModel: ODataModel, controller: Controller) {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
+
+		//Create the listbinding for backend
+		const oBinding = odataModel.bindList(
+			"/TimeRegistrationSet",
+			undefined,
+			undefined,
+			undefined,
+			{}
+		);
+		TimeRegistrationSetHandler.timeRegistrations = new OdataListbindingWrapper(
+			oBinding,
+			["ID"]
+		);
 	}
 
-	private getModel(): JSONModel {
+	/**
+	 * Function that returns the JSON model with the current data displayed
+	 * @returns
+	 */
+	private getAppointmentsModel(): JSONModel {
 		return TimeRegistrationSetHandler.controller
 			.getView()
 			.getModel(
@@ -50,29 +67,60 @@ export default class TimeRegistrationSetHandler {
 			) as JSONModel;
 	}
 
-	public createAppointMent(
+	/**
+	 * Call this to create a new appointment in the UI only.
+	 * @param startDate
+	 * @param endDate
+	 * @returns
+	 */
+	public createAppointMentUI(
 		startDate: Date,
 		endDate: Date
 	): Partial<trix.core.ITimeRegistration> {
-		const existingData =
-			this.getModel()?.getData() as DeepPartial<ITimeRegistrationAndAllocation[]>;
+		const existingData = this.getAppointmentsModel()?.getData() as DeepPartial<
+			ITimeRegistrationAndAllocation[]
+		>;
 
-		const newItem: Partial<ITimeRegistrationAndAllocation> = {
+		//Update the UI
+		const newItemUI: Partial<ITimeRegistrationAndAllocation> = {
 			startDate: startDate,
 			endDate: endDate,
-			comment: "test creation",
+			startTime: startDate,
+			endTime: endDate,
+			wholeDay: false,
+			amount: 0,
+			registrationStatus: 2,
+			registrationType: 0,
+			comment: "",
+			invalid: false,
+			statusContext: null,
+			recordStatus: 2,
+			user_userID: "TAG",
 		};
-
-		existingData.push(newItem);
-
+		existingData.push(newItemUI);
 		this.updateData(existingData);
 
-		return newItem;
+		return newItemUI;
+	}
+
+	public async createAppointmentBackend(
+		startDate: Date,
+		endDate: Date,
+		data: Partial<trix.core.ITimeRegistration>
+	): Promise<void> {
+		//Create the record in DB
+		await TimeRegistrationSetHandler.timeRegistrations.createItem({
+			startDate: startDate?.toISOString().split("T")[0] as unknown as Date, //Workaround hack to be abl
+			endDate: endDate?.toISOString().split("T")[0] as unknown as Date,
+			startTime: startDate?.toTimeString().split(" ")[0] as unknown as Date,
+			endTime: endDate?.toTimeString().split(" ")[0] as unknown as Date,
+			...data,
+		});
 	}
 
 	public async loadTimeRegistrations(): Promise<void> {
 		let timeRegistrationsForPeriod = await ModelDataHelper.getModelData<
-		ITimeRegistrationAndAllocation[]
+			ITimeRegistrationAndAllocation[]
 		>(TimeRegistrationSetHandler.odataModel, "/TimeRegistrationSet", {
 			$expand: "allocation",
 		});
@@ -103,7 +151,10 @@ export default class TimeRegistrationSetHandler {
 	}
 
 	private updateData(
-		data: ITimeRegistrationAndAllocation[] | Partial<ITimeRegistrationAndAllocation>[] | DeepPartial<ITimeRegistrationAndAllocation>[]
+		data:
+			| ITimeRegistrationAndAllocation[]
+			| Partial<ITimeRegistrationAndAllocation>[]
+			| DeepPartial<ITimeRegistrationAndAllocation>[]
 	) {
 		TimeRegistrationSetHandler.controller
 			.getView()

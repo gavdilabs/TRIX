@@ -32,10 +32,20 @@ export default class Main extends BaseController {
 		return this.byId(this.createId("trixCalendar")) as SinglePlanningCalendar;
 	}
 
+	/**
+	 * Event: Creates a new Appointment
+	 * @param event std. base event for UI5.
+	 */
 	public onAppointmentCreate(event: Event): void {
-		TimeRegistrationSetHandler.getInstance().createAppointMent(
-			event.getParameter("startDate") as Date,
-			event.getParameter("endDate") as Date
+		const parameters = event.getParameters() as {
+			startDate: Date;
+			endDate: Date;
+			id: string;
+		};
+
+		void TimeRegistrationSetHandler.getInstance().createAppointMentUI(
+			parameters.startDate,
+			parameters.endDate
 		);
 	}
 }
