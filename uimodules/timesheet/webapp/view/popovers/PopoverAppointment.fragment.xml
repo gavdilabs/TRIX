@@ -1,20 +1,17 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <ResponsivePopover title="Create New Timeregistration" class="sapUiContentPadding" placement="Auto">
+    <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto">
         <beginButton>
-            <Button text="Action-A" press="handleCloseButton" />
+            <Button text="Cancel" type="Cancel" press="handleCloseButton" />
         </beginButton>
         <endButton>
-            <Button text="Action-B" press="handleCloseButton" />
+            <Button text="Save" type="Emphasized" press="handleCloseButton" />
         </endButton>
         <content>
             <VBox>
-                <Select items="{ListAllocationTypes>/}">
-                    <core:Item key="{ListAllocationTypes>key}" text="{ListAllocationTypes>value}" />
-                </Select>
-                <Select items="{ListAllocationSubTypes>/}">
-                    <core:Item key="{ListAllocationSubTypes>ID}" text="{ListAllocationSubTypes>description}" />
-                </Select>
+                <Tree mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+                    <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
+                </Tree>
             </VBox>
         </content>
     </ResponsivePopover>

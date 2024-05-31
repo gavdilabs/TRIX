@@ -41,8 +41,9 @@ export default class Main extends BaseController {
 			this.getOdataModelCore(),
 			this.getResourceBundle()
 		);
-		void ddHandler.refreshListAllocationTypes();
-		void ddHandler.refreshListAllocationSubTypes();
+
+		//Preload the allocation tree data
+		void ddHandler.loadAllocationTree();
 	}
 
 	/**
