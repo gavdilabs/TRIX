@@ -179,4 +179,17 @@ export default class Main extends BaseController {
 
 		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
+
+	public formatterAppointmentColor(appointmentType: trix.core.AllocationType) {
+		switch (appointmentType) {
+			case trix.core.AllocationType.AbsenceAttendance:
+				return "red";
+			case trix.core.AllocationType.Project:
+				return "#345678";
+			case trix.core.AllocationType.Service:
+				return "blue";
+			default:
+				return "#ccc";
+		}
+	}
 }
