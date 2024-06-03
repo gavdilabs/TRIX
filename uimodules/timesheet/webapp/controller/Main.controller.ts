@@ -1,5 +1,6 @@
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
+import StandardTreeItem from "sap/m/StandardTreeItem";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
@@ -7,6 +8,7 @@ import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
+import { trix } from "../model/entities-core";
 import BaseController from "./BaseController";
 
 /**
@@ -14,6 +16,8 @@ import BaseController from "./BaseController";
  */
 export default class Main extends BaseController {
 	private popoverAppointment: Control;
+	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
+	private tempAppointmentControl: CalendarAppointment = undefined;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -85,17 +89,18 @@ export default class Main extends BaseController {
 			id: string;
 		};
 
-		const tempUiRecord =
-			TimeRegistrationSetHandler.getInstance().createAppointMentUI(
+		this.tempUiRecord =
+			TimeRegistrationSetHandler.getInstance().createTemporaryAppointMent(
 				parameters.startDate,
 				parameters.endDate
 			);
 
 		const appointmentControl = this.getCalendarAppointmentById(
-			tempUiRecord.ID,
+			this.tempUiRecord.ID,
 			true
 		);
 		if (appointmentControl) {
+			this.tempAppointmentControl = appointmentControl;
 			void (await this.openAppointmentDialogByControl(appointmentControl, 200));
 		}
 	}
@@ -126,8 +131,52 @@ export default class Main extends BaseController {
 					openByControl as unknown as Control
 				);
 			};
-
+			//To make sure the control has rendered - def. a problem locally
 			window.setTimeout(openFunc, delayInMs);
 		}
+	}
+
+	/**
+	 * Event function that handles when the project popover closes
+	 */
+	public onAppointmentPopoverClose() {
+		if (this.tempUiRecord.ID) {
+			TimeRegistrationSetHandler.getInstance().deleteDataMapItem(
+				this.tempUiRecord.ID
+			);
+		}
+	}
+
+	/**
+	 * Event Function for when selecting a Tree Project/allocation Item
+	 * @param event Std. UI5 event
+	 * @returns void
+	 */
+	public onAppointmentPopoverItemSelect(event: Event): void {
+		const params = event.getParameters() as { listItem: StandardTreeItem };
+		if (!params || !params.listItem) {
+			return;
+		}
+
+		const selectedItemData = params.listItem
+			.getBindingContext(DropDownHandler.MODELNAME_ALLOCATION_TREE)
+			.getObject() as { key: string; text: string; isSelectable: boolean };
+
+		//No data or non-selectable project
+		if (!selectedItemData || selectedItemData.isSelectable === false) {
+			return;
+		}
+
+		//add allocation Id to the tempUiRecord data
+		this.tempUiRecord.allocation_ID = selectedItemData.key;
+
+		//Commit the record to th backend DB
+		void TimeRegistrationSetHandler.getInstance().createAppointmentBackend(
+			this.tempAppointmentControl.getStartDate() as Date,
+			this.tempAppointmentControl.getEndDate() as Date,
+			this.tempUiRecord
+		);
+
+		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
 }

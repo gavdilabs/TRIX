@@ -2,10 +2,7 @@ import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import { trix } from "../model/entities-core";
-import {
-	DeepPartial,
-	ITimeRegistrationAndAllocation,
-} from "../model/interfaces";
+import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import ModelDataHelper from "../utils/ModelDataHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 
@@ -15,6 +12,9 @@ export default class TimeRegistrationSetHandler {
 	private static instance: TimeRegistrationSetHandler = undefined;
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
+
+	private static dataMap: Map<string, Partial<ITimeRegistrationAndAllocation>> =
+		new Map();
 
 	private static timeRegistrations: OdataListbindingWrapper<
 		Partial<trix.core.ITimeRegistration>
@@ -73,17 +73,14 @@ export default class TimeRegistrationSetHandler {
 	 * @param endDate
 	 * @returns
 	 */
-	public createAppointMentUI(
+	public createTemporaryAppointMent(
 		startDate: Date,
 		endDate: Date
 	): Partial<trix.core.ITimeRegistration> {
-		const existingData = this.getAppointmentsModel()?.getData() as DeepPartial<
-			ITimeRegistrationAndAllocation[]
-		>;
-
-		//Update the UI
-		const newItemUI: Partial<ITimeRegistrationAndAllocation> = {
-			ID: `TEMP#${this.uniqueId()}`,
+		//Create the new UI element
+		const itemID = `TEMP#${this.uniqueId()}`;
+		const newTempItem: Partial<ITimeRegistrationAndAllocation> = {
+			ID: itemID,
 			startDate: startDate,
 			endDate: endDate,
 			startTime: startDate,
@@ -98,10 +95,10 @@ export default class TimeRegistrationSetHandler {
 			recordStatus: 2,
 			user_userID: "TAG",
 		};
-		existingData.push(newItemUI);
-		this.updateData(existingData);
+		TimeRegistrationSetHandler.dataMap.set(itemID, newTempItem);
+		this.updateData();
 
-		return newItemUI;
+		return newTempItem;
 	}
 
 	private uniqueId(length = 16): string {
@@ -114,18 +111,48 @@ export default class TimeRegistrationSetHandler {
 	public async createAppointmentBackend(
 		startDate: Date,
 		endDate: Date,
-		data: Partial<trix.core.ITimeRegistration>
+		remainingData: Partial<trix.core.ITimeRegistration>
 	): Promise<void> {
+		const tempId: string = remainingData.ID;
+		delete remainingData.ID;
+
 		//Create the record in DB
-		await TimeRegistrationSetHandler.timeRegistrations.createItem({
-			startDate: startDate?.toISOString().split("T")[0] as unknown as Date, //Workaround hack to be abl
-			endDate: endDate?.toISOString().split("T")[0] as unknown as Date,
-			startTime: startDate?.toTimeString().split(" ")[0] as unknown as Date,
-			endTime: endDate?.toTimeString().split(" ")[0] as unknown as Date,
-			...data,
-		});
+		const newItemFromBackendContext =
+			await TimeRegistrationSetHandler.timeRegistrations.createItem({
+				...remainingData,
+				startDate: startDate?.toISOString().split("T")[0] as unknown as Date, //Workaround hack to be abl
+				endDate: endDate?.toISOString().split("T")[0] as unknown as Date,
+				startTime: startDate?.toTimeString().split(" ")[0] as unknown as Date,
+				endTime: endDate?.toTimeString().split(" ")[0] as unknown as Date,
+			});
+
+		//Add the DB Record to the data map
+		void (await newItemFromBackendContext.created());
+
+		//Reload the screen data
+		void this.loadTimeRegistrations();
+
+		//Delete the temp id item - will update the model automatically
+		this.deleteDataMapItem(tempId);
 	}
 
+	/**
+	 * Function to delete a specific item from the dataMap
+	 * @param itemId id to delete
+	 * @param skipUpdate Default false, flag to skip the model update.
+	 */
+	public deleteDataMapItem(itemId: string, skipUpdate: boolean = false) {
+		//Remove the temp record
+		TimeRegistrationSetHandler.dataMap.delete(itemId);
+
+		if (skipUpdate === false) {
+			this.updateData();
+		}
+	}
+
+	/**
+	 * Function that initially loads timeregistrations into map
+	 */
 	public async loadTimeRegistrations(): Promise<void> {
 		let timeRegistrationsForPeriod = await ModelDataHelper.getModelData<
 			ITimeRegistrationAndAllocation[]
@@ -153,21 +180,19 @@ export default class TimeRegistrationSetHandler {
 			item.endDate.setHours(parseInt(hour));
 			item.endDate.setMinutes(parseInt(minute));
 			item.endDate.setSeconds(parseInt(second));
+
+			//Add to the map
+			TimeRegistrationSetHandler.dataMap.set(item.ID, item);
 		});
 
-		this.updateData(timeRegistrationsForPeriod);
+		this.updateData();
 	}
 
-	private updateData(
-		data:
-			| ITimeRegistrationAndAllocation[]
-			| Partial<ITimeRegistrationAndAllocation>[]
-			| DeepPartial<ITimeRegistrationAndAllocation>[]
-	) {
+	private updateData() {
 		TimeRegistrationSetHandler.controller
 			.getView()
 			.setModel(
-				new JSONModel(data),
+				new JSONModel(Array.from(TimeRegistrationSetHandler.dataMap.values())),
 				TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME
 			);
 	}

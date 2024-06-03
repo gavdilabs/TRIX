@@ -1,15 +1,15 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto">
-        <beginButton>
+    <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
+        <!-- <beginButton>
             <Button text="Cancel" type="Cancel" press="handleCloseButton" />
         </beginButton>
         <endButton>
             <Button text="Save" type="Emphasized" press="handleCloseButton" />
-        </endButton>
+        </endButton> -->
         <content>
             <VBox>
-                <Tree mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+                <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                     <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
                 </Tree>
             </VBox>

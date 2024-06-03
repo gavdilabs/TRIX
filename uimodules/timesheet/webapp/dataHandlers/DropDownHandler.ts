@@ -13,9 +13,9 @@ export interface IAllocationTreeItem {
 }
 
 export default class DropDownHandler {
-	public readonly MODELNAME_ALLOCATION_TYPES = "ListAllocationTypes";
-	public readonly MODELNAME_ALLOCATION_SUB_TYPES = "ListAllocationSubTypes";
-	public readonly MODELNAME_ALLOCATION_TREE = "TreeAllocations";
+	public static readonly MODELNAME_ALLOCATION_TYPES = "ListAllocationTypes";
+	public static readonly MODELNAME_ALLOCATION_SUB_TYPES = "ListAllocationSubTypes";
+	public static readonly MODELNAME_ALLOCATION_TREE = "TreeAllocations";
 	private controller: Controller = undefined;
 	private odataModel: ODataModel = undefined;
 	private i18nBundle: ResourceBundle = undefined;
@@ -39,7 +39,7 @@ export default class DropDownHandler {
 		forceRefresh: boolean = false
 	): Promise<{ key: string; value: string }[]> {
 		if (
-			this.controller.getView().getModel(this.MODELNAME_ALLOCATION_TYPES) &&
+			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_TYPES) &&
 			forceRefresh === false
 		) {
 			return;
@@ -61,7 +61,7 @@ export default class DropDownHandler {
 			);
 			this.controller
 				.getView()
-				.setModel(new JSONModel(parsedTypes), this.MODELNAME_ALLOCATION_TYPES);
+				.setModel(new JSONModel(parsedTypes), DropDownHandler.MODELNAME_ALLOCATION_TYPES);
 
 			return parsedTypes;
 		}
@@ -78,13 +78,13 @@ export default class DropDownHandler {
 		forceRefresh: boolean = false
 	): Promise<trix.core.ITimeAllocation[]> {
 		if (
-			this.controller.getView().getModel(this.MODELNAME_ALLOCATION_SUB_TYPES) &&
+			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) &&
 			forceRefresh === false
 		) {
 			return (
 				this.controller
 					.getView()
-					.getModel(this.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
+					.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
 			).getData() as trix.core.ITimeAllocation[];
 		}
 
@@ -95,7 +95,7 @@ export default class DropDownHandler {
 		if (data && Array.isArray(data)) {
 			this.controller
 				.getView()
-				.setModel(new JSONModel(data), this.MODELNAME_ALLOCATION_SUB_TYPES);
+				.setModel(new JSONModel(data), DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES);
 
 			return data;
 		}
@@ -119,13 +119,13 @@ export default class DropDownHandler {
 		}
 
 		if (
-			this.controller.getView().getModel(this.MODELNAME_ALLOCATION_TREE) &&
+			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_TREE) &&
 			forceRefresh === false
 		) {
 			return (
 				this.controller
 					.getView()
-					.getModel(this.MODELNAME_ALLOCATION_TREE) as JSONModel
+					.getModel(DropDownHandler.MODELNAME_ALLOCATION_TREE) as JSONModel
 			).getData() as IAllocationTreeItem[];
 		}
 
@@ -164,7 +164,7 @@ export default class DropDownHandler {
 				.getView()
 				.setModel(
 					new JSONModel(nodesStructure),
-					this.MODELNAME_ALLOCATION_TREE
+					DropDownHandler.MODELNAME_ALLOCATION_TREE
 				);
 
 			return nodesStructure;
