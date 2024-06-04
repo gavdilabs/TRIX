@@ -192,4 +192,17 @@ export default class Main extends BaseController {
 				return "#ccc";
 		}
 	}
+	
+	public onAppointmentResize(event: Event) {
+		console.log(event.getParameters());
+	}
+
+	public async onAppointmentSelect(event: Event) {
+		const params = event.getParameters() as {
+			appointment: CalendarAppointment;
+		};
+		if (params && params.appointment) {
+			void (await this.openAppointmentDialogByControl(params.appointment));
+		}
+	}
 }
