@@ -4,12 +4,19 @@ import StandardTreeItem from "sap/m/StandardTreeItem";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
+import JSONModel from "sap/ui/model/json/JSONModel";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
 import BaseController from "./BaseController";
+
+enum AppointmentPopoverMode {
+	DRAGGED = "DRAGGED",
+	SELECTED = "SELECTED",
+	CELLPRESS = "CELLPRESS",
+}
 
 /**
  * @namespace trix.timesheet.controller
@@ -18,6 +25,7 @@ export default class Main extends BaseController {
 	private popoverAppointment: Control;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
+	private cellPressed: boolean = false;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -82,7 +90,10 @@ export default class Main extends BaseController {
 	 * Event: Creates a new Appointment
 	 * @param event std. base event for UI5.
 	 */
-	public async onAppointmentCreate(event: Event): Promise<void> {
+	public async onAppointmentCreate(
+		event: Event,
+		mode: AppointmentPopoverMode
+	): Promise<void> {
 		const parameters = event.getParameters() as {
 			startDate: Date;
 			endDate: Date;
@@ -101,7 +112,11 @@ export default class Main extends BaseController {
 		);
 		if (appointmentControl) {
 			this.tempAppointmentControl = appointmentControl;
-			void (await this.openAppointmentDialogByControl(appointmentControl, 200));
+			void (await this.openAppointmentDialogByControl(
+				appointmentControl,
+				mode,
+				200
+			));
 		}
 	}
 
@@ -111,6 +126,7 @@ export default class Main extends BaseController {
 	 */
 	public async openAppointmentDialogByControl(
 		openByControl: CalendarAppointment,
+		mode: AppointmentPopoverMode,
 		delayInMs: number = 0
 	): Promise<void> {
 		if (!this.popoverAppointment) {
@@ -127,9 +143,15 @@ export default class Main extends BaseController {
 
 		if (openByControl && this.popoverAppointment) {
 			const openFunc = () => {
-				(this.popoverAppointment as ResponsivePopover).openBy(
-					openByControl as unknown as Control
+				const popover = this.popoverAppointment as ResponsivePopover;
+
+				popover.setModel(
+					new JSONModel({
+						mode: mode,
+					})
 				);
+
+				popover.openBy(openByControl as unknown as Control);
 			};
 			//To make sure the control has rendered - def. a problem locally
 			window.setTimeout(openFunc, delayInMs);
@@ -145,6 +167,8 @@ export default class Main extends BaseController {
 				this.tempUiRecord.ID
 			);
 		}
+
+		this.cellPressed = false;
 	}
 
 	/**
@@ -192,7 +216,7 @@ export default class Main extends BaseController {
 				return "#ccc";
 		}
 	}
-	
+
 	public onAppointmentResize(event: Event) {
 		console.log(event.getParameters());
 	}
@@ -202,7 +226,17 @@ export default class Main extends BaseController {
 			appointment: CalendarAppointment;
 		};
 		if (params && params.appointment) {
-			void (await this.openAppointmentDialogByControl(params.appointment));
+			void (await this.openAppointmentDialogByControl(
+				params.appointment,
+				AppointmentPopoverMode.SELECTED
+			));
+		}
+	}
+
+	public async onCellPress(event: Event, mode: AppointmentPopoverMode) {
+		if (!this.cellPressed) {
+			this.cellPressed = true;
+			void (await this.onAppointmentCreate(event, mode));
 		}
 	}
 }

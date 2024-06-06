@@ -2,6 +2,13 @@
     xmlns:core="sap.ui.core">
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
+            <Text text="{PopoverControl>/mode}" />
+            <!-- Date/Time Display -->
+            <VBox visible="{$={PopoverControl>/mode} === 'DRAGGED'}">
+                
+            </VBox>
+
+            <!-- Tree based Project Selection -->
             <VBox>
                 <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                     <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
