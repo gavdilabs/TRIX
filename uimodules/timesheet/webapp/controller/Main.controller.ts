@@ -220,11 +220,6 @@ export default class Main extends BaseController {
 		}
 	}
 
-	public formatterDateTimeFromTo(startDate: Date, endDate: Date): string {
-
-		return
-	}
-
 	public onAppointmentResize(event: Event) {
 		console.log(event.getParameters());
 	}
