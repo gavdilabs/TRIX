@@ -17,11 +17,9 @@
             </HBox>
 
             <!-- Tree based Project Selection -->
-            <VBox>
-                <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
-                    <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
-                </Tree>
-            </VBox>
+            <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+                <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
+            </Tree>
         </content>
     </ResponsivePopover>
 </core:FragmentDefinition>

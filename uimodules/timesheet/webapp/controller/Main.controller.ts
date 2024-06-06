@@ -128,6 +128,8 @@ export default class Main extends BaseController {
 	/**
 	 * Function for opening the Time Registration
 	 * @param openByControl UI Control to link the popover to
+	 * @param mode Which mode popup is in
+	 * @param delayInMs MS number (default 0) to wait before opening the popover
 	 */
 	public async openAppointmentDialogByControl(
 		openByControl: CalendarAppointment,
@@ -259,5 +261,9 @@ export default class Main extends BaseController {
 				);
 				break;
 		}
+	}
+
+	public onAppointmentDrop(event:Event){
+		console.log(event.getParameters());
 	}
 }
