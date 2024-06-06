@@ -148,7 +148,10 @@ export default class Main extends BaseController {
 				popover.setModel(
 					new JSONModel({
 						mode: mode,
-					})
+						startDate: this.tempUiRecord.startDate,
+						endDate: this.tempUiRecord.endDate,
+					}),
+					"PopoverControl"
 				);
 
 				popover.openBy(openByControl as unknown as Control);
@@ -215,6 +218,11 @@ export default class Main extends BaseController {
 			default:
 				return "#ccc";
 		}
+	}
+
+	public formatterDateTimeFromTo(startDate: Date, endDate: Date): string {
+
+		return
 	}
 
 	public onAppointmentResize(event: Event) {

@@ -2,11 +2,12 @@
     xmlns:core="sap.ui.core">
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
-            <Text text="{PopoverControl>/mode}" />
             <!-- Date/Time Display -->
-            <VBox visible="{$={PopoverControl>/mode} === 'DRAGGED'}">
-                
-            </VBox>
+            <HBox>
+                <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/startDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
+                <Text class="sapUiTinyMarginEnd" text="to" />
+                <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/endDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
+            </HBox>
 
             <!-- Tree based Project Selection -->
             <VBox>
