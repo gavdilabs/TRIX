@@ -18,6 +18,11 @@ enum AppointmentPopoverMode {
 	CELLPRESS = "CELLPRESS",
 }
 
+enum DateType {
+	START_DATE = "START",
+	END_DATE = "END",
+}
+
 /**
  * @namespace trix.timesheet.controller
  */
@@ -148,8 +153,8 @@ export default class Main extends BaseController {
 				popover.setModel(
 					new JSONModel({
 						mode: mode,
-						startDate: this.tempUiRecord.startDate,
-						endDate: this.tempUiRecord.endDate,
+						startDate: openByControl.getStartDate(),
+						endDate: openByControl.getEndDate(),
 					}),
 					"PopoverControl"
 				);
@@ -165,7 +170,7 @@ export default class Main extends BaseController {
 	 * Event function that handles when the project popover closes
 	 */
 	public onAppointmentPopoverClose() {
-		if (this.tempUiRecord.ID) {
+		if (this.tempUiRecord?.ID) {
 			TimeRegistrationSetHandler.getInstance().deleteDataMapItem(
 				this.tempUiRecord.ID
 			);
@@ -240,6 +245,19 @@ export default class Main extends BaseController {
 		if (!this.cellPressed) {
 			this.cellPressed = true;
 			void (await this.onAppointmentCreate(event, mode));
+		}
+	}
+
+	public onTimeChange(event: Event, dateType: DateType) {
+		switch (dateType) {
+			case DateType.START_DATE:
+				this.tempAppointmentControl.setStartDate(new Date());
+				break;
+			case DateType.END_DATE:
+				this.tempAppointmentControl.setStartDate(
+					new Date(new Date().getMilliseconds() + 100000)
+				);
+				break;
 		}
 	}
 }

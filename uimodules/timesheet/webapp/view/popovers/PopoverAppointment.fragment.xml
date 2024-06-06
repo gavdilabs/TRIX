@@ -2,8 +2,15 @@
     xmlns:core="sap.ui.core">
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
-            <!-- Date/Time Display -->
-            <HBox>
+
+
+            <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED'}">
+                <TimePicker change="onTimeChange($event, 'START')" support2400="true" dateValue="{PopoverControl>/startDate}" formatPattern="mm:ss" minutesStep="15" />
+                <TimePicker change="onTimeChange($event, 'END')" support2400="true" dateValue="{PopoverControl>/endDate}" formatPattern="mm:ss" minutesStep="15"/>
+            </VBox>
+
+            <!-- Date/Time Display Mode when Appointment is dragged -->
+            <HBox visible="{=${PopoverControl>/mode} === 'DRAGGED'}">
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/startDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
                 <Text class="sapUiTinyMarginEnd" text="to" />
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/endDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
