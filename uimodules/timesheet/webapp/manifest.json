@@ -18,6 +18,10 @@
 					"annotations": [],
 					"odataVersion": "4.0"
 				}
+			},
+			"ApplicationModelSource": {
+				"uri": "model/applicationModel.json",
+				"type": "JSON"
 			}
 		}
 	},
@@ -61,6 +65,10 @@
 				"settings": {
 					"bundleName": "trix.timesheet.i18n.i18n"
 				}
+			},
+			"ApplicationModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"dataSource": "ApplicationModelSource"
 			},
 			"": {
 				"dataSource": "coreData",

@@ -263,7 +263,12 @@ export default class Main extends BaseController {
 		}
 	}
 
-	public onAppointmentDrop(event:Event){
+	public onAppointmentDrop(event: Event) {
 		console.log(event.getParameters());
+	}
+
+	public onToggleFullDay(event: Event) {
+		const params = event.getParameters() as { pressed: boolean };
+		this.getCalendarControl().setFullDay(params.pressed);
 	}
 }
