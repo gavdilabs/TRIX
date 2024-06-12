@@ -1,13 +1,18 @@
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import Context from "sap/ui/model/odata/v4/Context";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import { trix } from "../model/entities-core";
 import { ITimeRegistrationAndAllocation } from "../model/interfaces";
+import DateHelper from "../utils/DateHelper";
 import ModelDataHelper from "../utils/ModelDataHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 
 export default class TimeRegistrationSetHandler {
 	public static readonly REGISTRATIONS_MODEL_NAME = "PeriodRegistrations";
+	public static readonly REGISTRATIONS_GROUP_ID =
+		"UpdateGroupPeriodRegistrations";
 
 	private static instance: TimeRegistrationSetHandler = undefined;
 	private static odataModel: ODataModel = undefined;
@@ -37,7 +42,10 @@ export default class TimeRegistrationSetHandler {
 		return TimeRegistrationSetHandler.instance;
 	}
 
-	public static initialize(odataModel: ODataModel, controller: Controller) {
+	public static async initialize(
+		odataModel: ODataModel,
+		controller: Controller
+	): Promise<void> {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
 
@@ -47,24 +55,69 @@ export default class TimeRegistrationSetHandler {
 			undefined,
 			undefined,
 			undefined,
-			{}
+			{ $$updateGroupId: this.REGISTRATIONS_GROUP_ID }
 		);
 		TimeRegistrationSetHandler.timeRegistrations = new OdataListbindingWrapper(
 			oBinding,
-			["ID"]
+			["allocation_ID"]
 		);
+
+		void (await TimeRegistrationSetHandler.timeRegistrations.refreshBinding());
 	}
 
-	/**
-	 * Function that returns the JSON model with the current data displayed
-	 * @returns
-	 */
-	private getAppointmentsModel(): JSONModel {
-		return TimeRegistrationSetHandler.controller
-			.getView()
-			.getModel(
-				TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME
-			) as JSONModel;
+	private async getAppointmentContext(id: string): Promise<Context> {
+		const contexts: Context[] =
+			await TimeRegistrationSetHandler.timeRegistrations.getContexts();
+		const context = contexts.find(
+			(ctxTmp) => (ctxTmp.getObject() as trix.core.ITimeRegistration).ID === id
+		);
+		return context;
+	}
+
+	public async updateAppointment(
+		appointment: CalendarAppointment,
+		newStartDate: Date,
+		newEndDate: Date
+	): Promise<void> {
+		const timeRegData: trix.core.ITimeRegistration = appointment
+			?.getBindingContext("PeriodRegistrations")
+			.getObject() as trix.core.ITimeRegistration;
+
+		timeRegData.startDate = newStartDate;
+		timeRegData.endDate = newEndDate;
+
+		//Update the record in DB
+		const startDateStr: string = DateHelper.dateAsSimpleFormat(newStartDate);
+		const startTimeStr: string =
+			DateHelper.dateAsSimpleTimeFormat(newStartDate);
+		const endDateStr: string = DateHelper.dateAsSimpleFormat(newEndDate);
+		const endTimeStr: string = DateHelper.dateAsSimpleTimeFormat(newEndDate);
+
+		const existingContext = await this.getAppointmentContext(timeRegData.ID);
+		void existingContext?.setProperty(
+			`${existingContext.getPath()}/startDate`,
+			startDateStr
+		);
+		void existingContext?.setProperty(
+			`${existingContext.getPath()}/startTime`,
+			startTimeStr
+		);
+
+		void existingContext?.setProperty(
+			`${existingContext.getPath()}/endDate`,
+			endDateStr
+		);
+		void existingContext?.setProperty(
+			`${existingContext.getPath()}/endTime`,
+			endTimeStr
+		);
+		void (await TimeRegistrationSetHandler.odataModel.submitBatch(
+			TimeRegistrationSetHandler.REGISTRATIONS_GROUP_ID
+		));
+		this.updateUIModel()
+		// void (await TimeRegistrationSetHandler.timeRegistrations.patchItem(
+		// 	timeRegData
+		// ));
 	}
 
 	/**
@@ -96,7 +149,7 @@ export default class TimeRegistrationSetHandler {
 			user_userID: "TAG",
 		};
 		TimeRegistrationSetHandler.dataMap.set(itemID, newTempItem);
-		this.updateData();
+		this.updateUIModel();
 
 		return newTempItem;
 	}
@@ -146,7 +199,7 @@ export default class TimeRegistrationSetHandler {
 		TimeRegistrationSetHandler.dataMap.delete(itemId);
 
 		if (skipUpdate === false) {
-			this.updateData();
+			this.updateUIModel();
 		}
 	}
 
@@ -185,10 +238,10 @@ export default class TimeRegistrationSetHandler {
 			TimeRegistrationSetHandler.dataMap.set(item.ID, item);
 		});
 
-		this.updateData();
+		this.updateUIModel();
 	}
 
-	private updateData() {
+	private updateUIModel() {
 		TimeRegistrationSetHandler.controller
 			.getView()
 			.setModel(

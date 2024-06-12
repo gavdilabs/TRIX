@@ -16,21 +16,15 @@ export class OdataListbindingWrapper<T> {
     this.model = listBinding?.getModel() as ODataModel;
     this.entityKeys = entityKeys;
     this.contextsMap = new Map<string, Context>();
-
-    this.listBinding.refresh();
-    this.listBinding.attachDataReceived(this.onDataReceived.bind(this));
   }
 
-  private onDataReceived(): void {
-    const allContexts = this.listBinding.getContexts();
-    allContexts.forEach((context) => {
-      this.updateContextInMap(context);
-    });
+  public async getContexts():Promise<Context[]> {
+    void await this.listBinding.requestContexts();
+    return this.listBinding.getContexts();
   }
 
-  private updateContextInMap(context: Context): void {
-    const mapKey = this.createMapKeyFromData(context.getObject() as T);
-    this.contextsMap.set(mapKey, context);
+  public async refreshBinding():Promise<void> {
+    void await this.listBinding.requestRefresh();
   }
 
   private createMapKeyFromData(itemData: Partial<T>): string {
@@ -57,13 +51,13 @@ export class OdataListbindingWrapper<T> {
     try {
       const newContext = this.listBinding.create(newItem);
       void (await newContext.created());
-      this.updateContextInMap(newContext);
 
       this.listBinding.refresh();
       return newContext;
     } catch (error) {
       return undefined;
     }
+
   }
 
   private getContext(itemData: Partial<T>): Context {
@@ -73,50 +67,6 @@ export class OdataListbindingWrapper<T> {
       : undefined;
   }
 
-  public async patchItem(
-    updatedItem: Partial<T>,
-    omit: string[] = []
-  ): Promise<void> {
-    const mapKey = this.createMapKeyFromData(updatedItem);
-    const mapContext = this.getContext(updatedItem);
-
-    const removeAttrFromObject = <O extends object, A extends keyof O>(
-      object: O,
-      attr: A
-    ): Omit<O, A> => {
-      const newObject = { ...object }
-    
-      if (attr in newObject) {
-        delete newObject[attr]
-      }
-    
-      return newObject
-    }
-
-    //remove unwanted fields
-    omit.forEach((omitFieldName) => removeAttrFromObject(updatedItem,omitFieldName as keyof T));
-
-    if (mapContext) {
-      for (const [key, newValue] of Object.entries(updatedItem)) {
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const existingValue = mapContext.getProperty(
-          `${mapContext.getPath()}/${key}`
-        );
-
-        if (existingValue !== newValue) {
-          void await mapContext.setProperty(
-            `${mapContext.getPath()}/${key}`,
-            newValue,
-            mapKey
-          );
-        }
-      }
-    }
-
-    if (this.model.hasPendingChanges(mapKey)) {
-      await this.model.submitBatch(mapKey);
-    }
-  }
 
   /**
    * General purpose function for deleting an item from a list

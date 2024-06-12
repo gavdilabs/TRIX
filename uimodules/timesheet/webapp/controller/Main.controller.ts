@@ -263,8 +263,19 @@ export default class Main extends BaseController {
 		}
 	}
 
-	public onAppointmentDrop(event: Event) {
-		console.log(event.getParameters());
+	public async onAppointmentDrop(event: Event): Promise<void> {
+		const parameters = event.getParameters() as {
+			appointment: CalendarAppointment;
+			startDate: Date;
+			endDate: Date;
+		};
+
+		//Update the record in DB
+		void (await TimeRegistrationSetHandler.getInstance().updateAppointment(
+			parameters.appointment,
+			parameters.startDate,
+			parameters.endDate
+		));
 	}
 
 	public onToggleFullDay(event: Event) {
