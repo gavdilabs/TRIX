@@ -14,7 +14,8 @@ export interface IAllocationTreeItem {
 
 export default class DropDownHandler {
 	public static readonly MODELNAME_ALLOCATION_TYPES = "ListAllocationTypes";
-	public static readonly MODELNAME_ALLOCATION_SUB_TYPES = "ListAllocationSubTypes";
+	public static readonly MODELNAME_ALLOCATION_SUB_TYPES =
+		"ListAllocationSubTypes";
 	public static readonly MODELNAME_ALLOCATION_TREE = "TreeAllocations";
 	private controller: Controller = undefined;
 	private odataModel: ODataModel = undefined;
@@ -39,7 +40,9 @@ export default class DropDownHandler {
 		forceRefresh: boolean = false
 	): Promise<{ key: string; value: string }[]> {
 		if (
-			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_TYPES) &&
+			this.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_TYPES) &&
 			forceRefresh === false
 		) {
 			return;
@@ -61,7 +64,10 @@ export default class DropDownHandler {
 			);
 			this.controller
 				.getView()
-				.setModel(new JSONModel(parsedTypes), DropDownHandler.MODELNAME_ALLOCATION_TYPES);
+				.setModel(
+					new JSONModel(parsedTypes),
+					DropDownHandler.MODELNAME_ALLOCATION_TYPES
+				);
 
 			return parsedTypes;
 		}
@@ -78,7 +84,9 @@ export default class DropDownHandler {
 		forceRefresh: boolean = false
 	): Promise<trix.core.ITimeAllocation[]> {
 		if (
-			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) &&
+			this.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) &&
 			forceRefresh === false
 		) {
 			return (
@@ -95,7 +103,10 @@ export default class DropDownHandler {
 		if (data && Array.isArray(data)) {
 			this.controller
 				.getView()
-				.setModel(new JSONModel(data), DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES);
+				.setModel(
+					new JSONModel(data),
+					DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES
+				);
 
 			return data;
 		}
@@ -119,7 +130,9 @@ export default class DropDownHandler {
 		}
 
 		if (
-			this.controller.getView().getModel(DropDownHandler.MODELNAME_ALLOCATION_TREE) &&
+			this.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_TREE) &&
 			forceRefresh === false
 		) {
 			return (
@@ -128,6 +141,21 @@ export default class DropDownHandler {
 					.getModel(DropDownHandler.MODELNAME_ALLOCATION_TREE) as JSONModel
 			).getData() as IAllocationTreeItem[];
 		}
+		const addSubtypesToParent = (
+			parentNode: IAllocationTreeItem,
+			subtypes4Parent: trix.core.ITimeAllocation[]
+		) => {
+			if (subtypes4Parent) {
+				subtypes4Parent.forEach((subtype) => {
+					parentNode.nodes.push({
+						isSelectable: true,
+						key: subtype.ID,
+						text: subtype.description,
+						nodes: [],
+					});
+				});
+			}
+		};
 
 		//Simple 2 level tree for now - that may change ofc
 		const nodesStructure: IAllocationTreeItem[] = [];
@@ -139,24 +167,50 @@ export default class DropDownHandler {
 				nodes: [],
 			};
 
-			//Link all children to the parent node
-			const subtypes4Parent = subTypes.filter(
-				(item) =>
-					item.allocationType === (parentNode.key as trix.core.AllocationType)
-			);
+			if (
+				(parentNode.key as trix.core.AllocationType) ===
+				trix.core.AllocationType.AbsenceAttendance
+			) {
+				//Handle Absence Node
+				const absenceParentNode: IAllocationTreeItem = {
+					isSelectable: false,
+					key: type.key,
+					text: this.i18nBundle.getText("AllocationTypeAbsence"),
+					nodes: [],
+				};
+				const absenceSubTypes = subTypes.filter(
+					(item) =>
+						item.allocationType ===
+							(parentNode.key as trix.core.AllocationType) &&
+						item.isAbsence === true
+				);
+				addSubtypesToParent(absenceParentNode, absenceSubTypes);
+				nodesStructure.push(absenceParentNode);
 
-			if (subtypes4Parent) {
-				subtypes4Parent.forEach((subtype) => {
-					parentNode.nodes.push({
-						isSelectable: true,
-						key: subtype.ID,
-						text: subtype.description,
-						nodes: [],
-					});
-				});
+				//Handle Absence Node
+				const presenceParentNode: IAllocationTreeItem = {
+					isSelectable: false,
+					key: type.key,
+					text: this.i18nBundle.getText("AllocationTypeAttendance"),
+					nodes: [],
+				};
+				const presenceSubTypes = subTypes.filter(
+					(item) =>
+						item.allocationType ===
+							(parentNode.key as trix.core.AllocationType) &&
+						item.isAbsence === false
+				);
+				addSubtypesToParent(presenceParentNode, presenceSubTypes);
+				nodesStructure.push(presenceParentNode);
+			} else {
+				//Link all children to the parent node
+				const subtypes4Parent = subTypes.filter(
+					(item) =>
+						item.allocationType === (parentNode.key as trix.core.AllocationType)
+				);
+				addSubtypesToParent(parentNode, subtypes4Parent);
+				nodesStructure.push(parentNode);
 			}
-
-			nodesStructure.push(parentNode);
 		});
 
 		if (nodesStructure.length > 0) {
