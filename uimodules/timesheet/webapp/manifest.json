@@ -9,6 +9,20 @@
 		"description": "{{appDescription}}",
 		"applicationVersion": {
 			"version": "${version}"
+		},
+		"dataSources": {
+			"coreData": {
+				"uri": "/odata/",
+				"type": "OData",
+				"settings": {
+					"annotations": [],
+					"odataVersion": "4.0"
+				}
+			},
+			"ApplicationModelSource": {
+				"uri": "model/applicationModel.json",
+				"type": "JSON"
+			}
 		}
 	},
 
@@ -50,6 +64,22 @@
 				"type": "sap.ui.model.resource.ResourceModel",
 				"settings": {
 					"bundleName": "trix.timesheet.i18n.i18n"
+				}
+			},
+			"ApplicationModel": {
+				"type": "sap.ui.model.json.JSONModel",
+				"dataSource": "ApplicationModelSource"
+			},
+			"": {
+				"dataSource": "coreData",
+				"preload": true,
+				"type": "sap.ui.model.odata.v4.ODataModel",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"groupId": "$direct"
 				}
 			}
 		},
