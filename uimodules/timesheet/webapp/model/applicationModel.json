@@ -1,3 +1,5 @@
 {
-	"showSidePanel": false
+	"showSidePanel": false,
+	"registrationView": true,
+	"teamView": false
 }

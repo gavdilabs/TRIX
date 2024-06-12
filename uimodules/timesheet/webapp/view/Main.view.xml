@@ -1,4 +1,4 @@
-<mvc:View controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -8,25 +8,102 @@
 	xmlns:unified="sap.ui.unified"
 	xmlns:l="sap.ui.layout">
 
-	<Page title="{i18n>appTitle}" id="page">
+	<Page title="{i18n>appTitle}" id="page" showHeader="false">
+		<OverflowToolbar height="5rem">
+			<Title text="TRIX"></Title>
+			<ToolbarSpacer />
+			<HBox class="sapUiSmallMarginEnd">
+				<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
+					<Text text="John Doe"/>
+					<!-- <Text text="{firstName} {lastName}"/> -->
+					<Text text="JODO"/>
+					<!-- <Text text="{userID}"/> -->
+				</VBox>
+				<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="rwqera"/>
+			</HBox>
+		</OverflowToolbar>
 		<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
-			<VBox>
-				<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "TRIX - Timerecording">
-					<controls:appointments>
-						<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-						</unified:CalendarAppointment>
-					</controls:appointments>
-					<controls:actions>
-						<ToggleButton text="Full Day" press="onToggleFullDay"/>
-						<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
-					</controls:actions>
-					<controls:views>
-						<SinglePlanningCalendarDayView key="DayView" title="Day" />
-						<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
-						<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
-					</controls:views>
-				</controls:TRIXCalendar>
-			</VBox>
+			<f:SidePanel id="mySidePanel" toggle="onToggle" sidePanelPosition="Left" >
+				<f:mainContent>
+					<VBox visible="{ApplicationModel>/registrationView}">
+						<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "Time Sheet">
+							<controls:appointments>
+								<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+								</unified:CalendarAppointment>
+							</controls:appointments>
+							<controls:actions>
+								<ToggleButton text="Full Day" press="onToggleFullDay"/>
+								<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
+							</controls:actions>
+							<controls:views>
+								<SinglePlanningCalendarDayView key="DayView" title="Day" />
+								<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
+								<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
+							</controls:views>
+						</controls:TRIXCalendar>
+					</VBox>
+					<VBox visible="{ApplicationModel>/teamView}">
+						<List items="{/UserSet}">
+							<items>
+								<CustomListItem >
+									<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect"  enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "Time Sheet">
+										<controls:appointments>
+											<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+											</unified:CalendarAppointment>
+										</controls:appointments>
+										<controls:actions>
+											<ToggleButton text="Full Day" press="onToggleFullDay"/>
+											<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
+										</controls:actions>
+										<controls:views>
+											<SinglePlanningCalendarDayView key="DayView" title="Day" />
+											<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
+											<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
+										</controls:views>
+									</controls:TRIXCalendar>
+								</CustomListItem>
+							</items>
+						</List>
+					</VBox>
+				</f:mainContent>
+				<f:items>
+					<f:SidePanelItem icon="sap-icon://date-time" text="Registration">
+						<VBox>
+							<Switch id="registrationSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/registrationView}" change="toggleRegistrationTeamView"/>
+							<Text text="View for time registration. Register your hours here." />
+						</VBox>
+					</f:SidePanelItem>
+					<f:SidePanelItem icon="sap-icon://company-view" text="Team">
+						<VBox>
+							<Switch id="teamSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/teamView}" change="toggleRegistrationTeamView"/>
+							<Text text="View your team's registrations here. You confirm their hours here (if applicable)" />
+						</VBox>
+					</f:SidePanelItem>
+					<f:SidePanelItem icon="sap-icon://action-settings" text="Configuration"> 
+						<VBox>
+							<VBox >
+								<Label text="Absence color" showColon="true" class="sapUiSmallMarginTop"/>
+								<Input id="colorAbs"
+									type="Text"
+									placeholder="Enter Color ..."
+									showValueHelp="true"
+									valueHelpRequest="openSimplifiedModeSample"
+									change="handleInputChange"/>
+							</VBox>
+							<VBox >
+								<Label text="Presence color" showColon="true" class="sapUiSmallMarginTop"/>
+								<Input id="colorPres"
+									type="Text"
+									placeholder="Enter Color ..."
+									showValueHelp="true"
+									valueHelpRequest="openSimplifiedModeSample"
+									change="handleInputChange"/>
+							</VBox>
+						</VBox>
+					</f:SidePanelItem>
+				</f:items>
+			</f:SidePanel>
+
 			<l:sideContent width="200px">
 				<PlanningCalendarLegend id="SinglePlanningCalendarLegend" items="{path : '/legendItems', templateShareable: true}" appointmentItems="{path : '/legendAppointmentItems',
 									templateShareable: true}" class="sapUiSmallMarginTop">

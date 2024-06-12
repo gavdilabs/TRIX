@@ -1,0 +1,177 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog title="Edit User Info" contentHeight="50%" contentWidth="50%">
+        <VBox >
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Avatar displaySize="L" active="true" badgeIcon="sap-icon://camera" press="onChangeAvatar"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Default View" showColon="true" />
+                    <SegmentedButton width="80%" >
+                        <items>
+                            <SegmentedButtonItem text="Day"/>
+                            <SegmentedButtonItem text="Work Week"/>
+                            <SegmentedButtonItem text="Week"/>
+                            <SegmentedButtonItem text="Month"/>
+                        </items>
+                    </SegmentedButton>
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Firstname" showColon="true" />
+                    <Input value="{firstName}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Lastname" showColon="true" />
+                    <Input value="{lastName}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="User ID" showColon="true" />
+                    <Input value="{userName}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Email Address" showColon="true" />
+                    <Input value="{email}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Manager" showColon="true" />
+                    <Input value="{manager}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Country" showColon="true" />
+                    <Input value="{country}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Needs Approval from Manager" showColon="true" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="{needsManagerApproval}" />
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Register only deviations from expected work hours" showColon="true" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="{deviationsOnly}" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Expected Start Time" showColon="true" />
+                    <TimePicker value="{expectedStartTime}"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Expected End Time" showColon="true" />
+                    <TimePicker value="{expectedEndTime}"/>
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Substitute for Manager" showColon="true" />
+                    <Input value="{managerSubstitute}" width="80%" />
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    
+                </VBox>
+            </HBox>
+        </VBox>
+
+        <beginButton>
+            <Button text="Close" type="Ghost" press="onCloseEditUser"/>
+        </beginButton>
+        <endButton>
+            <Button text="Save" type="Success"/>
+        </endButton>
+    </Dialog>
+</core:FragmentDefinition>
+
+<!-- <core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+    <Dialog title="{i18n>ttl_editUserDialog}" contentHeight="50%" contentWidth="50%">
+        <VBox >
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_firstName}" showColon="true" />
+                    <Input value="{firstName}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_lastName}" showColon="true" />
+                    <Input value="{lastName}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_userName}" showColon="true" />
+                    <Input value="{userName}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_email}" showColon="true" />
+                    <Input value="{email}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_manager}" showColon="true" />
+                    <Input value="{manager}" width="80%"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_country}" showColon="true" />
+                    <Input value="{country}" width="80%" />
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_deviationsOnly}" showColon="true" />
+                    <Switch customTextOn="{i18n>txt_yes}" customTextOff="{i18n>txt_no}" state="{deviationsOnly}" />
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_defaultView}" showColon="true" />
+                    <SegmentedButton width="80%" >
+                        <items>
+                            <SegmentedButtonItem text="{i18n>txt_day}"/>
+                            <SegmentedButtonItem text="{i18n>txt_workWeek}"/>
+                            <SegmentedButtonItem text="{i18n>txt_week}"/>
+                            <SegmentedButtonItem text="{i18n>txt_month}"/>
+                        </items>
+                    </SegmentedButton>
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_expectedStartTime}" showColon="true" />
+                    <TimePicker value="{expectedStartTime}"/>
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_expectedEndTime}" showColon="true" />
+                    <TimePicker value="{expectedEndTime}"/>
+                </VBox>
+            </HBox>
+            <HBox width="100%">
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_needsManagerApproval}" showColon="true" />
+                    <Switch customTextOn="{i18n>txt_yes}" customTextOff="{i18n>txt_no}" state="{needsManagerApproval}" />
+                </VBox>
+                
+                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="{i18n>lbl_managerSubstitute}" showColon="true" />
+                    <Input value="{managerSubstitute}" width="80%" />
+                </VBox>
+            </HBox>
+        </VBox>
+    </Dialog>
+</core:FragmentDefinition> -->

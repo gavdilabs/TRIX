@@ -11,6 +11,13 @@ import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
 import BaseController from "./BaseController";
+import Dialog from "sap/m/Dialog";
+import ColorPickerPopover from "sap/ui/unified/ColorPickerPopover";
+import ColorPickerDisplayMode from "sap/ui/unified/ColorPickerDisplayMode";
+import Input from "sap/m/Input";
+import MessageToast from "sap/m/MessageToast";
+import { ValueState } from "sap/ui/core/library";
+import Switch from "sap/m/Switch";
 
 enum AppointmentPopoverMode {
 	DRAGGED = "DRAGGED",
@@ -28,6 +35,9 @@ enum DateType {
  */
 export default class Main extends BaseController {
 	private popoverAppointment: Control;
+	private dialogEditUser: Dialog;
+	private colorInputId: string;
+	private oColorPickerSimplifiedPopover: ColorPickerPopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
 	private cellPressed: boolean = false;
@@ -270,5 +280,59 @@ export default class Main extends BaseController {
 	public onToggleFullDay(event: Event) {
 		const params = event.getParameters() as { pressed: boolean };
 		this.getCalendarControl().setFullDay(params.pressed);
+	}
+
+	async onEditUser() {
+		if (!this.dialogEditUser) {
+			this.dialogEditUser = (await Fragment.load({
+				id: this.getView().getId(),
+				name: "trix.timesheet.view.fragments.EditUserDialog",
+				controller: this,
+			})) as Dialog;
+
+			if (this.dialogEditUser) {
+				this.dialogEditUser.open();
+			}
+		}
+		else if (!this.dialogEditUser.isOpen()) {
+			this.dialogEditUser.open();
+		}
+	}
+
+	onCloseEditUser(oEvent: Event) {
+		(oEvent.getSource().getEventingParent() as Dialog).close();
+	}
+
+	onChangeAvatar() {
+		return;
+	}
+
+	openSimplifiedModeSample(oEvent: Event) {
+		this.colorInputId = (oEvent.getSource()).getId() as string;
+		if (!this.oColorPickerSimplifiedPopover) {
+			this.oColorPickerSimplifiedPopover = new ColorPickerPopover("oColorPickerSimpplifiedPopover", {
+				colorString: "pink",
+				displayMode: ColorPickerDisplayMode.Simplified,
+				change: this.handleColorChange.bind(this)
+			});
+		}
+		this.oColorPickerSimplifiedPopover.openBy(oEvent.getSource());
+	}
+
+	handleColorChange() {
+		const oView = this.getView(),
+			oInput = oView.byId(this.colorInputId);
+
+		oInput.setValue(oEvent.getParameter("colorString"));
+		oInput.setValueState(ValueState.None);
+		this.colorInputId = "";
+		MessageToast.show("Chosen color string: " + oEvent.getParameter("colorString"));
+	}
+
+	toggleRegistrationTeamView(oEvent: Event) {
+		const oSwitch = oEvent.getSource() as Switch;
+		const appModel = this.getModel("ApplicationModel") as JSONModel;
+		oSwitch.getId().includes("team") && oSwitch.getState() === true ? appModel.setProperty("registrationView", false) && appModel.setProperty("teamView", true) :
+		appModel.setProperty("registrationView", true) && appModel.setProperty("teamView", false)
 	}
 }
