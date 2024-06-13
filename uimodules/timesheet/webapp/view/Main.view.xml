@@ -28,13 +28,9 @@
 				</controls:TRIXCalendar>
 			</VBox>
 			<l:sideContent width="200px">
-				<PlanningCalendarLegend id="SinglePlanningCalendarLegend" items="{path : '/legendItems', templateShareable: true}" appointmentItems="{path : '/legendAppointmentItems',
-									templateShareable: true}" class="sapUiSmallMarginTop">
-					<items>
-						<unified:CalendarLegendItem text="{text}" type="{type}" color="{color}" tooltip="{text}" />
-					</items>
+				<PlanningCalendarLegend appointmentItemsHeader="Calendar Items"  appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
 					<appointmentItems>
-						<unified:CalendarLegendItem text="{text}" type="{type}" tooltip="{text}" />
+						<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
 					</appointmentItems>
 				</PlanningCalendarLegend>
 			</l:sideContent>

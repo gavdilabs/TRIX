@@ -4,6 +4,7 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import { trix } from "../model/entities-core";
 import ModelDataHelper from "../utils/ModelDataHelper";
+import ApplicationModelHandler from "./ApplicationModelHandler";
 
 export interface IAllocationTreeItem {
 	text: string;
@@ -12,8 +13,25 @@ export interface IAllocationTreeItem {
 	nodes?: IAllocationTreeItem[];
 }
 
+interface IExtendedTimeAllocation extends trix.core.ITimeAllocation {
+	allocationTypeExtended: trix.core.AllocationType | ExtendedAllocationTypes;
+}
+
+export enum ExtendedAllocationTypes {
+	Absence = "Absence",
+	Attendance = "Attendance",
+}
+
+export interface IAllocationType {
+	key: string;
+	value: string;
+	color: string;
+}
+
 export default class DropDownHandler {
 	public static readonly MODELNAME_ALLOCATION_TYPES = "ListAllocationTypes";
+	public static readonly MODELNAME_ALLOCATION_TYPES_LEGEND =
+		"ListAllocationTypesLegend";
 	public static readonly MODELNAME_ALLOCATION_SUB_TYPES =
 		"ListAllocationSubTypes";
 	public static readonly MODELNAME_ALLOCATION_TREE = "TreeAllocations";
@@ -48,18 +66,30 @@ export default class DropDownHandler {
 			return;
 		}
 
-		const data = await ModelDataHelper.getModelData<string[]>(
+		let data = await ModelDataHelper.getModelData<string[]>(
 			this.odataModel,
 			"/getAllocationTypes()",
 			{}
 		);
 
-		const parsedTypes: { key: string; value: string }[] = [];
+		//We Remove the combined absence and attendance and add 2 individual
+		data = data.filter(
+			(dataItem) =>
+				dataItem !== (trix.core.AllocationType.AbsenceAttendance as string)
+		);
+		data.push(ExtendedAllocationTypes.Absence);
+		data.push(ExtendedAllocationTypes.Attendance);
+
+		const parsedTypes: IAllocationType[] = [];
 		if (data && Array.isArray(data)) {
 			data.forEach((itemName) =>
 				parsedTypes.push({
 					key: itemName,
 					value: this.i18nBundle.getText(`AllocationType${itemName}`),
+					color: ApplicationModelHandler.getInstance().getColorByAllocationType(
+						itemName as trix.core.AllocationType,
+						itemName === (ExtendedAllocationTypes.Attendance as string)
+					),
 				})
 			);
 			this.controller
@@ -75,13 +105,18 @@ export default class DropDownHandler {
 		return [];
 	}
 
-	public isSubtypeAttendance(allocationType:trix.core.AllocationType,subtypeId: string): boolean {
+	public isSubtypeAttendance(
+		allocationType: trix.core.AllocationType,
+		subtypeId: string
+	): boolean {
 		const allSubtypes = (
 			this.controller.getView().getModel("ListAllocationSubTypes") as JSONModel
 		).getData() as trix.core.ITimeAllocation[];
 
 		const subtype = allSubtypes?.find(
-			(subtypeTmp) => (subtypeTmp.ID === subtypeId && subtypeTmp.allocationType === allocationType)
+			(subtypeTmp) =>
+				subtypeTmp.ID === subtypeId &&
+				subtypeTmp.allocationType === allocationType
 		);
 		return subtype && subtype.isAbsence ? false : true;
 	}
@@ -93,7 +128,7 @@ export default class DropDownHandler {
 	 */
 	private async refreshListAllocationSubTypes(
 		forceRefresh: boolean = false
-	): Promise<trix.core.ITimeAllocation[]> {
+	): Promise<IExtendedTimeAllocation[]> {
 		if (
 			this.controller
 				.getView()
@@ -104,12 +139,27 @@ export default class DropDownHandler {
 				this.controller
 					.getView()
 					.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
-			).getData() as trix.core.ITimeAllocation[];
+			).getData() as IExtendedTimeAllocation[];
 		}
 
-		const data = await ModelDataHelper.getModelData<
-			trix.core.ITimeAllocation[]
-		>(this.odataModel, "/TimeAllocationSet?$orderby=description", {});
+		const data = await ModelDataHelper.getModelData<IExtendedTimeAllocation[]>(
+			this.odataModel,
+			"/TimeAllocationSet?$orderby=description",
+			{}
+		);
+
+		//Make some overrides on Attendance and Absence
+		data.forEach((dataItem) => {
+			if (
+				dataItem.allocationType === trix.core.AllocationType.AbsenceAttendance
+			) {
+				dataItem.allocationTypeExtended = dataItem.isAbsence
+					? ExtendedAllocationTypes.Absence
+					: ExtendedAllocationTypes.Attendance;
+			} else {
+				dataItem.allocationTypeExtended = dataItem.allocationType;
+			}
+		});
 
 		if (data && Array.isArray(data)) {
 			this.controller
@@ -178,50 +228,13 @@ export default class DropDownHandler {
 				nodes: [],
 			};
 
-			if (
-				(parentNode.key as trix.core.AllocationType) ===
-				trix.core.AllocationType.AbsenceAttendance
-			) {
-				//Handle Absence Node
-				const absenceParentNode: IAllocationTreeItem = {
-					isSelectable: false,
-					key: type.key,
-					text: this.i18nBundle.getText("AllocationTypeAbsence"),
-					nodes: [],
-				};
-				const absenceSubTypes = subTypes.filter(
-					(item) =>
-						item.allocationType ===
-							(parentNode.key as trix.core.AllocationType) &&
-						item.isAbsence === true
-				);
-				addSubtypesToParent(absenceParentNode, absenceSubTypes);
-				nodesStructure.push(absenceParentNode);
-
-				//Handle Absence Node
-				const presenceParentNode: IAllocationTreeItem = {
-					isSelectable: false,
-					key: type.key,
-					text: this.i18nBundle.getText("AllocationTypeAttendance"),
-					nodes: [],
-				};
-				const presenceSubTypes = subTypes.filter(
-					(item) =>
-						item.allocationType ===
-							(parentNode.key as trix.core.AllocationType) &&
-						item.isAbsence === false
-				);
-				addSubtypesToParent(presenceParentNode, presenceSubTypes);
-				nodesStructure.push(presenceParentNode);
-			} else {
-				//Link all children to the parent node
-				const subtypes4Parent = subTypes.filter(
-					(item) =>
-						item.allocationType === (parentNode.key as trix.core.AllocationType)
-				);
-				addSubtypesToParent(parentNode, subtypes4Parent);
-				nodesStructure.push(parentNode);
-			}
+			//Link all children to the parent node
+			const subtypes4Parent = subTypes.filter(
+				(item) =>
+					item.allocationType === (parentNode.key as trix.core.AllocationType)
+			);
+			addSubtypesToParent(parentNode, subtypes4Parent);
+			nodesStructure.push(parentNode);
 		});
 
 		if (nodesStructure.length > 0) {
