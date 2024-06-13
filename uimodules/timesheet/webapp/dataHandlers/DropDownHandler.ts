@@ -231,7 +231,7 @@ export default class DropDownHandler {
 			//Link all children to the parent node
 			const subtypes4Parent = subTypes.filter(
 				(item) =>
-					item.allocationType === (parentNode.key as trix.core.AllocationType)
+					item.allocationTypeExtended === (parentNode.key as trix.core.AllocationType)
 			);
 			addSubtypesToParent(parentNode, subtypes4Parent);
 			nodesStructure.push(parentNode);

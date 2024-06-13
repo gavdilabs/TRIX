@@ -10,6 +10,12 @@ export interface IApplicationModel {
 		service: string;
 		project: string;
 	};
+	workHours: {
+		default: {
+			from: string;
+			to: string;
+		};
+	};
 }
 
 export default class ApplicationModelHandler {
