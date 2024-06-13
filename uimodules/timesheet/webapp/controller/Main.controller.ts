@@ -19,11 +19,6 @@ enum AppointmentPopoverMode {
 	CELLPRESS = "CELLPRESS",
 }
 
-enum DateType {
-	START_DATE = "START",
-	END_DATE = "END",
-}
-
 interface IPopupModel {
 	mode: AppointmentPopoverMode;
 	startDate: Date;
@@ -136,7 +131,6 @@ export default class Main extends BaseController {
 			true
 		);
 		if (appointmentControl) {
-			this.tempAppointmentControl = appointmentControl;
 			void (await this.openAppointmentDialogByControl(
 				appointmentControl,
 				mode,
@@ -156,6 +150,9 @@ export default class Main extends BaseController {
 		mode: AppointmentPopoverMode,
 		delayInMs: number = 0
 	): Promise<void> {
+		//Set the global for return events to use
+		this.tempAppointmentControl = openByControl;
+
 		const appointmentData = openByControl
 			.getBindingContext("PeriodRegistrations")
 			.getObject() as trix.core.ITimeAllocation;
@@ -243,7 +240,7 @@ export default class Main extends BaseController {
 	/**
 	 * Function for closing the appointment popover
 	 */
-	public closePopover(){
+	public closePopover() {
 		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
 
@@ -310,19 +307,6 @@ export default class Main extends BaseController {
 		}
 	}
 
-	public onTimeChange(event: Event, dateType: DateType) {
-		switch (dateType) {
-			case DateType.START_DATE:
-				this.tempAppointmentControl.setStartDate(new Date());
-				break;
-			case DateType.END_DATE:
-				this.tempAppointmentControl.setStartDate(
-					new Date(new Date().getMilliseconds() + 100000)
-				);
-				break;
-		}
-	}
-
 	/**
 	 * Event function for when we move an appointment around and drop it
 	 * @param event std. ui5 event
@@ -340,6 +324,30 @@ export default class Main extends BaseController {
 			parameters.startDate,
 			parameters.endDate
 		));
+	}
+
+	public async onSaveAppointmentChanges(): Promise<void> {
+		const data = (
+			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
+		).getData() as IPopupModel;
+
+		//We use the below ref dates for stability as the timepickers may go 1970.01.01
+		const newStartDate:Date = this.tempAppointmentControl.getStartDate() as Date;
+		const newEndDate:Date = this.tempAppointmentControl.getEndDate() as Date; 
+
+		newStartDate.setHours(data.startDate.getHours());
+		newStartDate.setMinutes(data.startDate.getMinutes());
+		newEndDate.setHours(data.endDate.getHours());
+		newEndDate.setMinutes(data.endDate.getMinutes());
+
+		//Update the record in DB
+		void (await TimeRegistrationSetHandler.getInstance().updateAppointment(
+			this.tempAppointmentControl,
+			newStartDate,
+			newEndDate
+		));
+
+		this.closePopover();
 	}
 
 	public onToggleFullDay(event: Event) {
