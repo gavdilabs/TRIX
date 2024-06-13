@@ -7,6 +7,7 @@ import Fragment from "sap/ui/core/Fragment";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
+import ApplicationModelHandler from "../dataHandlers/ApplicationModelHandler";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
@@ -31,6 +32,7 @@ export default class Main extends BaseController {
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
 	private cellPressed: boolean = false;
+	private ddHandler: DropDownHandler = undefined;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -48,19 +50,26 @@ export default class Main extends BaseController {
 	 */
 	private async onPatternMatched() {
 		//Initialize the Data handler(s)
-		void await TimeRegistrationSetHandler.initialize(this.getOdataModelCore(), this);
+		void (await TimeRegistrationSetHandler.initialize(
+			this.getOdataModelCore(),
+			this
+		));
 
-		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
+		//ApplicationModelHandler init
+		ApplicationModelHandler.getInstance().initialize(this);
 
 		//Preload some popup lists
-		const ddHandler = new DropDownHandler(
+		this.ddHandler = new DropDownHandler(
 			this,
 			this.getOdataModelCore(),
 			this.getResourceBundle()
 		);
 
 		//Preload the allocation tree data
-		void ddHandler.loadAllocationTree();
+		void (await this.ddHandler.loadAllocationTree());
+
+		//Load last as other dependencies, formatter etc. need to use the ddhandler based on calendar data
+		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
 	}
 
 	/**
@@ -214,16 +223,23 @@ export default class Main extends BaseController {
 		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
 
-	public formatterAppointmentColor(appointmentType: trix.core.AllocationType) {
+	public formatterAppointmentColor(
+		appointmentType: trix.core.AllocationType,
+		appointmentSubtypeId: string
+	) {
 		switch (appointmentType) {
 			case trix.core.AllocationType.AbsenceAttendance:
-				return "red";
-			case trix.core.AllocationType.Project:
-				return "#345678";
-			case trix.core.AllocationType.Service:
-				return "blue";
+				return ApplicationModelHandler.getInstance().getColorByAllocationType(
+					appointmentType,
+					this.ddHandler?.isSubtypeAttendance(
+						appointmentType,
+						appointmentSubtypeId
+					)
+				);
 			default:
-				return "#ccc";
+				return ApplicationModelHandler.getInstance().getColorByAllocationType(
+					appointmentType
+				);
 		}
 	}
 

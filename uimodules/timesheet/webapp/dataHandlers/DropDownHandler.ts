@@ -75,6 +75,17 @@ export default class DropDownHandler {
 		return [];
 	}
 
+	public isSubtypeAttendance(allocationType:trix.core.AllocationType,subtypeId: string): boolean {
+		const allSubtypes = (
+			this.controller.getView().getModel("ListAllocationSubTypes") as JSONModel
+		).getData() as trix.core.ITimeAllocation[];
+
+		const subtype = allSubtypes?.find(
+			(subtypeTmp) => (subtypeTmp.ID === subtypeId && subtypeTmp.allocationType === allocationType)
+		);
+		return subtype && subtype.isAbsence ? false : true;
+	}
+
 	/**
 	 * Function for getting all the allocation subtypes available from the system
 	 * @param forceRefresh Will only fetch data 1 time ever - unless u set this to true

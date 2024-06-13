@@ -13,7 +13,7 @@
 			<VBox>
 				<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "TRIX - Timerecording">
 					<controls:appointments>
-						<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+						<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 						</unified:CalendarAppointment>
 					</controls:appointments>
 					<controls:actions>
