@@ -1,3 +1,7 @@
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import MessageBox from "sap/m/MessageBox";
+import MessageToast from "sap/m/MessageToast";
+import MessageType from "sap/ui/core/message/MessageType";
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Context from "sap/ui/model/odata/v4/Context";
@@ -16,6 +20,7 @@ export default class TimeRegistrationSetHandler {
 	private static instance: TimeRegistrationSetHandler = undefined;
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
+	private static i18nBundle: ResourceBundle = undefined;
 
 	private static dataMap: Map<string, Partial<ITimeRegistrationAndAllocation>> =
 		new Map();
@@ -43,10 +48,12 @@ export default class TimeRegistrationSetHandler {
 
 	public static async initialize(
 		odataModel: ODataModel,
-		controller: Controller
+		controller: Controller,
+		i18nBundle: ResourceBundle
 	): Promise<void> {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
+		this.i18nBundle = i18nBundle;
 
 		//Create the listbinding for backend
 		const oBinding = odataModel.bindList(
@@ -81,38 +88,42 @@ export default class TimeRegistrationSetHandler {
 		const timeRegData: trix.core.ITimeRegistration = appointment
 			?.getBindingContext("PeriodRegistrations")
 			.getObject() as trix.core.ITimeRegistration;
+		try {
+			timeRegData.startDate = newStartDate;
+			timeRegData.endDate = newEndDate;
 
-		timeRegData.startDate = newStartDate;
-		timeRegData.endDate = newEndDate;
+			//Update the record in DB
+			const startDateStr: string = DateHelper.dateAsSimpleFormat(newStartDate);
+			const startTimeStr: string =
+				DateHelper.dateAsSimpleTimeFormat(newStartDate);
+			const endDateStr: string = DateHelper.dateAsSimpleFormat(newEndDate);
+			const endTimeStr: string = DateHelper.dateAsSimpleTimeFormat(newEndDate);
 
-		//Update the record in DB
-		const startDateStr: string = DateHelper.dateAsSimpleFormat(newStartDate);
-		const startTimeStr: string =
-			DateHelper.dateAsSimpleTimeFormat(newStartDate);
-		const endDateStr: string = DateHelper.dateAsSimpleFormat(newEndDate);
-		const endTimeStr: string = DateHelper.dateAsSimpleTimeFormat(newEndDate);
+			const existingContext = await this.getAppointmentContext(timeRegData.ID);
+			void existingContext?.setProperty(
+				`${existingContext.getPath()}/startDate`,
+				startDateStr
+			);
+			void existingContext?.setProperty(
+				`${existingContext.getPath()}/startTime`,
+				startTimeStr
+			);
 
-		const existingContext = await this.getAppointmentContext(timeRegData.ID);
-		void existingContext?.setProperty(
-			`${existingContext.getPath()}/startDate`,
-			startDateStr
-		);
-		void existingContext?.setProperty(
-			`${existingContext.getPath()}/startTime`,
-			startTimeStr
-		);
+			void existingContext?.setProperty(
+				`${existingContext.getPath()}/endDate`,
+				endDateStr
+			);
+			void existingContext?.setProperty(
+				`${existingContext.getPath()}/endTime`,
+				endTimeStr
+			);
 
-		void existingContext?.setProperty(
-			`${existingContext.getPath()}/endDate`,
-			endDateStr
-		);
-		void existingContext?.setProperty(
-			`${existingContext.getPath()}/endTime`,
-			endTimeStr
-		);
+			this.updateUIModel();
 
-
-		this.updateUIModel();
+			this.toast("MessageAppointmentUpdatedOk");
+		} catch {
+			this.message("MessageAppointmentUpdatedFail", MessageType.Error);
+		}
 	}
 
 	private async commitData(): Promise<void> {
@@ -183,14 +194,20 @@ export default class TimeRegistrationSetHandler {
 				endTime: DateHelper.dateAsSimpleTimeFormat(endDate) as unknown as Date,
 			});
 
-		//Add the DB Record to the data map
-		void (await newItemFromBackendContext.created());
+		try {
+			//Add the DB Record to the data map
+			void (await newItemFromBackendContext.created());
 
-		//Reload the screen data
-		void this.loadTimeRegistrations();
+			//Reload the screen data
+			void this.loadTimeRegistrations();
 
-		//Delete the temp id item - will update the model automatically
-		this.deleteDataMapItem(tempId);
+			//Delete the temp id item - will update the model automatically
+			this.deleteDataMapItem(tempId);
+
+			this.toast("MessageAppointmentCreatedOk");
+		} catch {
+			this.message("MessageAppointmentCreateFail", MessageType.Error);
+		}
 	}
 
 	/**
@@ -204,6 +221,54 @@ export default class TimeRegistrationSetHandler {
 
 		if (skipUpdate === false) {
 			this.updateUIModel();
+		}
+	}
+
+	/**
+	 * Function delete remote db item
+	 * @param timeData
+	 */
+	public async deleteTimeRegistration(
+		timeData: Partial<trix.core.ITimeRegistration>
+	): Promise<void> {
+		if (!timeData || !timeData.ID) {
+			return;
+		}
+		const contextToDelete = await this.getAppointmentContext(timeData.ID);
+
+		try {
+			if (contextToDelete) {
+				await contextToDelete.delete();
+			}
+			this.deleteDataMapItem(timeData.ID);
+			this.toast("MessageAppointmentDeletedOk");
+		} catch (e) {
+			this.message("MessageAppointmentDeletedFail", MessageType.Error);
+		}
+	}
+
+	private toast(messageId: string) {
+		MessageToast.show(TimeRegistrationSetHandler.i18nBundle.getText(messageId));
+	}
+
+	private message(messageId: string, type: MessageType) {
+		const message = TimeRegistrationSetHandler.i18nBundle.getText(messageId);
+		switch (type) {
+			case MessageType.Error:
+				MessageBox.error(message);
+				break;
+			case MessageType.Warning:
+				MessageBox.warning(message);
+				break;
+			case MessageType.Information:
+				MessageBox.information(message);
+				break;
+			case MessageType.Success:
+				MessageBox.success(message);
+				break;
+			default:
+				MessageBox.show(message);
+				break;
 		}
 	}
 

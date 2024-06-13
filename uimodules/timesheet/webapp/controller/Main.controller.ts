@@ -24,10 +24,20 @@ enum DateType {
 	END_DATE = "END",
 }
 
+interface IPopupModel {
+	mode: AppointmentPopoverMode;
+	startDate: Date;
+	endDate: Date;
+	recordId: string;
+	isTemporary: boolean;
+}
+
 /**
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
+	public readonly POPOVER_MODEL_NAME = "PopoverControl";
+
 	private popoverAppointment: Control;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
@@ -52,7 +62,8 @@ export default class Main extends BaseController {
 		//Initialize the Data handler(s)
 		void (await TimeRegistrationSetHandler.initialize(
 			this.getOdataModelCore(),
-			this
+			this,
+			this.getResourceBundle()
 		));
 
 		//ApplicationModelHandler init
@@ -145,6 +156,10 @@ export default class Main extends BaseController {
 		mode: AppointmentPopoverMode,
 		delayInMs: number = 0
 	): Promise<void> {
+		const appointmentData = openByControl
+			.getBindingContext("PeriodRegistrations")
+			.getObject() as trix.core.ITimeAllocation;
+
 		if (!this.popoverAppointment) {
 			this.popoverAppointment = (await Fragment.load({
 				id: this.getView().getId(),
@@ -161,14 +176,16 @@ export default class Main extends BaseController {
 			const openFunc = () => {
 				const popover = this.popoverAppointment as ResponsivePopover;
 
-				popover.setModel(
-					new JSONModel({
-						mode: mode,
-						startDate: openByControl.getStartDate(),
-						endDate: openByControl.getEndDate(),
-					}),
-					"PopoverControl"
-				);
+				const data: IPopupModel = {
+					mode: mode,
+					startDate: openByControl.getStartDate() as Date,
+					endDate: openByControl.getEndDate() as Date,
+					isTemporary:
+						appointmentData?.ID?.indexOf("TEMP") === 0 ? true : false,
+					recordId: appointmentData?.ID,
+				};
+
+				popover.setModel(new JSONModel(data), this.POPOVER_MODEL_NAME);
 
 				popover.openBy(openByControl as unknown as Control);
 			};
@@ -220,9 +237,22 @@ export default class Main extends BaseController {
 			this.tempUiRecord
 		);
 
+		this.closePopover();
+	}
+
+	/**
+	 * Function for closing the appointment popover
+	 */
+	public closePopover(){
 		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
 
+	/**
+	 * Formatter: Sets configured color on the appointments
+	 * @param appointmentType Appointment typ ie. Service, Absence, Attendance etc.
+	 * @param appointmentSubtypeId Id of the subtype
+	 * @returns color #hex
+	 */
 	public formatterAppointmentColor(
 		appointmentType: trix.core.AllocationType,
 		appointmentSubtypeId: string
@@ -254,7 +284,7 @@ export default class Main extends BaseController {
 
 	/**
 	 * Event function for when an exisitng appointment is selected
-	 * @param event 
+	 * @param event
 	 */
 	public async onAppointmentSelect(event: Event) {
 		const params = event.getParameters() as {
@@ -315,5 +345,19 @@ export default class Main extends BaseController {
 	public onToggleFullDay(event: Event) {
 		const params = event.getParameters() as { pressed: boolean };
 		this.getCalendarControl().setFullDay(params.pressed);
+	}
+
+	public async onDeleteAppointment() {
+		const data = (
+			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
+		).getData() as IPopupModel;
+
+		void (await TimeRegistrationSetHandler.getInstance().deleteTimeRegistration(
+			{
+				ID: data.recordId,
+			}
+		));
+
+		this.closePopover();
 	}
 }
