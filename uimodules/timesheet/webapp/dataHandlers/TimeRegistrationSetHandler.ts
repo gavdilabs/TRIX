@@ -11,8 +11,7 @@ import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 
 export default class TimeRegistrationSetHandler {
 	public static readonly REGISTRATIONS_MODEL_NAME = "PeriodRegistrations";
-	public static readonly REGISTRATIONS_GROUP_ID =
-		"UpdateGroupPeriodRegistrations";
+	public static readonly REGISTRATIONS_GROUP_ID: string = undefined;
 
 	private static instance: TimeRegistrationSetHandler = undefined;
 	private static odataModel: ODataModel = undefined;
@@ -111,13 +110,16 @@ export default class TimeRegistrationSetHandler {
 			`${existingContext.getPath()}/endTime`,
 			endTimeStr
 		);
+
+
+		this.updateUIModel();
+	}
+
+	private async commitData(): Promise<void> {
 		void (await TimeRegistrationSetHandler.odataModel.submitBatch(
 			TimeRegistrationSetHandler.REGISTRATIONS_GROUP_ID
 		));
-		this.updateUIModel()
-		// void (await TimeRegistrationSetHandler.timeRegistrations.patchItem(
-		// 	timeRegData
-		// ));
+		this.updateUIModel();
 	}
 
 	/**
@@ -173,10 +175,12 @@ export default class TimeRegistrationSetHandler {
 		const newItemFromBackendContext =
 			await TimeRegistrationSetHandler.timeRegistrations.createItem({
 				...remainingData,
-				startDate: startDate?.toISOString().split("T")[0] as unknown as Date, //Workaround hack to be abl
-				endDate: endDate?.toISOString().split("T")[0] as unknown as Date,
-				startTime: startDate?.toTimeString().split(" ")[0] as unknown as Date,
-				endTime: endDate?.toTimeString().split(" ")[0] as unknown as Date,
+				startDate: DateHelper.dateAsSimpleFormat(startDate) as unknown as Date, //Workaround hack to cast it
+				endDate: DateHelper.dateAsSimpleFormat(endDate) as unknown as Date,
+				startTime: DateHelper.dateAsSimpleTimeFormat(
+					startDate
+				) as unknown as Date,
+				endTime: DateHelper.dateAsSimpleTimeFormat(endDate) as unknown as Date,
 			});
 
 		//Add the DB Record to the data map
