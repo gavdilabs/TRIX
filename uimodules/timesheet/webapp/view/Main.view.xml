@@ -9,9 +9,9 @@
 	xmlns:l="sap.ui.layout">
 
 	<Page title="{i18n>appTitle}" id="page">
-		<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
+		<l:DynamicSideContent class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
 			<VBox>
-				<controls:TRIXCalendar fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "TRIX - Timerecording">
+				<controls:TRIXCalendar firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "TRIX - Timerecording">
 					<controls:appointments>
 						<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 						</unified:CalendarAppointment>
@@ -21,9 +21,9 @@
 						<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
 					</controls:actions>
 					<controls:views>
-						<SinglePlanningCalendarDayView key="DayView" title="Day" />
-						<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
-						<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
+						<SinglePlanningCalendarDayView firstDayOfWeek="1" calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDay}" />
+						<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeek}" />
+						<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewkMonth}" />
 					</controls:views>
 				</controls:TRIXCalendar>
 			</VBox>

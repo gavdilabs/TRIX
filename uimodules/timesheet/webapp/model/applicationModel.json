@@ -1,9 +1,9 @@
 {
 	"showSidePanel": false,
 	"colors": {
-		"absence": "#FFB3B2",
-		"attendance": "#d2d7e7",
-		"service": "#509624",
+		"absence": "#BD9AD8",
+		"attendance": "#509624",
+		"service": "#c1d8f0",
 		"project": "#f9ff9f"
 	},
 	"workHours": {

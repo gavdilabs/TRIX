@@ -1,7 +1,6 @@
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import StandardTreeItem from "sap/m/StandardTreeItem";
-import Tree from "sap/m/Tree";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
@@ -167,11 +166,6 @@ export default class Main extends BaseController {
 
 			if (this.popoverAppointment) {
 				this.getView().addDependent(this.popoverAppointment);
-				(this.popoverAppointment as ResponsivePopover).attachBeforeOpen(() => {
-					const tree = this.byId("typeTree") as Tree;
-					tree?.collapseAll();
-					tree.removeSelections(true);
-				});
 			}
 		}
 
