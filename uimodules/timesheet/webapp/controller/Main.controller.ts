@@ -243,10 +243,19 @@ export default class Main extends BaseController {
 		}
 	}
 
+	/**
+	 * Event function for when an exisiting appointment is resized
+	 * @param event std. ui5 event
+	 */
 	public onAppointmentResize(event: Event) {
+		//TODO: Not implemented yet - also needs the xml param =true to enable
 		console.log(event.getParameters());
 	}
 
+	/**
+	 * Event function for when an exisitng appointment is selected
+	 * @param event 
+	 */
 	public async onAppointmentSelect(event: Event) {
 		const params = event.getParameters() as {
 			appointment: CalendarAppointment;
@@ -259,6 +268,11 @@ export default class Main extends BaseController {
 		}
 	}
 
+	/**
+	 * Event function for when a Cell is pressed
+	 * @param event std. ui5 event
+	 * @param mode param 2 of event to specify which mode we are in
+	 */
 	public async onCellPress(event: Event, mode: AppointmentPopoverMode) {
 		if (!this.cellPressed) {
 			this.cellPressed = true;
@@ -279,6 +293,10 @@ export default class Main extends BaseController {
 		}
 	}
 
+	/**
+	 * Event function for when we move an appointment around and drop it
+	 * @param event std. ui5 event
+	 */
 	public async onAppointmentDrop(event: Event): Promise<void> {
 		const parameters = event.getParameters() as {
 			appointment: CalendarAppointment;
