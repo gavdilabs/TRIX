@@ -1,5 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m"
-    xmlns:core="sap.ui.core">
+    xmlns:core="sap.ui.core"
+    xmlns:controls="trix.timesheet.controls">
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
 
@@ -17,9 +18,9 @@
             </HBox>
 
             <!-- Tree based Project Selection -->
-            <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+            <controls:TRIXTree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                 <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
-            </Tree>
+            </controls:TRIXTree>
 
             <!-- Save Button to appear in certain modes -->
             <HBox visible="{=${PopoverControl>/mode} === 'SELECTED'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">
