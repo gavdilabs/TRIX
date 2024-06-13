@@ -1,6 +1,7 @@
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import StandardTreeItem from "sap/m/StandardTreeItem";
+import Tree from "sap/m/Tree";
 import Event from "sap/ui/base/Event";
 import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
@@ -166,6 +167,11 @@ export default class Main extends BaseController {
 
 			if (this.popoverAppointment) {
 				this.getView().addDependent(this.popoverAppointment);
+				(this.popoverAppointment as ResponsivePopover).attachBeforeOpen(() => {
+					const tree = this.byId("typeTree") as Tree;
+					tree?.collapseAll();
+					tree.removeSelections(true);
+				});
 			}
 		}
 
@@ -332,8 +338,9 @@ export default class Main extends BaseController {
 		).getData() as IPopupModel;
 
 		//We use the below ref dates for stability as the timepickers may go 1970.01.01
-		const newStartDate:Date = this.tempAppointmentControl.getStartDate() as Date;
-		const newEndDate:Date = this.tempAppointmentControl.getEndDate() as Date; 
+		const newStartDate: Date =
+			this.tempAppointmentControl.getStartDate() as Date;
+		const newEndDate: Date = this.tempAppointmentControl.getEndDate() as Date;
 
 		newStartDate.setHours(data.startDate.getHours());
 		newStartDate.setMinutes(data.startDate.getMinutes());

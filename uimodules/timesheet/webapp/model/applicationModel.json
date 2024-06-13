@@ -1,7 +1,7 @@
 {
 	"showSidePanel": false,
 	"colors": {
-		"absence": "#ffcebe",
+		"absence": "#FFB3B2",
 		"attendance": "#d2d7e7",
 		"service": "#509624",
 		"project": "#f9ff9f"
