@@ -20,6 +20,11 @@
             <Tree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                 <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
             </Tree>
+            
+            <!-- Save Button to appear in certain modes -->
+            <HBox visible="{=${PopoverControl>/mode} === 'SELECTED'}" justifyContent="End" width="100%" class="sapUiTinyMarginTop">
+                <Button text="Save"  />
+            </HBox>
         </content>
     </ResponsivePopover>
 </core:FragmentDefinition>

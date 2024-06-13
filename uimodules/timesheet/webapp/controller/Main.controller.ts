@@ -48,7 +48,7 @@ export default class Main extends BaseController {
 	 */
 	private async onPatternMatched() {
 		//Initialize the Data handler(s)
-		TimeRegistrationSetHandler.initialize(this.getOdataModelCore(), this);
+		void await TimeRegistrationSetHandler.initialize(this.getOdataModelCore(), this);
 
 		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
 
