@@ -50,6 +50,10 @@ export default class ApplicationModelHandler {
 		appointmentType: trix.core.AllocationType,
 		isAttendance: boolean = false
 	): string {
+		if ((appointmentType as string) === "Attendance") {
+			return this.modelData.colors.attendance;
+		}
+
 		switch (appointmentType) {
 			case trix.core.AllocationType.AbsenceAttendance:
 				return isAttendance

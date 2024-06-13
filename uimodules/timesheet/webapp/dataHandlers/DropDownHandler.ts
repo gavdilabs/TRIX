@@ -13,7 +13,7 @@ export interface IAllocationTreeItem {
 	nodes?: IAllocationTreeItem[];
 }
 
-interface IExtendedTimeAllocation extends trix.core.ITimeAllocation {
+export interface IExtendedTimeAllocation extends trix.core.ITimeAllocation {
 	allocationTypeExtended: trix.core.AllocationType | ExtendedAllocationTypes;
 }
 
