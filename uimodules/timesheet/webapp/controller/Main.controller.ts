@@ -95,6 +95,10 @@ export default class Main extends BaseController {
 		}
 	}
 
+	/**
+	 * Event Function for the ToggleButton "FullDay | WS Day"
+	 * @param event Std. UI5 event
+	 */
 	public onToggleFullDay(event: Event) {
 		const params = event.getParameters() as { pressed: boolean };
 		this.getCalendarControl().setFullDay(params.pressed);

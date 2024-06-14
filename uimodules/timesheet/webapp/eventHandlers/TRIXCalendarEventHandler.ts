@@ -13,6 +13,9 @@ import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandl
 import { trix } from "../model/entities-core";
 import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
 
+/**
+ * Interface(Inner) for controllering the data selected in the appointment popover
+ */
 interface IPopupModel {
 	mode: AppointmentPopoverMode;
 	startDate: Date;
@@ -21,6 +24,9 @@ interface IPopupModel {
 	isTemporary: boolean;
 }
 
+/**
+ * Implementation of the ICalendarEventHandler interface - to support modularization of event impl. into sep class to avoid controller flooding etc.
+ */
 export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	private controller: Controller = undefined;
 	private odataModel: ODataModel = undefined;
@@ -257,6 +263,9 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		(this.popoverAppointment as ResponsivePopover)?.close();
 	}
 
+	/**
+	 * Event function for when save is clicked in the appointment popover
+	 */
 	public async onSaveAppointmentChanges(): Promise<void> {
 		const data = (
 			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
@@ -282,6 +291,9 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		this.closePopover();
 	}
 
+	/**
+	 * Function that handles the deletion of an appointment
+	 */
 	public async onDeleteAppointment() {
 		const data = (
 			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
