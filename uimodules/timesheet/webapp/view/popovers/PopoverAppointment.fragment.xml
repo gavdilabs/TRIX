@@ -4,7 +4,7 @@
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
 
-
+            <!-- Shows the timepickers to allow setting of new time(s) -->
             <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED'}">
                 <TimePicker dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15" />
                 <TimePicker dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15"/>
@@ -24,8 +24,8 @@
 
             <!-- Save Button to appear in certain modes -->
             <HBox visible="{=${PopoverControl>/mode} === 'SELECTED'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">
-                <Button text="Delete" type="Reject" press="onDeleteAppointment" />
-                <Button text="Save" press="onSaveAppointmentChanges" />
+                <Button text="{i18n>CommonDelete}" type="Reject" press="onDeleteAppointment" />
+                <Button text="{i18n>CommonSave}" press="onSaveAppointmentChanges" />
             </HBox>
         </content>
     </ResponsivePopover>

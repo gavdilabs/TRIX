@@ -17,7 +17,7 @@
 						</unified:CalendarAppointment>
 					</controls:appointments>
 					<controls:actions>
-						<ToggleButton text="Full Day" press="onToggleFullDay"/>
+						<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
 						<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
 					</controls:actions>
 					<controls:views>
@@ -28,7 +28,7 @@
 				</controls:TRIXCalendar>
 			</VBox>
 			<l:sideContent width="200px">
-				<PlanningCalendarLegend appointmentItemsHeader="Calendar Items" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
+				<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
 					<appointmentItems>
 						<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
 					</appointmentItems>
