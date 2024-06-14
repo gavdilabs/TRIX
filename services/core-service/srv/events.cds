@@ -19,17 +19,14 @@ extend service TrixCoreService with {
   }
 
   event allocationCreated {
-    allocation     : model.AllocationEventContext;
-    allocatedUsers : array of model.UserEventContext;
+    allocation : model.AllocationEventContext;
   }
 
   event allocationUpdated {
-    allocation     : model.AllocationEventContext;
-    allocatedUsers : array of model.UserEventContext;
+    allocation : model.AllocationEventContext;
   }
 
   event allocationDeleted {
-    allocation     : model.AllocationEventContext;
-    allocatedUsers : array of model.UserEventContext;
+    allocation : model.AllocationEventContext;
   }
 }
