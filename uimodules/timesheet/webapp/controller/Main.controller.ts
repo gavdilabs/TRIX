@@ -328,11 +328,9 @@ export default class Main extends BaseController {
 		MessageToast.show("Chosen color string: " + oEvent.getParameter("colorString"));
 	}
 
-	toggleRegistrationTeamView(oEvent: Event) {
-		const oSwitch = oEvent.getSource() as Switch;
+	toggleRegistrationTeamView() {
 		const oRegSwitch = this.byId("registrationSwitch") as Switch;
 		const oTeamSwitch = this.byId("teamSwitch") as Switch;
-		const appModel = this.getModel("ApplicationModel") as JSONModel;
 		oRegSwitch.setState(oTeamSwitch.getState());
 		oTeamSwitch.setState(!oRegSwitch.getState());
 	}
