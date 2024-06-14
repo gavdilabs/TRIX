@@ -1,6 +1,8 @@
 import Event from "sap/ui/base/Event";
 import TRIXCalendar from "../controls/TRIXCalendar";
-import ApplicationModelHandler from "../dataHandlers/ApplicationModelHandler";
+import ApplicationModelHandler, {
+	CalendarView,
+} from "../dataHandlers/ApplicationModelHandler";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
@@ -36,7 +38,13 @@ export default class Main extends BaseController {
 		));
 
 		//ApplicationModelHandler init
-		ApplicationModelHandler.getInstance().initialize(this);
+		ApplicationModelHandler.getInstance().initialize(
+			this,
+			this.getResourceBundle()
+		);
+		ApplicationModelHandler.getInstance().setCurrentView(
+			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
+		);
 
 		//Preload some popup lists
 		this.ddHandler = new DropDownHandler(
@@ -98,5 +106,11 @@ export default class Main extends BaseController {
 	public onToggleFullDay(event: Event) {
 		const params = event.getParameters() as { pressed: boolean };
 		this.getCalendarControl().setFullDay(params.pressed);
+	}
+
+	public onViewChange(event: Event): void {
+		const calendar:TRIXCalendar = event.getSource();
+		const viewKey:string = calendar.getViewByViewId(calendar.getSelectedView())?.getKey();
+		ApplicationModelHandler.getInstance().setCurrentView(viewKey as CalendarView);
 	}
 }

@@ -1,5 +1,7 @@
 {
 	"showSidePanel": false,
+	"view": "WeekView",
+	"viewTitle": "",
 	"colors": {
 		"absence": "#BD9AD8",
 		"attendance": "#509624",

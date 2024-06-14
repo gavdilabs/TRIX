@@ -1,7 +1,11 @@
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
+import SinglePlanningCalendarView from "sap/m/SinglePlanningCalendarView";
 import Event from "sap/ui/base/Event";
 import RenderManager from "sap/ui/core/RenderManager";
-import { AppointmentPopoverMode, ICalendarEventHandler } from "../eventHandlers/EventTypes";
+import {
+	AppointmentPopoverMode,
+	ICalendarEventHandler,
+} from "../eventHandlers/EventTypes";
 /**
  * @namespace trix.timesheet.controls
  */
@@ -37,29 +41,42 @@ export default class TRIXCalendar extends SinglePlanningCalendar {
 		}
 		//AppointmentCreate?
 		if (this.eventHandler.onAppointmentCreate) {
-			//@ts-expect-error: UI5 does not support multiple params on events, but the UI xml does
-			this.attachAppointmentCreate((event:Event, mode:AppointmentPopoverMode) => {
-				void this.eventHandler.onAppointmentCreate(event,mode);
-			});
+			this.attachAppointmentCreate(
+				//@ts-expect-error: UI5 does not support multiple params on events, but the UI xml does
+				(event: Event, mode: AppointmentPopoverMode) => {
+					void this.eventHandler.onAppointmentCreate(event, mode);
+				}
+			);
 		}
 		//Calendar Cell Press
-		if(this.eventHandler.onCellPress){
+		if (this.eventHandler.onCellPress) {
 			//@ts-expect-error: UI5 does not support multiple params on events, but the UI xml does
-			this.attachCellPress((event:Event, mode:AppointmentPopoverMode) => {
-				void this.eventHandler.onCellPress(event,mode);
+			this.attachCellPress((event: Event, mode: AppointmentPopoverMode) => {
+				void this.eventHandler.onCellPress(event, mode);
 			});
 		}
 		//OnAppoinrment
-		if(this.eventHandler.onAppointmentSelect){
-			this.attachAppointmentSelect((event:Event) => {
+		if (this.eventHandler.onAppointmentSelect) {
+			this.attachAppointmentSelect((event: Event) => {
 				void this.eventHandler.onAppointmentSelect(event);
 			});
 		}
 	}
 
 	/**
+	 * If you need to get the view
+	 * @param id
+	 * @returns the View witht that ID or undefined
+	 */
+	public getViewByViewId(id: string): SinglePlanningCalendarView {
+		const views = this.getViews();
+
+		return views?.find((view) => view.getId() === id);
+	}
+
+	/**
 	 * Default hook onEfterRendering to take care of default view fx
-	 * @param oEvent 
+	 * @param oEvent
 	 */
 	onAfterRendering(oEvent: jQuery.Event): void {
 		super.onAfterRendering(oEvent);

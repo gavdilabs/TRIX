@@ -1,9 +1,12 @@
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import { trix } from "../model/entities-core";
 
 export interface IApplicationModel {
 	showSidePanel: false;
+	view: string;
+	viewTitle: string;
 	colors: {
 		absence: string;
 		attendance: string;
@@ -16,6 +19,12 @@ export interface IApplicationModel {
 			to: string;
 		};
 	};
+}
+
+export enum CalendarView {
+	DAY = "DayView",
+	WEEK = "WeekView",
+	MONTH = "MonthView",
 }
 
 export default class ApplicationModelHandler {
@@ -31,13 +40,15 @@ export default class ApplicationModelHandler {
 		service: string;
 		project: string;
 	} = undefined;
+	private i18nBundle: ResourceBundle = undefined;
 
 	public static getInstance(): ApplicationModelHandler {
 		return ApplicationModelHandler.instance;
 	}
 
-	public initialize(controller: Controller) {
+	public initialize(controller: Controller, i18nBundle: ResourceBundle) {
 		this.controller = controller;
+		this.i18nBundle = i18nBundle;
 
 		if (!this.controller) {
 			throw new Error(
@@ -50,6 +61,33 @@ export default class ApplicationModelHandler {
 				.getOwnerComponent()
 				.getModel(ApplicationModelHandler.APPLICATION_MODEL_NAME) as JSONModel
 		).getData() as IApplicationModel;
+	}
+
+	public setCurrentView(viewKey: CalendarView) {
+		if (!viewKey) {
+			return;
+		}
+
+		const text: string = `${this.i18nBundle.getText("CalendarView", [
+			this.i18nBundle.getText(`CalendarView${viewKey}`),
+		])}`;
+
+		this.upDateModelDataProperty("/view", viewKey);
+		this.upDateModelDataProperty("/viewTitle", text);
+	}
+
+	public upDateModelDataProperty(
+		propNameAndPath: string,
+		value: object | string | number | boolean
+	) {
+		const model = this.controller
+			.getOwnerComponent()
+			.getModel(ApplicationModelHandler.APPLICATION_MODEL_NAME) as JSONModel;
+		model.setProperty(propNameAndPath, value);
+	}
+
+	public getCurrentCalendarViewKey(): string {
+		return this.modelData.view;
 	}
 
 	public getColorByAllocationType(
