@@ -5,7 +5,6 @@ import Control from "sap/ui/core/Control";
 import Fragment from "sap/ui/core/Fragment";
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
-import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
@@ -29,7 +28,6 @@ interface IPopupModel {
  */
 export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	private controller: Controller = undefined;
-	private odataModel: ODataModel = undefined;
 	private cellPressed: boolean = false;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
@@ -39,11 +37,9 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 
 	constructor(
 		controller: Controller,
-		odataModel: ODataModel,
 		calendar: TRIXCalendar
 	) {
 		this.controller = controller;
-		this.odataModel = odataModel;
 		this.calendar = calendar;
 	}
 

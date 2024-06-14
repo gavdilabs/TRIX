@@ -6,6 +6,9 @@ import { AppointmentPopoverMode, ICalendarEventHandler } from "../eventHandlers/
  * @namespace trix.timesheet.controls
  */
 
+/**
+ * Extension of sap.m.SinglePlanningCalendar - it can do alot but not everything :)
+ */
 export default class TRIXCalendar extends SinglePlanningCalendar {
 	private initialized: boolean = false;
 	private eventHandler: ICalendarEventHandler = undefined;
@@ -71,5 +74,8 @@ export default class TRIXCalendar extends SinglePlanningCalendar {
 		}
 	}
 
+	/**
+	 * Call the default rendering manager for the SinglePlanningCalendar
+	 */
 	static renderer = RenderManager.getRenderer(SinglePlanningCalendar.prototype);
 }

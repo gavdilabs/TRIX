@@ -53,11 +53,7 @@ export default class Main extends BaseController {
 
 		//Set the Calendar EventHandler on the Trix Calendar
 		this.getCalendarControl()?.setEventHandler(
-			new TRIXCalendarEventHandler(
-				this,
-				this.getOdataModelCore(),
-				this.getCalendarControl()
-			)
+			new TRIXCalendarEventHandler(this, this.getCalendarControl())
 		);
 	}
 

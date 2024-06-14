@@ -21,6 +21,11 @@ export default class DateHelper {
 		return datesOut;
 	}
 
+	/**
+	 * Returns the time part from a Date object in 'hh:mm:ss' format
+	 * @param date Input date to parse time from
+	 * @returns string rep in 'hh:mm:ss' format
+	 */
 	public static dateAsSimpleTimeFormat(date: Date): string {
 		const hours: string =
 			date.getHours() >= 10 ? `${date.getHours()}` : `0${date.getHours()}`;
@@ -36,6 +41,11 @@ export default class DateHelper {
 		return `${hours}:${minutes}:${seconds}`;
 	}
 
+	/**
+	 * Returns the date part from a Date object in 'yyyy-MM-dd' format
+	 * @param date Input date to parse string part from
+	 * @returns string rep in 'yyyy-MM-dd' format
+	 */
 	public static dateAsSimpleFormat(date: Date): string {
 		const monthStr =
 			date.getMonth() + 1 >= 10
