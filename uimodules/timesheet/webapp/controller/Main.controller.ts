@@ -14,7 +14,6 @@ import BaseController from "./BaseController";
 import Dialog from "sap/m/Dialog";
 import ColorPickerPopover from "sap/ui/unified/ColorPickerPopover";
 import ColorPickerDisplayMode from "sap/ui/unified/ColorPickerDisplayMode";
-import Input from "sap/m/Input";
 import MessageToast from "sap/m/MessageToast";
 import { ValueState } from "sap/ui/core/library";
 import Switch from "sap/m/Switch";
@@ -331,8 +330,10 @@ export default class Main extends BaseController {
 
 	toggleRegistrationTeamView(oEvent: Event) {
 		const oSwitch = oEvent.getSource() as Switch;
+		const oRegSwitch = this.byId("registrationSwitch") as Switch;
+		const oTeamSwitch = this.byId("teamSwitch") as Switch;
 		const appModel = this.getModel("ApplicationModel") as JSONModel;
-		oSwitch.getId().includes("team") && oSwitch.getState() === true ? appModel.setProperty("registrationView", false) && appModel.setProperty("teamView", true) :
-		appModel.setProperty("registrationView", true) && appModel.setProperty("teamView", false)
+		oRegSwitch.setState(oTeamSwitch.getState());
+		oTeamSwitch.setState(!oRegSwitch.getState());
 	}
 }

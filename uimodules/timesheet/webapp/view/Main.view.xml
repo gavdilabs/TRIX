@@ -1,4 +1,4 @@
-<mvc:View xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -43,27 +43,86 @@
 						</controls:TRIXCalendar>
 					</VBox>
 					<VBox visible="{ApplicationModel>/teamView}">
-						<List items="{/UserSet}">
+
+						<!-- <Carousel
+							id="carouselSample"
+							height="auto"
+							pages="{
+								path: '/UserSet',
+								sorter: [{path: 'firstName'}]
+							}"
+							loop="false"
+							beforePageChanged="onCarouselChanged">
+							<customLayout>
+								<CarouselLayout visiblePagesCount="10"/>
+							</customLayout>
+							<ScrollContainer 
+								vertical="false" 
+								horizontal="false" 
+								class="sapUiContentPadding">
+								<f:Card>
+									<f:content>
+										<l:VerticalLayout width="100%">
+											<l:BlockLayout>
+												<l:BlockLayoutRow>
+													<l:BlockLayoutCell  width="1">
+														<HBox class="sapUiTinyMarginBottom">
+															<Text text="{firstName} {lastName} ({userID})" />
+														</HBox>
+														<HBox class="sapUiSmallMarginBottom">
+															<Text text="{firstName}" />
+														</HBox>
+													</l:BlockLayoutCell>
+												</l:BlockLayoutRow>
+											</l:BlockLayout>
+										</l:VerticalLayout>
+									</f:content>
+								</f:Card>
+							</ScrollContainer>
+						</Carousel> -->
+						<Table items="{path: '/TimeRegistrationSet', filters: [{path: 'recordStatus', operator: 'NE', value1: '2'}]}">
+							<columns>
+								<Column >
+									<Text text="User"/>
+								</Column>
+								<Column >
+									<Text text="Date"/>
+								</Column>
+								<Column >
+									<Text text="Start"/>
+								</Column>
+								<Column >
+									<Text text="End"/>
+								</Column>
+								<Column >
+									<Text text="Hours"/>
+								</Column>
+								<Column >
+									<Text text="Reg Item"/>
+								</Column>
+								<Column width="5rem">
+									<Text text="Approve"/>
+								</Column>
+								<Column width="5rem">
+									<Text text="Reject"/>
+								</Column>
+								<Column width="5rem">
+									<Text text="Status"/>
+								</Column>
+							</columns>
 							<items>
-								<CustomListItem >
-									<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect"  enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "Time Sheet">
-										<controls:appointments>
-											<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-											</unified:CalendarAppointment>
-										</controls:appointments>
-										<controls:actions>
-											<ToggleButton text="Full Day" press="onToggleFullDay"/>
-											<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
-										</controls:actions>
-										<controls:views>
-											<SinglePlanningCalendarDayView key="DayView" title="Day" />
-											<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
-											<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
-										</controls:views>
-									</controls:TRIXCalendar>
-								</CustomListItem>
+								<ColumnListItem >
+									<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
+									<Text text="{startDate}"/>
+									<Text text="{startTime}"/>
+									<Text text="{endTime}"/>
+									<Text text="{amount}"/>
+									<Text text="{allocation/description}"/>
+									<Button icon="sap-icon://accept" type="Success"/>
+									<Button icon="sap-icon://decline" type="Reject"/>
+								</ColumnListItem>
 							</items>
-						</List>
+						</Table>
 					</VBox>
 				</f:mainContent>
 				<f:items>
