@@ -120,3 +120,33 @@ entity Team : cuid, sap.common.CodeList {
   members      : Association to many User
                    on members.team = $self;
 }
+
+/*** EVENT CONTEXT TYPES ***/
+
+type TimeRegistrationEventContext {
+  id                 : String;
+  startDate          : Date;
+  endDate            : Date null;
+  startTime          : Time;
+  endTime            : Time;
+  wholeDay           : Boolean;
+  amount             : Decimal(2, 1);
+  registrationStatus : RegistrationStatus;
+  registrationType   : RegistrationType;
+  comment            : String(255);
+  invalid            : Boolean;
+  statusContext      : String(255) null;
+  recordStatus       : RecordStatus;
+}
+
+type UserEventContext {
+  userID : String(255);
+  email  : String(255);
+}
+
+type AllocationEventContext {
+  id        : String;
+  isAbsence : Boolean;
+  validFrom : DateTime;
+  validTo   : DateTime;
+}
