@@ -44,21 +44,29 @@ export default class TRIXCalendar extends SinglePlanningCalendar {
 			this.attachAppointmentCreate(
 				//@ts-expect-error: UI5 does not support multiple params on events, but the UI xml does
 				(event: Event, mode: AppointmentPopoverMode) => {
-					void this.eventHandler.onAppointmentCreate(event, mode);
+					void this.eventHandler.onAppointmentCreate(
+						event,
+						mode ? mode : AppointmentPopoverMode.DRAGGED
+					);
 				}
 			);
 		}
 		//Calendar Cell Press
 		if (this.eventHandler.onCellPress) {
-			//@ts-expect-error: UI5 does not support multiple params on events, but the UI xml does
-			this.attachCellPress((event: Event, mode: AppointmentPopoverMode) => {
-				void this.eventHandler.onCellPress(event, mode);
+			this.attachCellPress((event: Event) => {
+				void this.eventHandler.onCellPress(
+					event,
+					AppointmentPopoverMode.CELLPRESS
+				);
 			});
 		}
 		//OnAppoinrment
 		if (this.eventHandler.onAppointmentSelect) {
 			this.attachAppointmentSelect((event: Event) => {
-				void this.eventHandler.onAppointmentSelect(event);
+				void this.eventHandler.onAppointmentSelect(
+					event,
+					AppointmentPopoverMode.SELECTED
+				);
 			});
 		}
 	}

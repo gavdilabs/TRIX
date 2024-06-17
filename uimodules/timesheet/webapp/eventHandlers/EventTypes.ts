@@ -19,5 +19,6 @@ export interface ICalendarEventHandler {
 		event: Event,
 		mode: AppointmentPopoverMode
 	) => Promise<void>;
-	onAppointmentSelect?: (event: Event) => Promise<void>;
+	onAppointmentSelect?: (event: Event,
+		mode: AppointmentPopoverMode) => Promise<void>;
 }
