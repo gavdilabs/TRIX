@@ -17,6 +17,7 @@ import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
  */
 interface IPopupModel {
 	mode: AppointmentPopoverMode;
+	allocationId?: string;
 	startDate: Date;
 	endDate: Date;
 	recordId: string;
@@ -35,10 +36,7 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	private calendar: TRIXCalendar = undefined;
 	public readonly POPOVER_MODEL_NAME = "PopoverControl";
 
-	constructor(
-		controller: Controller,
-		calendar: TRIXCalendar
-	) {
+	constructor(controller: Controller, calendar: TRIXCalendar) {
 		this.controller = controller;
 		this.calendar = calendar;
 	}
@@ -169,6 +167,8 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 			.getBindingContext("PeriodRegistrations")
 			.getObject() as trix.core.ITimeAllocation;
 
+		this.tempUiRecord = appointmentData;
+
 		if (!this.popoverAppointment) {
 			this.popoverAppointment = (await Fragment.load({
 				id: this.controller.getView().getId(),
@@ -209,7 +209,9 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	 * @returns void
 	 */
 	public onAppointmentPopoverItemSelect(event: Event): void {
+		const popoverData = this.getPopoverModelData();
 		const params = event.getParameters() as { listItem: StandardTreeItem };
+
 		if (!params || !params.listItem) {
 			return;
 		}
@@ -217,6 +219,14 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		const selectedItemData = params.listItem
 			.getBindingContext(DropDownHandler.MODELNAME_ALLOCATION_TREE)
 			.getObject() as { key: string; text: string; isSelectable: boolean };
+
+		//Update the selected item key in popover model
+		this.setPopoverModelDataProperty("/allocationId", selectedItemData.key);
+
+		//If we are in SELECTD mode we abort here - we dont want the popup to close and create item
+		if (popoverData?.mode === AppointmentPopoverMode.SELECTED) {
+			return;
+		}
 
 		//No data or non-selectable project
 		if (!selectedItemData || selectedItemData.isSelectable === false) {
@@ -263,9 +273,7 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	 * Event function for when save is clicked in the appointment popover
 	 */
 	public async onSaveAppointmentChanges(): Promise<void> {
-		const data = (
-			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
-		).getData() as IPopupModel;
+		const data = this.getPopoverModelData();
 
 		//We use the below ref dates for stability as the timepickers may go 1970.01.01
 		const newStartDate: Date =
@@ -281,7 +289,8 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		void (await TimeRegistrationSetHandler.getInstance().updateAppointment(
 			this.tempAppointmentControl,
 			newStartDate,
-			newEndDate
+			newEndDate,
+			data.allocationId
 		));
 
 		this.closePopover();
@@ -291,9 +300,7 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	 * Function that handles the deletion of an appointment
 	 */
 	public async onDeleteAppointment() {
-		const data = (
-			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
-		).getData() as IPopupModel;
+		const data = this.getPopoverModelData();
 
 		void (await TimeRegistrationSetHandler.getInstance().deleteTimeRegistration(
 			{
@@ -302,5 +309,38 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		));
 
 		this.closePopover();
+	}
+
+	/**
+	 * Conv. function to get easy access to the current popover model data
+	 * @returns IPopupModel data structure
+	 */
+	public getPopoverModelData(): IPopupModel {
+		return (
+			this.popoverAppointment.getModel(this.POPOVER_MODEL_NAME) as JSONModel
+		).getData() as IPopupModel;
+	}
+
+	/**
+	 * Set a property value in the PopoverModel
+	 * @param propName property name to set
+	 * @param value value to set
+	 */
+	public setPopoverModelDataProperty(
+		propName: string,
+		value: string | number | boolean | object
+	): void {
+		if (!propName) {
+			return;
+		}
+
+		propName = propName[0] === "/" ? propName : `/${propName}`;
+
+		const model = this.popoverAppointment.getModel(
+			this.POPOVER_MODEL_NAME
+		) as JSONModel;
+		if (model) {
+			model.setProperty(propName, value);
+		}
 	}
 }

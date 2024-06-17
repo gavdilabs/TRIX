@@ -83,7 +83,8 @@ export default class TimeRegistrationSetHandler {
 	public async updateAppointment(
 		appointment: CalendarAppointment,
 		newStartDate: Date,
-		newEndDate: Date
+		newEndDate: Date,
+		allocationId?: string
 	): Promise<void> {
 		const timeRegData: trix.core.ITimeRegistration = appointment
 			?.getBindingContext("PeriodRegistrations")
@@ -117,7 +118,12 @@ export default class TimeRegistrationSetHandler {
 				`${existingContext.getPath()}/endTime`,
 				endTimeStr
 			);
-
+			if (allocationId) {
+				void existingContext?.setProperty(
+					`${existingContext.getPath()}/allocation_ID`,
+					allocationId
+				);
+			}
 			this.updateUIModel();
 
 			this.toast("MessageAppointmentUpdatedOk");
