@@ -4,8 +4,7 @@
 
 - [ ] Setup all data repositories
 - [ ] Write unit tests for data repositories
-- [ ] Write unit tests for logging middleware
-- [ ] Setup logging middleware
+- [x] Setup logging middleware
 - [ ] Setup handlers for all data entry points
 - [ ] Setup base e2e tests for all data entry points
 - [ ] Setup bound function and action imports
