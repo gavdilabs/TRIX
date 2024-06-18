@@ -7,6 +7,7 @@ export enum AppointmentPopoverMode {
 	DRAGGED = "DRAGGED",
 	SELECTED = "SELECTED",
 	CELLPRESS = "CELLPRESS",
+	RESIZE = "RESIZE",
 }
 
 /**
@@ -19,6 +20,12 @@ export interface ICalendarEventHandler {
 		event: Event,
 		mode: AppointmentPopoverMode
 	) => Promise<void>;
-	onAppointmentSelect?: (event: Event,
-		mode: AppointmentPopoverMode) => Promise<void>;
+	onAppointmentSelect?: (
+		event: Event,
+		mode: AppointmentPopoverMode
+	) => Promise<void>;
+	onAppointmentResize?: (
+		event: Event,
+		mode: AppointmentPopoverMode
+	) => Promise<void>;
 }

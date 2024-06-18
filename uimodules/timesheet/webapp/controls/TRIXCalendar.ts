@@ -60,12 +60,22 @@ export default class TRIXCalendar extends SinglePlanningCalendar {
 				);
 			});
 		}
-		//OnAppoinrment
+		//OnAppointment selection
 		if (this.eventHandler.onAppointmentSelect) {
 			this.attachAppointmentSelect((event: Event) => {
 				void this.eventHandler.onAppointmentSelect(
 					event,
 					AppointmentPopoverMode.SELECTED
+				);
+			});
+		}
+
+		//Event when an appointment has been resized
+		if (this.eventHandler.onAppointmentResize) {
+			this.attachAppointmentResize((event: Event) => {
+				void this.eventHandler.onAppointmentResize(
+					event,
+					AppointmentPopoverMode.RESIZE
 				);
 			});
 		}

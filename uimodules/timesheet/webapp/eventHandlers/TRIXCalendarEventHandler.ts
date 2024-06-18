@@ -111,9 +111,25 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	 * Event function for when an exisiting appointment is resized
 	 * @param event std. ui5 event
 	 */
-	public onAppointmentResize(event: Event) {
-		//TODO: Not implemented yet - also needs the xml param =true to enable
-		console.log(event.getParameters());
+	public async onAppointmentResize(
+		event: Event,
+		mode: AppointmentPopoverMode
+	): Promise<void> {
+		console.log(mode, event.getParameters());
+		const parameters = event.getParameters() as {
+			appointment: CalendarAppointment;
+			startDate: Date;
+			endDate: Date;
+		};
+
+		//Update the record in DB
+		void (await TimeRegistrationSetHandler.getInstance().updateAppointment(
+			parameters.appointment,
+			parameters.startDate,
+			parameters.endDate
+		));
+
+		return;
 	}
 
 	/**
