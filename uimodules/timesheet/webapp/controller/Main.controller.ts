@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import ResponsivePopover from "sap/m/ResponsivePopover";
 import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
 import StandardTreeItem from "sap/m/StandardTreeItem";
@@ -17,6 +18,8 @@ import ColorPickerDisplayMode from "sap/ui/unified/ColorPickerDisplayMode";
 import MessageToast from "sap/m/MessageToast";
 import { ValueState } from "sap/ui/core/library";
 import Switch from "sap/m/Switch";
+import Item from "sap/ui/core/Item";
+import Formatter from "../model/formatter";
 
 enum AppointmentPopoverMode {
 	DRAGGED = "DRAGGED",
@@ -40,6 +43,8 @@ export default class Main extends BaseController {
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private tempAppointmentControl: CalendarAppointment = undefined;
 	private cellPressed: boolean = false;
+	private selectedSideItem: Item;
+	private formatter = new Formatter("Formatter");
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -50,6 +55,8 @@ export default class Main extends BaseController {
 			.attachPatternMatched(() => {
 				void this.onPatternMatched();
 			}, this);
+		// this.formatter = this.formatter ? this.formatter : new Formatter();
+		// new Formatter();
 	}
 
 	/**
@@ -331,7 +338,51 @@ export default class Main extends BaseController {
 	toggleRegistrationTeamView() {
 		const oRegSwitch = this.byId("registrationSwitch") as Switch;
 		const oTeamSwitch = this.byId("teamSwitch") as Switch;
-		oRegSwitch.setState(oTeamSwitch.getState());
-		oTeamSwitch.setState(!oRegSwitch.getState());
+		const state = oRegSwitch.getState();
+		oRegSwitch.setState(!state);
+		oTeamSwitch.setState(state);
 	}
+
+	onToggle(oEvent: Event) {
+		const oItem = oEvent.getParameter("item") as Item,
+			iItemIndex = oItem ? parseInt(oItem.getId().replace(/^\D+/g, '')) : -1,
+			bExpanded = oEvent.getParameter("expanded") as boolean;
+			const oAppModel = this.getModel('ApplicationModel') as JSONModel;
+
+		if (iItemIndex < 3) {
+			if (oItem !== this.selectedSideItem && bExpanded) {
+				oEvent.preventDefault();
+				const oRegSwitch = this.byId("registrationSwitch") as Switch;
+				const oTeamSwitch = this.byId("teamSwitch") as Switch;
+				this.selectedSideItem = oItem;
+				switch (iItemIndex) {
+					case 1:
+						oAppModel.setProperty("/registrationView", true);
+						oAppModel.setProperty("/teamView", false);
+						// oRegSwitch.setState(true);
+						// oTeamSwitch.setState(false);
+						break;
+					case 2:
+						oAppModel.setProperty("/registrationView", false);
+						oAppModel.setProperty("/teamView", true);
+						oAppModel.setProperty("/showSidePanel", false);
+						// oRegSwitch.setState(false);
+						// oTeamSwitch.setState(true);
+						break;
+					default:
+						break;
+				}
+			}
+			else if (oItem === this.selectedSideItem && bExpanded) {
+				oEvent.preventDefault();
+				// oItem.set
+				return;
+			}
+			// bExpanded ? (oEvent.getSource() as SidePanel).setActionBarExpanded(false) : null;
+			// (oItem.getEventingParent() as SidePanel).setProperty("sideContentExpanded", false);
+
+
+		}
+	}
+
 }

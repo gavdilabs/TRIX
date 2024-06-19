@@ -8,21 +8,24 @@
 	xmlns:unified="sap.ui.unified"
 	xmlns:l="sap.ui.layout">
 
-	<Page title="{i18n>appTitle}" id="page" showHeader="false">
-		<OverflowToolbar height="5rem">
-			<Title text="TRIX"></Title>
-			<ToolbarSpacer />
-			<HBox class="sapUiSmallMarginEnd">
-				<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
-					<Text text="John Doe"/>
-					<!-- <Text text="{firstName} {lastName}"/> -->
-					<Text text="JODO"/>
-					<!-- <Text text="{userID}"/> -->
-				</VBox>
-				<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="rwqera"/>
-			</HBox>
-		</OverflowToolbar>
+	<Page title="{i18n>appTitle}" id="page" showHeader="true">
+		<customHeader>
+			<OverflowToolbar height="5rem" >
+				<Title text="TRIX"/>
+				<ToolbarSpacer />
+				<HBox class="sapUiSmallMarginEnd">
+					<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
+						<Text text="John Doe"/>
+						<!-- <Text text="{firstName} {lastName}"/> -->
+						<Text text="JODO"/>
+						<!-- <Text text="{userID}"/> -->
+					</VBox>
+					<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="rwqera"/>
+				</HBox>
+			</OverflowToolbar>
+		</customHeader>
 		<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
+			
 			<f:SidePanel id="mySidePanel" toggle="onToggle" sidePanelPosition="Left" >
 				<f:mainContent>
 					<VBox visible="{ApplicationModel>/registrationView}">
@@ -80,7 +83,7 @@
 								</f:Card>
 							</ScrollContainer>
 						</Carousel> -->
-						<Table items="{path: '/TimeRegistrationSet', filters: [{path: 'recordStatus', operator: 'NE', value1: '2'}]}">
+						<Table items="{path: '/TimeRegistrationSet'}">
 							<columns>
 								<Column >
 									<Text text="User"/>
@@ -106,7 +109,7 @@
 								<Column width="5rem">
 									<Text text="Reject"/>
 								</Column>
-								<Column width="5rem">
+								<Column>
 									<Text text="Status"/>
 								</Column>
 							</columns>
@@ -118,8 +121,9 @@
 									<Text text="{endTime}"/>
 									<Text text="{amount}"/>
 									<Text text="{allocation/description}"/>
-									<Button icon="sap-icon://accept" type="Success"/>
-									<Button icon="sap-icon://decline" type="Reject"/>
+									<Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
+									<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/>
+									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
 								</ColumnListItem>
 							</items>
 						</Table>
@@ -127,16 +131,16 @@
 				</f:mainContent>
 				<f:items>
 					<f:SidePanelItem icon="sap-icon://date-time" text="Registration">
-						<VBox>
+						<!-- <VBox>
 							<Switch id="registrationSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/registrationView}" change="toggleRegistrationTeamView"/>
 							<Text text="View for time registration. Register your hours here." />
-						</VBox>
+						</VBox> -->
 					</f:SidePanelItem>
-					<f:SidePanelItem icon="sap-icon://company-view" text="Team">
-						<VBox>
+					<f:SidePanelItem icon="sap-icon://company-view" text="Team" >
+						<!-- <VBox>
 							<Switch id="teamSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/teamView}" change="toggleRegistrationTeamView"/>
 							<Text text="View your team's registrations here. You confirm their hours here (if applicable)" />
-						</VBox>
+						</VBox> -->
 					</f:SidePanelItem>
 					<f:SidePanelItem icon="sap-icon://action-settings" text="Configuration"> 
 						<VBox>

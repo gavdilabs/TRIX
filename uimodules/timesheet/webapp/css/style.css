@@ -1,3 +1,6 @@
 .sapMCrslFluid .sapMCrslItem {
     margin-right: 0 !important;
 }
+.sapUiSizeCompact .sapMPageWithHeader > section {
+    top: 5rem;
+}
