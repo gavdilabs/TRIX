@@ -28,7 +28,8 @@ service TrixAdminService {
     }
   ]) as projection on schema.ValidationRule;
 
-  function getApprovalTypes()      returns many Integer;
+  /** FUNCTION IMPORTS **/
+  function getApprovalTypes()      returns many types.EnumPair;
 
   annotate getApprovalTypes with @(restrict: [
     {to: 'Admin'},
@@ -55,7 +56,5 @@ service TrixAdminService {
     {to: 'Admin'},
     {to: 'system-user'}
   ]);
-
-  function ping(msg : String null) returns String;
 
 }
