@@ -1,4 +1,5 @@
 using {trix.core as model} from '../db/schema';
+using {trix.common.types} from '../../shared/types';
 
 @path    : 'core'
 @requires: 'authenticated-user'
@@ -165,9 +166,9 @@ service TrixCoreService {
                        };
 
   /** FUNCTION IMPORTS **/
-  function getRecordStatuses()       returns many model.EnumPair;
-  function getRegistrationStatuses() returns many model.EnumPair;
-  function getRegistrationTypes()    returns many model.EnumPair;
+  function getRecordStatuses()       returns many types.EnumPair;
+  function getRegistrationStatuses() returns many types.EnumPair;
+  function getRegistrationTypes()    returns many types.EnumPair;
   function getAllocationTypes()      returns many model.AllocationType;
 
 /** ACTION IMPORTS **/
