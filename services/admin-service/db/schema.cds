@@ -1,11 +1,11 @@
 using {
   managed,
-  sap,
   cuid
 } from '@sap/cds/common';
 
 namespace trix.admin;
 
+// NOTE: This is for future planned integrations
 @assert.range
 type SolutionType      : Integer enum {
   Standalone          = 0;
@@ -48,7 +48,7 @@ entity ValidationRule : managed {
       enabled : Boolean;
 }
 
-entity RegistrationTypes : cuid, managed {
+entity RegistrationType : cuid, managed {
   // NOTE: This needs to be fleshed out further
   group : RegistrationGroup;
 }
@@ -56,9 +56,8 @@ entity RegistrationTypes : cuid, managed {
 entity Configuration : cuid, managed {
   companyName       : String(255);
   configurationType : ConfigurationType;
-  solutionType      : SolutionType;
   approvalEnabled   : Boolean;
   approvalType      : ApprovalType;
   validationRules   : Association to many ValidationRule;
-  registrationTypes : Association to many RegistrationTypes;
+  registrationTypes : Association to many RegistrationType;
 }
