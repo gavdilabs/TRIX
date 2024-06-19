@@ -159,6 +159,34 @@ export namespace trix.core {
     localized?: ITexts;
   }
 
+  export interface ITimeRegistrationEventContext {
+    id: string;
+    startDate: Date;
+    endDate: Date;
+    startTime: Date;
+    endTime: Date;
+    wholeDay: boolean;
+    amount: number;
+    registrationStatus: RegistrationStatus;
+    registrationType: RegistrationType;
+    comment: string;
+    invalid: boolean;
+    statusContext: string;
+    recordStatus: RecordStatus;
+  }
+
+  export interface IUserEventContext {
+    userID: string;
+    email: string;
+  }
+
+  export interface IAllocationEventContext {
+    id: string;
+    isAbsence: boolean;
+    validFrom: Date;
+    validTo: Date;
+  }
+
   export interface ITexts {
     locale: string;
     ID: string;
@@ -176,6 +204,9 @@ export namespace trix.core {
     WorkWeek = "trix.core.WorkWeek",
     WorkDay = "trix.core.WorkDay",
     Team = "trix.core.Team",
+    TimeRegistrationEventContext = "trix.core.TimeRegistrationEventContext",
+    UserEventContext = "trix.core.UserEventContext",
+    AllocationEventContext = "trix.core.AllocationEventContext",
     Texts = "trix.core.Team.texts",
   }
 
@@ -189,6 +220,9 @@ export namespace trix.core {
     WorkWeek = "WorkWeek",
     WorkDay = "WorkDay",
     Team = "Team",
+    TimeRegistrationEventContext = "TimeRegistrationEventContext",
+    UserEventContext = "UserEventContext",
+    AllocationEventContext = "AllocationEventContext",
     Texts = "Texts",
   }
 }

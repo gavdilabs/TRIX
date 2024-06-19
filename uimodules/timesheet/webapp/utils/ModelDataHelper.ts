@@ -31,6 +31,13 @@ export default class ModelDataHelper {
     }
   }
 
+  /**
+   * Function that allows posting to an Action on the CAP layer
+   * @param model Odatamodel to use
+   * @param actionName Name of the action to hit
+   * @param parameters Parameters structure that will serve as body
+   * @returns Result as <K>
+   */
   public static async postToAction<K>(
     model: ODataModel,
     actionName: string,

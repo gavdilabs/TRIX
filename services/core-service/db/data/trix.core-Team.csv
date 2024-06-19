@@ -1,5 +1,5 @@
-ID;externalCode;manager_userID
-cf6464c4-3208-4df5-b923-2c039a9b9dd8;Finance & Controlling;
-58f09c13-9f07-4262-a2fe-c17b1370a543;Executive Management;
-0fe86c77-a2c3-4de2-828b-8a84053377ff;IT & Digital;
-86ac1478-20b2-479b-83e5-0cc881f13db6;Service & Support;
+ID;name;manager_userID
+cf6464c4-3208-4df5-b923-2c039a9b9dd8;Finance & Controlling;DON
+58f09c13-9f07-4262-a2fe-c17b1370a543;Executive Management;CLA
+0fe86c77-a2c3-4de2-828b-8a84053377ff;IT & Digital;SUP
+86ac1478-20b2-479b-83e5-0cc881f13db6;Service & Support;POP

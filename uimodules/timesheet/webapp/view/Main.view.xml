@@ -1,4 +1,4 @@
-<mvc:View xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -20,7 +20,7 @@
 						<Text text="JODO"/>
 						<!-- <Text text="{userID}"/> -->
 					</VBox>
-					<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="rwqera"/>
+					<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="Edit user properties"/>
 				</HBox>
 			</OverflowToolbar>
 		</customHeader>
@@ -29,19 +29,19 @@
 			<f:SidePanel id="mySidePanel" toggle="onToggle" sidePanelPosition="Left" >
 				<f:mainContent>
 					<VBox visible="{ApplicationModel>/registrationView}">
-						<controls:TRIXCalendar fullDay="false" startHour="8" endHour="20" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="false" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "Time Sheet">
+						<controls:TRIXCalendar viewChange="onViewChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
 							<controls:appointments>
-								<unified:CalendarAppointment color="{path:'PeriodRegistrations>allocation/allocationType',formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+								<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
 								</unified:CalendarAppointment>
 							</controls:appointments>
 							<controls:actions>
-								<ToggleButton text="Full Day" press="onToggleFullDay"/>
+								<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
 								<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
 							</controls:actions>
 							<controls:views>
-								<SinglePlanningCalendarDayView key="DayView" title="Day" />
-								<SinglePlanningCalendarWorkWeekView key="WorkWeekView" title="Work Week" />
-								<SinglePlanningCalendarWeekView key="WeekView" title="Week" />
+								<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
+								<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
+								<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
 							</controls:views>
 						</controls:TRIXCalendar>
 					</VBox>
@@ -83,50 +83,70 @@
 								</f:Card>
 							</ScrollContainer>
 						</Carousel> -->
-						<Table items="{path: '/TimeRegistrationSet'}">
-							<columns>
-								<Column >
-									<Text text="User"/>
-								</Column>
-								<Column >
-									<Text text="Date"/>
-								</Column>
-								<Column >
-									<Text text="Start"/>
-								</Column>
-								<Column >
-									<Text text="End"/>
-								</Column>
-								<Column >
-									<Text text="Hours"/>
-								</Column>
-								<Column >
-									<Text text="Reg Item"/>
-								</Column>
-								<Column width="5rem">
-									<Text text="Approve"/>
-								</Column>
-								<Column width="5rem">
-									<Text text="Reject"/>
-								</Column>
-								<Column>
-									<Text text="Status"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem >
-									<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
-									<Text text="{startDate}"/>
-									<Text text="{startTime}"/>
-									<Text text="{endTime}"/>
-									<Text text="{amount}"/>
-									<Text text="{allocation/description}"/>
-									<Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
-									<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/>
-									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
-								</ColumnListItem>
-							</items>
-						</Table>
+						<VBox class="tableContainer">
+
+							<OverflowToolbar >
+								<Title text="Approve Team's Hours"></Title>
+								<ToolbarSpacer />
+								<Button text="Filter" icon="sap-icon://filter" />
+								<Button text="Sort" icon="sap-icon://sort"/>
+								<Button text="Group" icon="sap-icon://group"/>
+							</OverflowToolbar>
+							<Table items="{path: '/TimeRegistrationSet', 
+								sorter: [
+									{path: 'user/userID', group: 'true'}
+								],
+								filters: [
+									{path: 'registrationStatus', operator: 'EQ', value1: '1'}
+								]
+								}">
+								<columns>
+									<Column >
+										<Text text="User"/>
+									</Column>
+									<Column >
+										<Text text="Date"/>
+									</Column>
+									<Column >
+										<Text text="Start"/>
+									</Column>
+									<Column >
+										<Text text="End"/>
+									</Column>
+									<Column >
+										<Text text="Hours"/>
+									</Column>
+									<Column >
+										<Text text="Reg Item"/>
+									</Column>
+									<Column width="5rem">
+										<Text text="Approve"/>
+									</Column>
+									<Column width="5rem">
+										<Text text="Reject"/>
+									</Column>
+									<Column>
+										<Text text="Status"/>
+									</Column>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
+										<Text text="{startDate}"/>
+										<Text text="{startTime}"/>
+										<Text text="{endTime}"/>
+										<Text text="{amount}"/>
+										<Text text="{allocation/description}"/>
+										<Button icon="sap-icon://accept" type="Success" />
+										<Button icon="sap-icon://decline" type="Reject" />
+										<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
+										<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
+										<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
+									</ColumnListItem>
+								</items>
+							</Table>
+						</VBox>
+
 					</VBox>
 				</f:mainContent>
 				<f:items>
@@ -168,13 +188,9 @@
 			</f:SidePanel>
 
 			<l:sideContent width="200px">
-				<PlanningCalendarLegend id="SinglePlanningCalendarLegend" items="{path : '/legendItems', templateShareable: true}" appointmentItems="{path : '/legendAppointmentItems',
-									templateShareable: true}" class="sapUiSmallMarginTop">
-					<items>
-						<unified:CalendarLegendItem text="{text}" type="{type}" color="{color}" tooltip="{text}" />
-					</items>
+				<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
 					<appointmentItems>
-						<unified:CalendarLegendItem text="{text}" type="{type}" tooltip="{text}" />
+						<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
 					</appointmentItems>
 				</PlanningCalendarLegend>
 			</l:sideContent>

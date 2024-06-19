@@ -32,7 +32,7 @@ export default abstract class BaseController extends Controller {
 	 * Convenience method for getting the i18n resource bundle of the component.
 	 * @returns The i18n resource bundle of the component
 	 */
-	public getResourceBundle(): ResourceBundle  {
+	public getResourceBundle(): ResourceBundle {
 		const oModel = this.getOwnerComponent().getModel("i18n") as ResourceModel;
 		return oModel.getResourceBundle() as ResourceBundle;
 	}
@@ -82,7 +82,11 @@ export default abstract class BaseController extends Controller {
 		}
 	}
 
-	public getOdataModelCore():ODataModel {
+	/**
+	 * Tooling funciton for easy access to the Code OdataModel in V4 flavoud
+	 * @returns
+	 */
+	public getOdataModelCore(): ODataModel {
 		return this.getModel() as ODataModel;
 	}
 }
