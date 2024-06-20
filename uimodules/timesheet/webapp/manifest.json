@@ -12,7 +12,15 @@
 		},
 		"dataSources": {
 			"coreData": {
-				"uri": "/odata/",
+				"uri": "/odata/core/",
+				"type": "OData",
+				"settings": {
+					"annotations": [],
+					"odataVersion": "4.0"
+				}
+			},
+			"adminData": {
+				"uri": "/odata/admin/",
 				"type": "OData",
 				"settings": {
 					"annotations": [],
@@ -75,6 +83,18 @@
 			},
 			"": {
 				"dataSource": "coreData",
+				"preload": true,
+				"type": "sap.ui.model.odata.v4.ODataModel",
+				"settings": {
+					"synchronizationMode": "None",
+					"operationMode": "Server",
+					"autoExpandSelect": true,
+					"earlyRequests": true,
+					"groupId": "$direct"
+				}
+			},
+			"admin": {
+				"dataSource": "adminData",
 				"preload": true,
 				"type": "sap.ui.model.odata.v4.ODataModel",
 				"settings": {

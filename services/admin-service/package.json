@@ -5,7 +5,7 @@
   "license": "UNLICENSED",
   "scripts": {
     "start": "cds-serve",
-    "dev": "cds-ts watch --profile pg",
+    "dev": "cds-ts watch --profile pg --port 4005",
     "debug": "cds-ts run --profile pg",
     "test": "jest",
     "coverage": "nyc npm run test",

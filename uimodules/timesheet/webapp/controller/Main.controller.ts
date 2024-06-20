@@ -29,6 +29,7 @@ import MultiComboBox from "sap/m/MultiComboBox";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
+import List from "sap/m/List";
 
 /**
  * @namespace trix.timesheet.controller
@@ -305,5 +306,18 @@ export default class Main extends BaseController {
 		oFilterComboBox.setSelectedKeys([]);
 		oBinding.filter(aFilters);
 		oBinding.refresh();
+	}
+
+	onAddNewRegistrationType() {
+		const oRegTypeList = this.byId("RegistrationTypeList") as List;
+		const oBinding = oRegTypeList.getBinding("items") as ODataListBinding;
+
+		const oInitData = {
+			description: "Test",
+			group: 1
+		}
+		oBinding.create(oInitData).created().then(() => {
+			oBinding.refresh();
+		});
 	}
 }

@@ -1,6 +1,7 @@
 using {trix.admin as schema} from '../db/schema';
 using {trix.common.types} from '../../shared/types';
 
+@path    : 'admin'
 @requires: 'authenticated-user'
 service TrixAdminService {
 

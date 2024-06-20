@@ -50,6 +50,7 @@ entity ValidationRule : managed {
 
 entity RegistrationType : cuid, managed {
   // NOTE: This needs to be fleshed out further
+  description: String(255);
   group : RegistrationGroup;
 }
 

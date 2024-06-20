@@ -1,4 +1,4 @@
-<mvc:View xmlns:uxap="sap.uxap" xmlns:smarttable="sap.ui.comp.smarttable" xmlns:macros="sap.fe.macros" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:form="sap.ui.layout.form" xmlns:uxap="sap.uxap" xmlns:smarttable="sap.ui.comp.smarttable" xmlns:macros="sap.fe.macros" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -6,7 +6,8 @@
 	}"
 	xmlns:controls="trix.timesheet.controls"
 	xmlns:unified="sap.ui.unified"
-	xmlns:l="sap.ui.layout">
+	xmlns:l="sap.ui.layout"
+	xmlns:lf="sap.ui.layout.form">
 
 	<uxap:ObjectPageLayout id="page" useIconTabBar="true" showAnchorBar="true" subSectionLayout="TitleOnTop" >
 		<uxap:headerTitle>
@@ -48,7 +49,7 @@
 							</controls:TRIXCalendar>
 						</VBox>
 
-						<l:sideContent width="200px">
+						<l:sideContent >
 							<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
 								<appointmentItems>
 									<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
@@ -71,6 +72,7 @@
 							<Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
 							<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/>
 						</OverflowToolbar>
+
 						<Table id="ValidationTable"
 							items="{path: '/TimeRegistrationSet', 
 							sorter: [
@@ -121,21 +123,172 @@
 									<Text text="{allocation/description}"/>
 									<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
 									<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus"/>
-									<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
-									<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
 									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
 								</ColumnListItem>
 							</items>
 						</Table>
 					</VBox>
-
 				</uxap:ObjectPageSubSection>
 			</uxap:ObjectPageSection>
 
 			<uxap:ObjectPageSection title="{i18n>ttl_configuration}" >
-				<uxap:ObjectPageSubSection >
+				<uxap:ObjectPageSubSection title="{i18n>subTtl_globalSettings}">
 					<VBox >
+						<lf:SimpleForm id="GlobalSettings"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="{i18n>formTtl_quickSettings}"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="12"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false" >
+							<lf:content>
+								<!-- <core:Title text="{i18n>formTtl_quickSettings}" /> -->
+								<Label text="{i18n>formLbl_enableApproval}" />
+								<Switch state="{ApplicationModel>/globalSettings/enableApproval}" />
+							</lf:content>
+						</lf:SimpleForm>
+					</VBox>
+				</uxap:ObjectPageSubSection>
 
+				<uxap:ObjectPageSubSection title="{i18n>subTtl_validations}">
+					<VBox >
+						<lf:SimpleForm id="ValidationSettings"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="{i18n>formTtl_rules}"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="12"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false" >
+							<lf:content>
+								<!-- <core:Title text="{i18n>formTtl_rules}" /> -->
+								<Label text="{i18n>formLbl_11HourRule}" />
+								<Switch state="{ApplicationModel>/validations/11HourRule}" />
+								<Label text="{i18n>formLbl_48HourRule}" />
+								<Switch state="{ApplicationModel>/validations/48HourRule}" />
+								<Label text="{i18n>formLbl_onlyAbsenceInWorkHours}" />
+								<Switch state="{ApplicationModel>/validations/onlyAbsenceInWorkHours}" />
+							</lf:content>
+						</lf:SimpleForm>
+					</VBox>
+				</uxap:ObjectPageSubSection>
+
+				<uxap:ObjectPageSubSection title="{i18n>subTtl_registrationTypes}">
+					<HBox >
+						<VBox >
+							<List id="RegistrationTypeList" items="{odata/admin/RegistrationTypeSet}">
+								
+								<items>
+									<CustomListItem >
+										<Text text="ee"></Text>
+									</CustomListItem>
+								</items>
+							</List>
+							<Button press="onAddNewRegistrationType" text="New Registration Type" icon="sap-icon://add"/>
+						</VBox>
+							
+					</HBox>
+				</uxap:ObjectPageSubSection>
+
+				<uxap:ObjectPageSubSection title="{i18n>subTtl_integrations}">
+					<VBox >
+						<lf:SimpleForm id="SimpleFormChange480_12120"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="Address"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="12"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false" >
+							<lf:content>
+								<core:Title text="Office" />
+								<Label text="Name" />
+								<Input value="{SupplierName}" />
+								<Label text="Street/No." />
+								<Input value="{Street}">
+								</Input>
+								<Input value="{HouseNumber}">
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S4" />
+									</layoutData>
+								</Input>
+								<Label text="ZIP Code/City" />
+								<Input value="{ZIPCode}">
+									<layoutData>
+										<l:GridData span="XL2 L3 M4 S4" />
+									</layoutData>
+								</Input>
+								<Input value="{City}" />
+								<Label text="Country" />
+								<Select id="country" selectedKey="{Country}">
+									<items>
+										<core:Item text="England" key="England"/>
+										<core:Item text="Germany" key="Germany"/>
+										<core:Item text="USA" key="USA"/>
+									</items>
+								</Select>
+								<core:Title text="Online" />
+								<Label text="Web" />
+								<Input value="{Url}" type="Url" />
+								<Label text="Twitter" />
+								<Input value="{Twitter}" />
+							</lf:content>
+						</lf:SimpleForm>
+						<lf:SimpleForm id="SimpleFormChange480_12120-2"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="More"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="12"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false">
+							<lf:content>
+								<core:Title text="Contact data" />
+								<Label text="Email" />
+								<Input value="{EMail}" type="Email" />
+								<Label text="Tel." />
+								<Input value="{Tel}" type="Tel" />
+								<Label text="SMS" />
+								<Input value="{Sms}" type="Tel" />
+							</lf:content>
+						</lf:SimpleForm>
 					</VBox>
 				</uxap:ObjectPageSubSection>
 			</uxap:ObjectPageSection>

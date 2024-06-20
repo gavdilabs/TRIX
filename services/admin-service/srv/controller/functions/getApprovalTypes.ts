@@ -22,6 +22,9 @@ export default class ApprovalTypesHandler {
     next: Function
   ): ActionReturn<typeof getApprovalTypes> {
     this._logger.trace("Returning available approval types");
-    return Object.values(ApprovalType);
+    return Object.entries(ApprovalType).map(([k, v]) => ({
+      name: k,
+      index: v,
+    }));
   }
 }
