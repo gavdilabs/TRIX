@@ -99,7 +99,8 @@
 								filters: [
 									{path: 'registrationStatus', operator: 'EQ', value1: '1'}
 								]
-								}">
+								}"
+								noDataText="{i18n>tbl_noHoursAwaitingApproval}">
 								<columns>
 									<Column >
 										<Text text="User"/>
@@ -137,8 +138,8 @@
 										<Text text="{endTime}"/>
 										<Text text="{amount}"/>
 										<Text text="{allocation/description}"/>
-										<Button icon="sap-icon://accept" type="Success" />
-										<Button icon="sap-icon://decline" type="Reject" />
+										<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
+										<Button icon="sap-icon://decline" type="Reject" press="updateRegistrationStatus"/>
 										<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
 										<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
 										<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>

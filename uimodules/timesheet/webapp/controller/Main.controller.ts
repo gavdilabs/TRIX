@@ -22,6 +22,9 @@ import Item from "sap/ui/core/Item";
 import Formatter from "../model/formatter";
 import Fragment from "sap/ui/core/Fragment";
 import JSONModel from "sap/ui/model/json/JSONModel";
+import Context from "sap/ui/model/odata/v4/Context";
+import Table from "sap/m/Table";
+import Button from "sap/m/Button";
 
 /**
  * @namespace trix.timesheet.controller
@@ -208,15 +211,11 @@ export default class Main extends BaseController {
 					case 1:
 						oAppModel.setProperty("/registrationView", true);
 						oAppModel.setProperty("/teamView", false);
-						// oRegSwitch.setState(true);
-						// oTeamSwitch.setState(false);
 						break;
 					case 2:
 						oAppModel.setProperty("/registrationView", false);
 						oAppModel.setProperty("/teamView", true);
 						oAppModel.setProperty("/showSidePanel", false);
-						// oRegSwitch.setState(false);
-						// oTeamSwitch.setState(true);
 						break;
 					default:
 						break;
@@ -224,14 +223,20 @@ export default class Main extends BaseController {
 			}
 			else if (oItem === this.selectedSideItem && bExpanded) {
 				oEvent.preventDefault();
-				// oItem.set
 				return;
 			}
-			// bExpanded ? (oEvent.getSource() as SidePanel).setActionBarExpanded(false) : null;
-			// (oItem.getEventingParent() as SidePanel).setProperty("sideContentExpanded", false);
-
-
 		}
 	}
+	
+	updateRegistrationStatus(oEvent: Event) {
+		const oBtn = oEvent.getSource() as Button;
+		const sBtnType = oBtn.getType();
+		const iCode = sBtnType === "Accept" ? 3 : 4;
+		const oRegistration = oBtn.getEventingParent() as Item;
+		const oBindingContext = oRegistration.getBindingContext() as Context;
 
+		oBindingContext.setProperty("registrationStatus", iCode).then(() => {
+			(oRegistration.getEventingParent() as Table).getBinding("items").refresh();
+		});
+	}
 }
