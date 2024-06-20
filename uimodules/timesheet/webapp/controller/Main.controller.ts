@@ -135,8 +135,8 @@ export default class Main extends BaseController {
 	}
 
 	public onViewChange(event: Event): void {
-		const calendar:TRIXCalendar = event.getSource();
-		const viewKey:string = calendar.getViewByViewId(calendar.getSelectedView())?.getKey();
+		const calendar: TRIXCalendar = event.getSource();
+		const viewKey: string = calendar.getViewByViewId(calendar.getSelectedView())?.getKey();
 		ApplicationModelHandler.getInstance().setCurrentView(viewKey as CalendarView);
 	}
 
@@ -199,7 +199,7 @@ export default class Main extends BaseController {
 		const oItem = oEvent.getParameter("item") as Item,
 			iItemIndex = oItem ? parseInt(oItem.getId().replace(/^\D+/g, '')) : -1,
 			bExpanded = oEvent.getParameter("expanded") as boolean;
-			const oAppModel = this.getModel('ApplicationModel') as JSONModel;
+		const oAppModel = this.getModel('ApplicationModel') as JSONModel;
 
 		if (iItemIndex < 3) {
 			if (oItem !== this.selectedSideItem && bExpanded) {
@@ -227,16 +227,27 @@ export default class Main extends BaseController {
 			}
 		}
 	}
-	
-	updateRegistrationStatus(oEvent: Event) {
+
+	async updateRegistrationStatus(oEvent: Event) {
 		const oBtn = oEvent.getSource() as Button;
 		const sBtnType = oBtn.getType();
-		const iCode = sBtnType === "Accept" ? 3 : 4;
+		const iCode = sBtnType === "Success" ? 3 : 4;
 		const oRegistration = oBtn.getEventingParent() as Item;
-		const oBindingContext = oRegistration.getBindingContext() as Context;
+		const oTable = oRegistration.getEventingParent() as Table;
 
-		oBindingContext.setProperty("registrationStatus", iCode).then(() => {
-			(oRegistration.getEventingParent() as Table).getBinding("items").refresh();
-		});
+		if (oTable.getSelectedItems().length > 0) {
+			const aItems = oTable.getSelectedItems();
+			for (const item of aItems) {
+				const oBindingContext = item.getBindingContext() as Context;
+				await oBindingContext.setProperty("registrationStatus", iCode);
+			}
+			oTable.getBinding("items").refresh();
+		}
+		else {
+			const oBindingContext = oRegistration.getBindingContext() as Context;
+			await oBindingContext.setProperty("registrationStatus", iCode).then(() => {
+				(oRegistration.getEventingParent() as Table).getBinding("items").refresh();
+			});
+		}
 	}
 }

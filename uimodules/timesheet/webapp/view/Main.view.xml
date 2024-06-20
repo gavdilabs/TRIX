@@ -100,7 +100,8 @@
 									{path: 'registrationStatus', operator: 'EQ', value1: '1'}
 								]
 								}"
-								noDataText="{i18n>tbl_noHoursAwaitingApproval}">
+								noDataText="{i18n>tbl_noHoursAwaitingApproval}"
+								mode="MultiSelect">
 								<columns>
 									<Column >
 										<Text text="User"/>
