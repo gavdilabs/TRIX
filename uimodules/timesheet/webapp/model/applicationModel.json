@@ -21,7 +21,7 @@
 		}
 	},
 	"regStatus": [
-		{"text": "InProcess", "key": 1},
+		{"text": "In Progress", "key": 1},
 		{"text": "Complete", "key": 2},
 		{"text": "Approved", "key": 3},
 		{"text": "Rejected", "key": 4}

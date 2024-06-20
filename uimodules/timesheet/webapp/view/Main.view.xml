@@ -1,4 +1,4 @@
-<mvc:View xmlns:macros="sap.fe.macros" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:uxap="sap.uxap" xmlns:smarttable="sap.ui.comp.smarttable" xmlns:macros="sap.fe.macros" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -8,195 +8,139 @@
 	xmlns:unified="sap.ui.unified"
 	xmlns:l="sap.ui.layout">
 
-	<Page title="{i18n>appTitle}" id="page" showHeader="true">
-		<customHeader>
-			<OverflowToolbar height="5rem" >
-				<Title text="TRIX"/>
-				<ToolbarSpacer />
-				<HBox class="sapUiSmallMarginEnd">
-					<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
-						<Text text="John Doe"/>
-						<!-- <Text text="{firstName} {lastName}"/> -->
-						<Text text="JODO"/>
-						<!-- <Text text="{userID}"/> -->
-					</VBox>
-					<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="Edit user properties"/>
-				</HBox>
-			</OverflowToolbar>
-		</customHeader>
-		<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
+	<uxap:ObjectPageLayout id="page" useIconTabBar="true" showAnchorBar="true" subSectionLayout="TitleOnTop" >
+		<uxap:headerTitle>
+			<uxap:ObjectPageHeader objectTitle="TRIX">
+				<uxap:actions>
+					<HBox class="sapUiSmallMarginEnd">
+						<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
+							<Text text="John Doe"/>
+							<!-- <Text text="{firstName} {lastName}"/> -->
+							<Text text="JODO"/>
+							<!-- <Text text="{userID}"/> -->
+						</VBox>
+						<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="Edit user properties"/>
+					</HBox>
+				</uxap:actions>
+			</uxap:ObjectPageHeader>
+		</uxap:headerTitle>
 			
-			<f:SidePanel id="mySidePanel" toggle="onToggle" sidePanelPosition="Left" >
-				<f:mainContent>
-					<VBox visible="{ApplicationModel>/registrationView}">
-						<controls:TRIXCalendar viewChange="onViewChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
-							<controls:appointments>
-								<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-								</unified:CalendarAppointment>
-							</controls:appointments>
-							<controls:actions>
-								<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
-								<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
-							</controls:actions>
-							<controls:views>
-								<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
-								<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
-								<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
-							</controls:views>
-						</controls:TRIXCalendar>
-					</VBox>
-					<VBox visible="{ApplicationModel>/teamView}">
+		<uxap:sections>
+			<uxap:ObjectPageSection title="{i18n>ttl_registerHours}" >
+				<uxap:ObjectPageSubSection >
+					<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
 
-						<!-- <Carousel
-							id="carouselSample"
-							height="auto"
-							pages="{
-								path: '/UserSet',
-								sorter: [{path: 'firstName'}]
+						<VBox >
+							<controls:TRIXCalendar viewChange="onViewChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
+								<controls:appointments>
+									<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+									</unified:CalendarAppointment>
+								</controls:appointments>
+								<controls:actions>
+									<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
+									<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
+								</controls:actions>
+								<controls:views>
+									<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
+									<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
+									<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
+								</controls:views>
+							</controls:TRIXCalendar>
+						</VBox>
+
+						<l:sideContent width="200px">
+							<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
+								<appointmentItems>
+									<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
+								</appointmentItems>
+							</PlanningCalendarLegend>
+						</l:sideContent>
+
+					</l:DynamicSideContent>
+				</uxap:ObjectPageSubSection>
+			</uxap:ObjectPageSection>
+
+			<uxap:ObjectPageSection title="{i18n>ttl_validateHours}">
+				<uxap:ObjectPageSubSection >
+					<VBox class="tableContainer">
+
+						<OverflowToolbar >
+							<Title text="Approve Team's Hours"></Title>
+							<ToolbarSpacer />
+							<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
+							<Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
+							<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/>
+						</OverflowToolbar>
+						<Table id="ValidationTable"
+							items="{path: '/TimeRegistrationSet', 
+							sorter: [
+								{path: 'user/userID', group: 'true'}
+							],
+							filters: [
+								{path: 'registrationStatus', operator: 'EQ', value1: '1'}
+							]
 							}"
-							loop="false"
-							beforePageChanged="onCarouselChanged">
-							<customLayout>
-								<CarouselLayout visiblePagesCount="10"/>
-							</customLayout>
-							<ScrollContainer 
-								vertical="false" 
-								horizontal="false" 
-								class="sapUiContentPadding">
-								<f:Card>
-									<f:content>
-										<l:VerticalLayout width="100%">
-											<l:BlockLayout>
-												<l:BlockLayoutRow>
-													<l:BlockLayoutCell  width="1">
-														<HBox class="sapUiTinyMarginBottom">
-															<Text text="{firstName} {lastName} ({userID})" />
-														</HBox>
-														<HBox class="sapUiSmallMarginBottom">
-															<Text text="{firstName}" />
-														</HBox>
-													</l:BlockLayoutCell>
-												</l:BlockLayoutRow>
-											</l:BlockLayout>
-										</l:VerticalLayout>
-									</f:content>
-								</f:Card>
-							</ScrollContainer>
-						</Carousel> -->
-						<VBox class="tableContainer">
+							noDataText="{i18n>tbl_noHoursAwaitingApproval}"
+							mode="MultiSelect">
+							<columns>
+								<Column >
+									<Text text="User"/>
+								</Column>
+								<Column >
+									<Text text="Date"/>
+								</Column>
+								<Column >
+									<Text text="Start"/>
+								</Column>
+								<Column >
+									<Text text="End"/>
+								</Column>
+								<Column >
+									<Text text="Hours"/>
+								</Column>
+								<Column >
+									<Text text="Reg Item"/>
+								</Column>
+								<Column width="5rem">
+									<Text text="Approve"/>
+								</Column>
+								<Column width="5rem">
+									<Text text="Reject"/>
+								</Column>
+								<Column>
+									<Text text="Status"/>
+								</Column>
+							</columns>
+							<items>
+								<ColumnListItem >
+									<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
+									<Text text="{startDate}"/>
+									<Text text="{startTime}"/>
+									<Text text="{endTime}"/>
+									<Text text="{amount}"/>
+									<Text text="{allocation/description}"/>
+									<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
+									<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus"/>
+									<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
+									<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
+									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
+								</ColumnListItem>
+							</items>
+						</Table>
+					</VBox>
 
-							<OverflowToolbar >
-								<Title text="Approve Team's Hours"></Title>
-								<ToolbarSpacer />
-								<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
-								<Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
-								<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/>
-							</OverflowToolbar>
-							<Table items="{path: '/TimeRegistrationSet', 
-								sorter: [
-									{path: 'user/userID', group: 'true'}
-								],
-								filters: [
-									{path: 'registrationStatus', operator: 'EQ', value1: '1'}
-								]
-								}"
-								noDataText="{i18n>tbl_noHoursAwaitingApproval}"
-								mode="MultiSelect">
-								<columns>
-									<Column >
-										<Text text="User"/>
-									</Column>
-									<Column >
-										<Text text="Date"/>
-									</Column>
-									<Column >
-										<Text text="Start"/>
-									</Column>
-									<Column >
-										<Text text="End"/>
-									</Column>
-									<Column >
-										<Text text="Hours"/>
-									</Column>
-									<Column >
-										<Text text="Reg Item"/>
-									</Column>
-									<Column width="5rem">
-										<Text text="Approve"/>
-									</Column>
-									<Column width="5rem">
-										<Text text="Reject"/>
-									</Column>
-									<Column>
-										<Text text="Status"/>
-									</Column>
-								</columns>
-								<items>
-									<ColumnListItem >
-										<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
-										<Text text="{startDate}"/>
-										<Text text="{startTime}"/>
-										<Text text="{endTime}"/>
-										<Text text="{amount}"/>
-										<Text text="{allocation/description}"/>
-										<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
-										<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus"/>
-										<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
-										<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
-										<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
-									</ColumnListItem>
-								</items>
-							</Table>
-						</VBox>
+				</uxap:ObjectPageSubSection>
+			</uxap:ObjectPageSection>
+
+			<uxap:ObjectPageSection title="{i18n>ttl_configuration}" >
+				<uxap:ObjectPageSubSection >
+					<VBox >
 
 					</VBox>
-				</f:mainContent>
-				<f:items>
-					<f:SidePanelItem icon="sap-icon://date-time" text="Registration">
-						<!-- <VBox>
-							<Switch id="registrationSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/registrationView}" change="toggleRegistrationTeamView"/>
-							<Text text="View for time registration. Register your hours here." />
-						</VBox> -->
-					</f:SidePanelItem>
-					<f:SidePanelItem icon="sap-icon://company-view" text="Team" >
-						<!-- <VBox>
-							<Switch id="teamSwitch" class="sapUiSmallMarginBottom" state="{ApplicationModel>/teamView}" change="toggleRegistrationTeamView"/>
-							<Text text="View your team's registrations here. You confirm their hours here (if applicable)" />
-						</VBox> -->
-					</f:SidePanelItem>
-					<f:SidePanelItem icon="sap-icon://action-settings" text="Configuration"> 
-						<VBox>
-							<VBox >
-								<Label text="Absence color" showColon="true" class="sapUiSmallMarginTop"/>
-								<Input id="colorAbs"
-									type="Text"
-									placeholder="Enter Color ..."
-									showValueHelp="true"
-									valueHelpRequest="openSimplifiedModeSample"
-									change="handleInputChange"/>
-							</VBox>
-							<VBox >
-								<Label text="Presence color" showColon="true" class="sapUiSmallMarginTop"/>
-								<Input id="colorPres"
-									type="Text"
-									placeholder="Enter Color ..."
-									showValueHelp="true"
-									valueHelpRequest="openSimplifiedModeSample"
-									change="handleInputChange"/>
-							</VBox>
-						</VBox>
-					</f:SidePanelItem>
-				</f:items>
-			</f:SidePanel>
+				</uxap:ObjectPageSubSection>
+			</uxap:ObjectPageSection>
 
-			<l:sideContent width="200px">
-				<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
-					<appointmentItems>
-						<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
-					</appointmentItems>
-				</PlanningCalendarLegend>
-			</l:sideContent>
-		</l:DynamicSideContent>
-	</Page>
+		</uxap:sections>
+	</uxap:ObjectPageLayout>
 
 </mvc:View>

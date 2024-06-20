@@ -25,6 +25,10 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import Context from "sap/ui/model/odata/v4/Context";
 import Table from "sap/m/Table";
 import Button from "sap/m/Button";
+import MultiComboBox from "sap/m/MultiComboBox";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 
 /**
  * @namespace trix.timesheet.controller
@@ -253,7 +257,7 @@ export default class Main extends BaseController {
 	}
 
 	async onOpenFilterPopover(oEvent: Event) {
-		var oButton = oEvent.getSource() as Button,
+		const oButton = oEvent.getSource() as Button,
 			oView = this.getView();
 
 		if (!this.oFilterPopover) {
@@ -263,10 +267,43 @@ export default class Main extends BaseController {
 				controller: this,
 			})) as ResponsivePopover;
 
+			if (this.oFilterPopover) {
+				oView.addDependent(this.oFilterPopover);
+				const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox;
+				oFilterComboBox.setSelectedKeys(['1'])
+				
+				this.oFilterPopover.openBy(oButton);
+				return;
+			}
 		}
 		if (this.oFilterPopover) {
-			oView.addDependent(this.oFilterPopover);
+			oView.addDependent(this.oFilterPopover);			
 			this.oFilterPopover.openBy(oButton);
 		}
+	}
+
+	onFilterRegistrations() {
+		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
+			oTable = this.byId("ValidationTable") as Table,
+			oBinding = oTable.getBinding("items") as ODataListBinding,
+			aSelectedKeys = oFilterComboBox.getSelectedKeys();
+		let aFilters: Filter[] = [];
+
+		for (const key of aSelectedKeys) {
+			aFilters.push(new Filter("registrationStatus", FilterOperator.EQ, key));
+		}
+		oBinding.filter(aFilters);
+		oBinding.refresh();
+	}
+
+	onClearRegFilters() {
+		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
+			oTable = this.byId("ValidationTable") as Table,
+			oBinding = oTable.getBinding("items") as ODataListBinding;
+		let aFilters: Filter[] = [];
+
+		oFilterComboBox.setSelectedKeys([]);
+		oBinding.filter(aFilters);
+		oBinding.refresh();
 	}
 }
