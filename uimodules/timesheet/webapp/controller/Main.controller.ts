@@ -33,6 +33,7 @@ export default class Main extends BaseController {
 	private dialogEditUser: Dialog;
 	private colorInputId: string;
 	private oColorPickerSimplifiedPopover: ColorPickerPopover;
+	private oFilterPopover: ResponsivePopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private cellPressed: boolean = false;
 	private selectedSideItem: Item;
@@ -248,6 +249,24 @@ export default class Main extends BaseController {
 			await oBindingContext.setProperty("registrationStatus", iCode).then(() => {
 				(oRegistration.getEventingParent() as Table).getBinding("items").refresh();
 			});
+		}
+	}
+
+	async onOpenFilterPopover(oEvent: Event) {
+		var oButton = oEvent.getSource() as Button,
+			oView = this.getView();
+
+		if (!this.oFilterPopover) {
+			this.oFilterPopover = (await Fragment.load({
+				id: oView.getId(),
+				name: "trix.timesheet.view.popovers.FilterPopover",
+				controller: this,
+			})) as ResponsivePopover;
+
+		}
+		if (this.oFilterPopover) {
+			oView.addDependent(this.oFilterPopover);
+			this.oFilterPopover.openBy(oButton);
 		}
 	}
 }

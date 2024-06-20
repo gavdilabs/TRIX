@@ -1,4 +1,4 @@
-<mvc:View xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
+<mvc:View xmlns:macros="sap.fe.macros" xmlns:filterbar="sap.ui.comp.filterbar" xmlns:cards="sap.f.cards" xmlns:f="sap.f" controllerName="trix.timesheet.controller.Main" displayBlock="true"
 	xmlns="sap.m"
 	xmlns:mvc="sap.ui.core.mvc"
 	xmlns:core="sap.ui.core" core:require="{
@@ -88,9 +88,9 @@
 							<OverflowToolbar >
 								<Title text="Approve Team's Hours"></Title>
 								<ToolbarSpacer />
-								<Button text="Filter" icon="sap-icon://filter" />
-								<Button text="Sort" icon="sap-icon://sort"/>
-								<Button text="Group" icon="sap-icon://group"/>
+								<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
+								<Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
+								<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/>
 							</OverflowToolbar>
 							<Table items="{path: '/TimeRegistrationSet', 
 								sorter: [
@@ -140,7 +140,7 @@
 										<Text text="{amount}"/>
 										<Text text="{allocation/description}"/>
 										<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
-										<Button icon="sap-icon://decline" type="Reject" press="updateRegistrationStatus"/>
+										<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus"/>
 										<!-- <Button icon="sap-icon://accept" type="Success" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableAcceptBtn'}"/>
 										<Button icon="sap-icon://decline" type="Reject" enabled="{path:'registrationStatus', targetType:'any', formatter:'.formatter.enableRejectBtn'}"/> -->
 										<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
