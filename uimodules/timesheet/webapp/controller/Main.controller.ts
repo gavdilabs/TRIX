@@ -108,6 +108,10 @@ export default class Main extends BaseController {
 		this.getCalendarControl().setFullDay(params.pressed);
 	}
 
+	/**
+	 * Triggers when Date View is changed on the Calendar
+	 * @param event std. UI5 event
+	 */
 	public onCalendarChange(event: Event): void {
 		const params = event.getParameters() as { date?: Date };
 		const calendar: TRIXCalendar = event.getSource();
