@@ -11,6 +11,15 @@ export interface ITimeRegistrationAndAllocation
 /**
  * Tooling interface for allowing a Partial to consider nested structures
  */
-export type DeepPartial<T> = T extends object ? {
-    [P in keyof T]?: DeepPartial<T[P]>;
-} : T;
+export type DeepPartial<T> = T extends object ? {[P in keyof T]?: DeepPartial<T[P]>;
+}:T;
+
+export enum Day {
+	MONDAY = 1,
+	TUESDAY = 2,
+	WEDNESDAY = 3,
+	THURSDAY = 4,
+	FRIDAY = 5,
+	SATURDAY = 6,
+	SUNDAY = 0,
+}

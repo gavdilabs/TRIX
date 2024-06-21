@@ -13,6 +13,7 @@ import { trix } from "../model/entities-core";
 import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import DateHelper from "../utils/DateHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
+import { CalendarView } from "./ApplicationModelHandler";
 
 export default class TimeRegistrationSetHandler {
 	public static readonly REGISTRATIONS_MODEL_NAME = "PeriodRegistrations";
@@ -53,14 +54,19 @@ export default class TimeRegistrationSetHandler {
 		odataModel: ODataModel,
 		controller: Controller,
 		i18nBundle: ResourceBundle,
-		startDate: Date,
+		inputDate: Date,
+		navMode: CalendarView
 	): Promise<void> {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
 		this.i18nBundle = i18nBundle;
 
-		TimeRegistrationSetHandler.startDate = startDate;
-		TimeRegistrationSetHandler.endDate = DateHelper.;
+		//Update the dates
+		void TimeRegistrationSetHandler.updateDatesAndMode(
+			inputDate,
+			navMode,
+			false
+		);
 
 		//Create the listbinding for backend
 		const oBinding = odataModel.bindList(
@@ -275,6 +281,19 @@ export default class TimeRegistrationSetHandler {
 			default:
 				MessageBox.show(message);
 				break;
+		}
+	}
+
+	public static async updateDatesAndMode(
+		inputDate: Date,
+		navMode: CalendarView,
+		reload: boolean = true
+	) {
+		[TimeRegistrationSetHandler.startDate, TimeRegistrationSetHandler.endDate] =
+			DateHelper.getStartEndDates(inputDate, navMode);
+
+		if (reload) {
+			await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations();
 		}
 	}
 

@@ -30,15 +30,6 @@ export default class Main extends BaseController {
 	 * Routing target - only firing if url has /Main
 	 */
 	private async onPatternMatched() {
-		//Initialize the Data handler(s)
-		void (await TimeRegistrationSetHandler.initialize(
-			this.getOdataModelCore(),
-			this,
-			this.getResourceBundle(),
-			this.getCalendarControl().getStartDate() as Date,
-			this.getCalendarControl().getStartDate() as Date
-		));
-
 		//ApplicationModelHandler init
 		ApplicationModelHandler.getInstance().initialize(
 			this,
@@ -47,6 +38,15 @@ export default class Main extends BaseController {
 		ApplicationModelHandler.getInstance().setCurrentView(
 			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
 		);
+
+		//Initialize the Data handler(s)
+		void (await TimeRegistrationSetHandler.initialize(
+			this.getOdataModelCore(),
+			this,
+			this.getResourceBundle(),
+			new Date(),
+			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
+		));
 
 		//Preload some popup lists
 		this.ddHandler = new DropDownHandler(
@@ -116,6 +116,11 @@ export default class Main extends BaseController {
 			.getViewByViewId(calendar.getSelectedView())
 			?.getKey();
 		ApplicationModelHandler.getInstance().setCurrentView(
+			viewKey as CalendarView
+		);
+
+		void TimeRegistrationSetHandler.updateDatesAndMode(
+			calendar.getStartDate() as Date,
 			viewKey as CalendarView
 		);
 	}
