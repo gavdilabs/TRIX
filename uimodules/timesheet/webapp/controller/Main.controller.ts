@@ -34,7 +34,9 @@ export default class Main extends BaseController {
 		void (await TimeRegistrationSetHandler.initialize(
 			this.getOdataModelCore(),
 			this,
-			this.getResourceBundle()
+			this.getResourceBundle(),
+			this.getCalendarControl().getStartDate() as Date,
+			this.getCalendarControl().getStartDate() as Date
 		));
 
 		//ApplicationModelHandler init
@@ -109,8 +111,12 @@ export default class Main extends BaseController {
 	}
 
 	public onViewChange(event: Event): void {
-		const calendar:TRIXCalendar = event.getSource();
-		const viewKey:string = calendar.getViewByViewId(calendar.getSelectedView())?.getKey();
-		ApplicationModelHandler.getInstance().setCurrentView(viewKey as CalendarView);
+		const calendar: TRIXCalendar = event.getSource();
+		const viewKey: string = calendar
+			.getViewByViewId(calendar.getSelectedView())
+			?.getKey();
+		ApplicationModelHandler.getInstance().setCurrentView(
+			viewKey as CalendarView
+		);
 	}
 }

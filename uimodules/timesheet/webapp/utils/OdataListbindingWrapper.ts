@@ -1,3 +1,4 @@
+import Filter from "sap/ui/model/Filter";
 import Context from "sap/ui/model/odata/v4/Context";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
@@ -35,8 +36,12 @@ export class OdataListbindingWrapper<T> {
 	/**
 	 * Request new data remotely on the listbinding
 	 */
-	public async refreshBinding(): Promise<void> {
-		void (await this.listBinding.requestRefresh());
+	public async refreshBinding(filters?: Filter[]): Promise<void> {
+		if (filters) {
+			this.listBinding.filter(filters);
+		} else {
+			void (await this.listBinding.requestRefresh());
+		}
 	}
 
 	/**

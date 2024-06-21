@@ -3,6 +3,8 @@ import MessageBox from "sap/m/MessageBox";
 import MessageToast from "sap/m/MessageToast";
 import MessageType from "sap/ui/core/message/MessageType";
 import Controller from "sap/ui/core/mvc/Controller";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Context from "sap/ui/model/odata/v4/Context";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
@@ -10,7 +12,6 @@ import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import { trix } from "../model/entities-core";
 import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import DateHelper from "../utils/DateHelper";
-import ModelDataHelper from "../utils/ModelDataHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 
 export default class TimeRegistrationSetHandler {
@@ -21,6 +22,8 @@ export default class TimeRegistrationSetHandler {
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
 	private static i18nBundle: ResourceBundle = undefined;
+	private static startDate: Date = undefined;
+	private static endDate: Date = undefined;
 
 	private static dataMap: Map<string, Partial<ITimeRegistrationAndAllocation>> =
 		new Map();
@@ -49,19 +52,23 @@ export default class TimeRegistrationSetHandler {
 	public static async initialize(
 		odataModel: ODataModel,
 		controller: Controller,
-		i18nBundle: ResourceBundle
+		i18nBundle: ResourceBundle,
+		startDate: Date,
 	): Promise<void> {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
 		this.i18nBundle = i18nBundle;
+
+		TimeRegistrationSetHandler.startDate = startDate;
+		TimeRegistrationSetHandler.endDate = DateHelper.;
 
 		//Create the listbinding for backend
 		const oBinding = odataModel.bindList(
 			"/TimeRegistrationSet",
 			undefined,
 			undefined,
-			undefined,
-			{ $$updateGroupId: this.REGISTRATIONS_GROUP_ID }
+			new Filter("startDate", FilterOperator.NE, null),
+			{ $$updateGroupId: this.REGISTRATIONS_GROUP_ID, $expand: "allocation" }
 		);
 		TimeRegistrationSetHandler.timeRegistrations = new OdataListbindingWrapper(
 			oBinding,
@@ -87,7 +94,7 @@ export default class TimeRegistrationSetHandler {
 		allocationId?: string
 	): Promise<void> {
 		const timeRegData: trix.core.ITimeRegistration = appointment
-			?.getBindingContext("PeriodRegistrations")
+			?.getBindingContext(TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME)
 			.getObject() as trix.core.ITimeRegistration;
 		try {
 			timeRegData.startDate = newStartDate;
@@ -130,13 +137,6 @@ export default class TimeRegistrationSetHandler {
 		} catch {
 			this.message("MessageAppointmentUpdatedFail", MessageType.Error);
 		}
-	}
-
-	private async commitData(): Promise<void> {
-		void (await TimeRegistrationSetHandler.odataModel.submitBatch(
-			TimeRegistrationSetHandler.REGISTRATIONS_GROUP_ID
-		));
-		this.updateUIModel();
 	}
 
 	/**
@@ -282,17 +282,31 @@ export default class TimeRegistrationSetHandler {
 	 * Function that initially loads timeregistrations into map
 	 */
 	public async loadTimeRegistrations(): Promise<void> {
-		let timeRegistrationsForPeriod = await ModelDataHelper.getModelData<
-			ITimeRegistrationAndAllocation[]
-		>(TimeRegistrationSetHandler.odataModel, "/TimeRegistrationSet", {
-			$expand: "allocation",
+		const dateFilters: Filter[] = [
+			new Filter(
+				"startDate",
+				FilterOperator.GE,
+				DateHelper.dateAsSimpleFormat(TimeRegistrationSetHandler.startDate)
+			),
+			new Filter(
+				"endDate",
+				FilterOperator.LE,
+				DateHelper.dateAsSimpleFormat(TimeRegistrationSetHandler.endDate)
+			),
+		];
+		void (await TimeRegistrationSetHandler.timeRegistrations.refreshBinding(
+			dateFilters
+		));
+		let timeRegistrationsForPeriod =
+			await TimeRegistrationSetHandler.timeRegistrations.getContexts();
+
+		timeRegistrationsForPeriod = timeRegistrationsForPeriod.filter((ctx) => {
+			const itemData = ctx.getObject() as trix.core.ITimeRegistration;
+			return itemData.startDate && itemData.endDate;
 		});
 
-		timeRegistrationsForPeriod = timeRegistrationsForPeriod.filter(
-			(item) => item.startDate && item.endDate
-		);
-
-		timeRegistrationsForPeriod.forEach((item) => {
+		timeRegistrationsForPeriod.forEach((ctx) => {
+			const item = ctx.getObject() as trix.core.ITimeRegistration;
 			//Setup the startdate
 			let [hour, minute, second] = (item.startTime as unknown as string).split(
 				":"
