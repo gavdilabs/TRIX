@@ -69,8 +69,8 @@
 							<Title text="Approve Team's Hours"></Title>
 							<ToolbarSpacer />
 							<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
-							<Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
-							<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/>
+							<!-- <Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
+							<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/> -->
 						</OverflowToolbar>
 
 						<Table id="ValidationTable"
@@ -115,14 +115,17 @@
 							</columns>
 							<items>
 								<ColumnListItem >
+									<customData>
+										<core:CustomData key="regStatus" value="{path: 'registrationStatus', targetType:'string'}" writeToDom="true"/>
+									</customData>
 									<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
 									<Text text="{startDate}"/>
 									<Text text="{startTime}"/>
 									<Text text="{endTime}"/>
 									<Text text="{amount}"/>
 									<Text text="{allocation/description}"/>
-									<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus"/>
-									<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus"/>
+									<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
+									<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
 									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
 								</ColumnListItem>
 							</items>
