@@ -14,6 +14,7 @@ import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import DateHelper from "../utils/DateHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
 import { CalendarView } from "./ApplicationModelHandler";
+import DropDownHandler from "./DropDownHandler";
 
 export default class TimeRegistrationSetHandler {
 	public static readonly REGISTRATIONS_MODEL_NAME = "PeriodRegistrations";
@@ -106,6 +107,11 @@ export default class TimeRegistrationSetHandler {
 			timeRegData.startDate = newStartDate;
 			timeRegData.endDate = newEndDate;
 
+			//Prepare Map item
+			const mapItem: Partial<ITimeRegistrationAndAllocation> = {
+				...timeRegData,
+			};
+
 			//Update the record in DB
 			const startDateStr: string = DateHelper.dateAsSimpleFormat(newStartDate);
 			const startTimeStr: string =
@@ -114,35 +120,51 @@ export default class TimeRegistrationSetHandler {
 			const endTimeStr: string = DateHelper.dateAsSimpleTimeFormat(newEndDate);
 
 			const existingContext = await this.getAppointmentContext(timeRegData.ID);
-			void existingContext?.setProperty(
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/startDate`,
 				startDateStr
-			);
-			void existingContext?.setProperty(
+			));
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/startTime`,
 				startTimeStr
-			);
+			));
 
-			void existingContext?.setProperty(
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/endDate`,
 				endDateStr
-			);
-			void existingContext?.setProperty(
+			));
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/endTime`,
 				endTimeStr
-			);
+			));
 			if (allocationId) {
-				void existingContext?.setProperty(
+				void (await existingContext?.setProperty(
 					`${existingContext.getPath()}/allocation_ID`,
 					allocationId
-				);
+				));
+				mapItem.allocation_ID = allocationId;
+				mapItem.allocation = this.getAllocationById(allocationId);
 			}
+
+			mapItem.startDate = newStartDate;
+			mapItem.endDate = newEndDate;
+			TimeRegistrationSetHandler.dataMap.set(timeRegData.ID, mapItem);
+
 			this.updateUIModel();
 
 			this.toast("MessageAppointmentUpdatedOk");
-		} catch {
-			this.message("MessageAppointmentUpdatedFail", MessageType.Error);
+		} catch (e) {
+			this.message(
+				TimeRegistrationSetHandler.i18nBundle.getText(
+					"MessageAppointmentUpdatedFail"
+				),
+				MessageType.Error
+			);
 		}
+	}
+
+	public static isTempItemId(id: string): boolean {
+		return id && id.indexOf("TEMP#") > -1;
 	}
 
 	/**
@@ -349,6 +371,9 @@ export default class TimeRegistrationSetHandler {
 		this.updateUIModel();
 	}
 
+	/**
+	 * This will inflate the items into
+	 */
 	private updateUIModel() {
 		TimeRegistrationSetHandler.controller
 			.getView()
@@ -356,5 +381,23 @@ export default class TimeRegistrationSetHandler {
 				new JSONModel(Array.from(TimeRegistrationSetHandler.dataMap.values())),
 				TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME
 			);
+	}
+
+	/**
+	 * Return a TimeAllocation object structure from a given timeAllocation id
+	 * @param allocationId Allocation Id
+	 * @returns TimeAllocation data
+	 */
+	private getAllocationById(allocationId: string): trix.core.ITimeAllocation {
+		const allocationData = (
+			TimeRegistrationSetHandler.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
+		).getData() as trix.core.ITimeAllocation[];
+		if (allocationData) {
+			return allocationData.find((itemTmp) => itemTmp.ID === allocationId);
+		} else {
+			return undefined;
+		}
 	}
 }

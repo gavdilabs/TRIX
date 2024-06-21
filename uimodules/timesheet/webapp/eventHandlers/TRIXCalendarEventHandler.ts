@@ -136,7 +136,10 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	 * Event function that handles when the project popover closes
 	 */
 	public onAppointmentPopoverClose() {
-		if (this.tempUiRecord?.ID) {
+		if (
+			this.tempUiRecord?.ID &&
+			TimeRegistrationSetHandler.isTempItemId(this.tempUiRecord.ID)
+		) {
 			TimeRegistrationSetHandler.getInstance().deleteDataMapItem(
 				this.tempUiRecord.ID
 			);
