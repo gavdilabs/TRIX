@@ -10,6 +10,9 @@
     box-shadow: 5px 5px 5px rgb(196, 196, 196) !important;
     background: white !important;
 }
+.sapMListTblRow[data-regStatus="2"]{
+    background: #307291c7 !important;
+}
 .sapMListTblRow[data-regStatus="3"]{
     background: #30914cc7 !important;
 }

@@ -15,10 +15,10 @@
 				<uxap:actions>
 					<HBox class="sapUiSmallMarginEnd">
 						<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
-							<Text text="John Doe"/>
-							<!-- <Text text="{firstName} {lastName}"/> -->
-							<Text text="JODO"/>
-							<!-- <Text text="{userID}"/> -->
+							<!-- <Text text="John Doe"/> -->
+							<Text text="{/UserSet>/firstName} {/UserSet>lastName}"/>
+							<!-- <Text text="JODO"/> -->
+							<Text text="{UserSet>userID}"/>
 						</VBox>
 						<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="Edit user properties"/>
 					</HBox>

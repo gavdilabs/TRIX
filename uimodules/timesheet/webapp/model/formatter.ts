@@ -12,6 +12,6 @@ export default class Formatter extends BaseController{
 		return this.getResourceBundle().getText(`reg_status_${code}`);
 	}
 	showApproveRejectBtns(code: number) {
-		return code === 1 ? true : false;
+		return code === 2 ? false : true;
 	}
 };
