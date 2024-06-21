@@ -31,7 +31,15 @@ service TrixCoreService {
     };
 
   entity TimeAllocationSet @(restrict: [
-    {grant: ['READ']},
+    {
+      grant: ['READ'],
+      to   : ['TimeUser'],
+      where: 'allocatedUsers.userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      to   : []
+    },
     {
       grant: ['*'],
       to   : [
@@ -45,10 +53,12 @@ service TrixCoreService {
   entity User2AllocationSet @(restrict: [
     {
       grant: ['READ'],
-      to   : [
-        'TimeUser',
-        'TeamLead'
-      ]
+      to   : ['TimeUser'],
+      where: 'userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      to   : ['TeamLead']
     },
     {
       grant: ['*'],
@@ -88,6 +98,7 @@ service TrixCoreService {
   entity WorkScheduleSet @(restrict: [
     {
       grant: ['READ'],
+      to   : ['TimeUser'],
       where: 'user.userID = $user.id'
     },
     {
