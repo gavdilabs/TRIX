@@ -61,6 +61,9 @@ export default class ApplicationModelHandler {
 				.getOwnerComponent()
 				.getModel(ApplicationModelHandler.APPLICATION_MODEL_NAME) as JSONModel
 		).getData() as IApplicationModel;
+
+		//Set the current
+		this.setCurrentView(this.getCurrentCalendarViewKey() as CalendarView);
 	}
 
 	public setCurrentView(viewKey: CalendarView) {

@@ -134,4 +134,23 @@ export default class DateHelper {
 
 		return true;
 	}
+
+	/**
+	 * Helper function for adding/subtracting days from a Date
+	 * @param inputDate
+	 * @param inOrDecrementInDays
+	 * @returns new Date
+	 */
+	public static addDaysToDate(
+		inputDate: Date,
+		inOrDecrementInDays: number
+	): Date {
+		if (!inputDate || !inputDate.getFullYear) {
+			throw new Error("Please input a proper date object");
+		}
+
+		const returnDate = new Date(inputDate);
+		returnDate.setDate(inputDate.getDate() + inOrDecrementInDays);
+		return returnDate;
+	}
 }

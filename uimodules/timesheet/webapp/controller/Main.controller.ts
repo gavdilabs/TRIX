@@ -7,6 +7,7 @@ import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
 import { trix } from "../model/entities-core";
+import DateHelper from "../utils/DateHelper";
 import BaseController from "./BaseController";
 
 /**
@@ -34,9 +35,6 @@ export default class Main extends BaseController {
 		ApplicationModelHandler.getInstance().initialize(
 			this,
 			this.getResourceBundle()
-		);
-		ApplicationModelHandler.getInstance().setCurrentView(
-			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
 		);
 
 		//Initialize the Data handler(s)
@@ -110,7 +108,8 @@ export default class Main extends BaseController {
 		this.getCalendarControl().setFullDay(params.pressed);
 	}
 
-	public onViewChange(event: Event): void {
+	public onCalendarChange(event: Event): void {
+		const params = event.getParameters() as { date?: Date };
 		const calendar: TRIXCalendar = event.getSource();
 		const viewKey: string = calendar
 			.getViewByViewId(calendar.getSelectedView())
@@ -120,7 +119,9 @@ export default class Main extends BaseController {
 		);
 
 		void TimeRegistrationSetHandler.updateDatesAndMode(
-			calendar.getStartDate() as Date,
+			params.date
+				? DateHelper.addDaysToDate(params.date, 0)
+				: (calendar.getStartDate() as Date),
 			viewKey as CalendarView
 		);
 	}
