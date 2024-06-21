@@ -6,6 +6,9 @@ import { trix } from "../model/entities-core";
 import ModelDataHelper from "../utils/ModelDataHelper";
 import ApplicationModelHandler from "./ApplicationModelHandler";
 
+/**
+ * Interface for the items in the Allocation Tree
+ */
 export interface IAllocationTreeItem {
 	text: string;
 	key: string;
@@ -13,21 +16,33 @@ export interface IAllocationTreeItem {
 	nodes?: IAllocationTreeItem[];
 }
 
+/**
+ * Extension Interface to get access to the allocation navTo on TimeAllocation
+ */
 export interface IExtendedTimeAllocation extends trix.core.ITimeAllocation {
 	allocationTypeExtended: trix.core.AllocationType | ExtendedAllocationTypes;
 }
 
+/**
+ * Enum to help break up the Absence&Attendance type into 2 separate in the UI
+ */
 export enum ExtendedAllocationTypes {
 	Absence = "Absence",
 	Attendance = "Attendance",
 }
 
+/**
+ * Interface describing an AllocationType when used in the UI
+ */
 export interface IAllocationType {
 	key: string;
 	value: string;
 	color: string;
 }
 
+/**
+ * Helper class for the different Dropdown lists - putting data into JSON models for 1 time binding etc having post manipulated the data
+ */
 export default class DropDownHandler {
 	public static readonly MODELNAME_ALLOCATION_TYPES = "ListAllocationTypes";
 	public static readonly MODELNAME_ALLOCATION_TYPES_LEGEND =
@@ -105,6 +120,12 @@ export default class DropDownHandler {
 		return [];
 	}
 
+	/**
+	 * Return boolean indicator if an allocationType and acc. subtype is Attendance type
+	 * @param allocationType Project/Service etc
+	 * @param subtypeId allocation subtype from the AllocationType
+	 * @returns boolean true | false
+	 */
 	public isSubtypeAttendance(
 		allocationType: trix.core.AllocationType,
 		subtypeId: string
