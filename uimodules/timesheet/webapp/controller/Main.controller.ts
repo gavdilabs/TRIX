@@ -43,7 +43,7 @@ export default class Main extends BaseController {
 			this,
 			this.getResourceBundle(),
 			new Date(),
-			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
+			ApplicationModelHandler.getInstance().getCurrentCalendarView() as CalendarView
 		));
 
 		//Preload some popup lists
