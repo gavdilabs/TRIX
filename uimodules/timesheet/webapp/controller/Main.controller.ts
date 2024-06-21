@@ -30,6 +30,14 @@ import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import Filter from "sap/ui/model/Filter";
 import FilterOperator from "sap/ui/model/FilterOperator";
 import List from "sap/m/List";
+import Input from "sap/m/Input";
+import MessageBox from "sap/m/MessageBox";
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import CustomListItem from "sap/m/CustomListItem";
+import HBox from "sap/m/HBox";
+import Text from "sap/m/Text";
+import Select from "sap/m/Select";
 
 /**
  * @namespace trix.timesheet.controller
@@ -39,11 +47,13 @@ export default class Main extends BaseController {
 	private colorInputId: string;
 	private oColorPickerSimplifiedPopover: ColorPickerPopover;
 	private oFilterPopover: ResponsivePopover;
+	private oCatalogyPopover: ResponsivePopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private cellPressed: boolean = false;
 	private selectedSideItem: Item;
 	private formatter = new Formatter("Formatter");
 	private ddHandler: DropDownHandler = undefined;
+	private oResourceBundle: ResourceBundle;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -54,8 +64,6 @@ export default class Main extends BaseController {
 			.attachPatternMatched(() => {
 				void this.onPatternMatched();
 			}, this);
-		// this.formatter = this.formatter ? this.formatter : new Formatter();
-		// new Formatter();
 	}
 
 	/**
@@ -68,6 +76,8 @@ export default class Main extends BaseController {
 			this,
 			this.getResourceBundle()
 		));
+
+		this.oResourceBundle = this.getResourceBundle();
 
 		//ApplicationModelHandler init
 		ApplicationModelHandler.getInstance().initialize(
@@ -283,6 +293,29 @@ export default class Main extends BaseController {
 		}
 	}
 
+	async onOpenCatalogyPopover(oEvent: Event) {
+		const oButton = oEvent.getSource() as Button,
+			oView = this.getView();
+
+		if (!this.oCatalogyPopover) {
+			this.oCatalogyPopover = (await Fragment.load({
+				id: oView.getId(),
+				name: "trix.timesheet.view.popovers.CatalogyPopover",
+				controller: this,
+			})) as ResponsivePopover;
+
+			if (this.oCatalogyPopover) {
+				oView.addDependent(this.oCatalogyPopover);				
+				this.oCatalogyPopover.openBy(oButton);
+				return;
+			}
+		}
+		if (this.oCatalogyPopover) {
+			oView.addDependent(this.oCatalogyPopover);			
+			this.oCatalogyPopover.openBy(oButton);
+		}
+	}
+
 	onFilterRegistrations() {
 		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
 			oTable = this.byId("ValidationTable") as Table,
@@ -308,16 +341,79 @@ export default class Main extends BaseController {
 		oBinding.refresh();
 	}
 
-	onAddNewRegistrationType() {
-		const oRegTypeList = this.byId("RegistrationTypeList") as List;
-		const oBinding = oRegTypeList.getBinding("items") as ODataListBinding;
+	onAddNewCatalogy() {
+		const oCatalogyList = this.byId("CatalogyList") as List;
+		const oRegTypeTable = this.byId("RegistrationTypesTable") as Table;
+		const oInput = this.byId("CatalogyInput") as Input;
+		const oBinding = oCatalogyList.getBinding("items") as ODataListBinding;
+
+		if (oInput.getValue().length < 1) {
+			MessageBox.warning(this.oResourceBundle.getText("msg_newCatalogyEmpty"), {
+				actions: [(MessageBox as any).Action.CLOSE],
+				emphasizedAction: (MessageBox as any).Action.CLOSE
+			});
+			return;
+		}
 
 		const oInitData = {
-			description: "Test",
-			group: 1
+			name: oInput.getValue()
 		}
-		oBinding.create(oInitData).created().then(() => {
+		oBinding.create(oInitData).created().then(async () => {
 			oBinding.refresh();
+			oRegTypeTable.getItems().forEach((oItem) => {
+				const oSelect = oItem.findElements(true).find((element) => element.getDomRef()?.className.includes("sapMSlt")) as Select;
+				oSelect.getBinding("items").refresh();
+			})
+		});
+	}
+
+	onRemoveCatalogy(oEvent: Event) {
+		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
+		const oRegTypeTable = this.byId("RegistrationTypesTable") as List;
+
+		MessageBox.warning(this.oResourceBundle.getText("msg_deleteCatalogyWarning"), {
+			actions: [(MessageBox as any).Action.YES, (MessageBox as any).Action.CANCEL],
+			emphasizedAction: (MessageBox as any).Action.YES,
+			onClose: (sAction: any) => {
+				if (sAction === (MessageBox as any).Action.YES) {
+					oContext.delete().then(() => {
+						oRegTypeTable.getItems().forEach((oItem) => {
+							const oSelect = oItem.findElements(true).find((element) => element.getDomRef()?.className.includes("sapMSlt")) as Select;
+							oSelect.getBinding("items").refresh();
+						})
+						MessageToast.show(this.oResourceBundle.getText("msg_catalogyDeleted"), {
+							closeOnBrowserNavigation: false
+						});
+					});
+				}
+			}
+		});
+	}
+
+	onAddNewRegType() {
+		const oRegTypeTable = this.byId("RegistrationTypesTable") as Table;
+		const oBinding = oRegTypeTable.getBinding("items") as ODataListBinding;
+
+		oBinding.create().created().then(async () => {
+			oBinding.refresh();
+		});
+	}
+
+	async onRemoveRegType(oEvent: Event) {
+		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
+
+		MessageBox.warning(this.oResourceBundle.getText("msg_deleteRegTypeWarning"), {
+			actions: [(MessageBox as any).Action.YES, (MessageBox as any).Action.CANCEL],
+			emphasizedAction: (MessageBox as any).Action.YES,
+			onClose: (sAction: any) => {
+				if (sAction === (MessageBox as any).Action.YES) {
+					oContext.delete().then(() => {
+						MessageToast.show(this.oResourceBundle.getText("msg_regTypeDeleted"), {
+							closeOnBrowserNavigation: false
+						});
+					});
+				}
+			}
 		});
 	}
 }

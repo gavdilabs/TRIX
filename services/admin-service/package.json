@@ -17,6 +17,7 @@
     "build:cds:prod": "npx cds build --production",
     "build:types": "npx @cap-js/cds-typer '*' --outputDirectory ./@cds-models",
     "build:clean": "npx rimraf gen",
+    "db:start": "docker-compose up",
     "db:load": "cds deploy --profile pg",
     "cleanup:ts": "npx rimraf gen/srv/srv/**/**/*.ts",
     "build:mta": "mbt build --mtar archive.mtar",
@@ -70,5 +71,21 @@
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
+  },
+  "cds": {
+    "requires": {
+      "db": {
+        "[pg]": {
+          "kind": "postgres",
+          "credentials": {
+            "host": "localhost",
+            "port": 5432,
+            "user": "postgres",
+            "password": "postgres",
+            "database": "postgres"
+          }
+        }
+      }
+    }
   }
 }

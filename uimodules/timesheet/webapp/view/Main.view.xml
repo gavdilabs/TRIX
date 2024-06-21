@@ -193,28 +193,60 @@
 				</uxap:ObjectPageSubSection>
 
 				<uxap:ObjectPageSubSection title="{i18n>subTtl_registrationTypes}">
-					<HBox >
-						<VBox >
-							<List id="RegistrationTypeList" items="{odata/admin/RegistrationTypeSet}">
-								
+					
+					<HBox width="100%">
+						<VBox width="30%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
+							<Title text="{i18n>formTtl_catalogies}"/>
+							<List id="CatalogyList" items="{admin>/RegistrationGroupSet}">
 								<items>
 									<CustomListItem >
-										<Text text="ee"></Text>
+										<HBox justifyContent="SpaceBetween" alignItems="End">
+											<Text id="sCatalogyName" text="{admin>name}"/>
+											<Button icon="sap-icon://decline" type="Transparent" press="onRemoveCatalogy"/>
+										</HBox>
 									</CustomListItem>
 								</items>
 							</List>
-							<Button press="onAddNewRegistrationType" text="New Registration Type" icon="sap-icon://add"/>
+							<Button press="onOpenCatalogyPopover" text="{i18n>txt_newCatalogy}" icon="sap-icon://add" class="sapUiTinyMarginTop"/>
 						</VBox>
-							
+						
+						<VBox width="70%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
+							<Title text="{i18n>formTtl_registrationTypes}"/>
+							<Table id="RegistrationTypesTable" items="{admin>/RegistrationTypeSet}">
+								<columns>
+									<Column >
+										<Text text="{i18n>colHdr_name}"/>
+									</Column>
+									<Column >
+										<Text text="{i18n>colHdr_catalogy}"/>
+									</Column>
+									<Column width="3rem"/>
+								</columns>
+								<items>
+									<ColumnListItem >
+										<cells>
+											<Input value="{admin>name}"/>
+											<Select selectedKey="{admin>group_ID}" items="{admin>/RegistrationGroupSet}" forceSelection="false" width="100%">
+												<items>
+													<core:Item key="{admin>ID}" text="{admin>name}"/>
+												</items>
+											</Select>
+											<Button icon="sap-icon://decline" press="onRemoveRegType" type="Transparent"/>
+										</cells>
+									</ColumnListItem>
+								</items>
+							</Table>
+							<Button press="onAddNewRegType" text="Add Registration Type" icon="sap-icon://add"/>
+						</VBox>
 					</HBox>
 				</uxap:ObjectPageSubSection>
 
 				<uxap:ObjectPageSubSection title="{i18n>subTtl_integrations}">
 					<VBox >
-						<lf:SimpleForm id="SimpleFormChange480_12120"
+						<lf:SimpleForm id="Integration4ECC"
 							editable="true"
 							layout="ResponsiveGridLayout"
-							title="Address"
+							title="{i18n>formTtl_SAP_ECC_integration}"
 							labelSpanXL="4"
 							labelSpanL="4"
 							labelSpanM="12"
@@ -229,43 +261,36 @@
 							columnsM="1"
 							singleContainerFullSize="false" >
 							<lf:content>
-								<core:Title text="Office" />
-								<Label text="Name" />
-								<Input value="{SupplierName}" />
+								<Label text="{i18n>formLbl_destination}" />
+								<Input value="" />
 								<Label text="Street/No." />
-								<Input value="{Street}">
-								</Input>
-								<Input value="{HouseNumber}">
+								<Input value=""/>
+								<Input value="">
 									<layoutData>
 										<l:GridData span="XL2 L3 M4 S4" />
 									</layoutData>
 								</Input>
 								<Label text="ZIP Code/City" />
-								<Input value="{ZIPCode}">
+								<Input value="">
 									<layoutData>
 										<l:GridData span="XL2 L3 M4 S4" />
 									</layoutData>
 								</Input>
-								<Input value="{City}" />
+								<Input value="" />
 								<Label text="Country" />
-								<Select id="country" selectedKey="{Country}">
+								<Select selectedKey="">
 									<items>
 										<core:Item text="England" key="England"/>
 										<core:Item text="Germany" key="Germany"/>
 										<core:Item text="USA" key="USA"/>
 									</items>
 								</Select>
-								<core:Title text="Online" />
-								<Label text="Web" />
-								<Input value="{Url}" type="Url" />
-								<Label text="Twitter" />
-								<Input value="{Twitter}" />
 							</lf:content>
 						</lf:SimpleForm>
-						<lf:SimpleForm id="SimpleFormChange480_12120-2"
+						<lf:SimpleForm id="Integration4S4H"
 							editable="true"
 							layout="ResponsiveGridLayout"
-							title="More"
+							title="{i18n>formTtl_SAP_S4H_integration}"
 							labelSpanXL="4"
 							labelSpanL="4"
 							labelSpanM="12"
@@ -280,13 +305,74 @@
 							columnsM="1"
 							singleContainerFullSize="false">
 							<lf:content>
-								<core:Title text="Contact data" />
-								<Label text="Email" />
-								<Input value="{EMail}" type="Email" />
-								<Label text="Tel." />
-								<Input value="{Tel}" type="Tel" />
-								<Label text="SMS" />
-								<Input value="{Sms}" type="Tel" />
+								<Label text="{i18n>formLbl_destination}" />
+									<Input value="" />
+									<Label text="Street/No." />
+									<Input value=""/>
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Label text="ZIP Code/City" />
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Input value="" />
+									<Label text="Country" />
+									<Select selectedKey="">
+										<items>
+											<core:Item text="England" key="England"/>
+											<core:Item text="Germany" key="Germany"/>
+											<core:Item text="USA" key="USA"/>
+										</items>
+									</Select>
+							</lf:content>
+						</lf:SimpleForm>
+						<lf:SimpleForm id="Integration4SF"
+							editable="true"
+							layout="ResponsiveGridLayout"
+							title="{i18n>formTtl_SAP_SF_integration}"
+							labelSpanXL="4"
+							labelSpanL="4"
+							labelSpanM="12"
+							labelSpanS="12"
+							adjustLabelSpan="false"
+							emptySpanXL="0"
+							emptySpanL="0"
+							emptySpanM="0"
+							emptySpanS="0"
+							columnsXL="2"
+							columnsL="2"
+							columnsM="1"
+							singleContainerFullSize="false">
+							<lf:content>
+								<Label text="{i18n>formLbl_destination}" />
+									<Input value="" />
+									<Label text="Street/No." />
+									<Input value=""/>
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Label text="ZIP Code/City" />
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Input value="" />
+									<Label text="Country" />
+									<Select selectedKey="">
+										<items>
+											<core:Item text="England" key="England"/>
+											<core:Item text="Germany" key="Germany"/>
+											<core:Item text="USA" key="USA"/>
+										</items>
+									</Select>
 							</lf:content>
 						</lf:SimpleForm>
 					</VBox>

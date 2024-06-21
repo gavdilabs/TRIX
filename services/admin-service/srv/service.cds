@@ -13,6 +13,14 @@ service TrixAdminService {
     }
   ]) as projection on schema.Configuration;
 
+  entity RegistrationGroupSet @(restrict: [
+    {grant: ['READ']},
+    {
+      grant: ['*'],
+      to   : ['Admin']
+    }
+  ]) as projection on schema.RegistrationGroup;
+
   entity RegistrationTypeSet @(restrict: [
     {grant: ['READ']},
     {
