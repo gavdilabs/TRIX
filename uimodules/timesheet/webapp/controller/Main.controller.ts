@@ -11,6 +11,7 @@ import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
 import { trix } from "../model/entities-core";
+import DateHelper from "../utils/DateHelper";
 import BaseController from "./BaseController";
 import Dialog from "sap/m/Dialog";
 import ColorPickerPopover from "sap/ui/unified/ColorPickerPopover";
@@ -84,9 +85,15 @@ export default class Main extends BaseController {
 			this,
 			this.getResourceBundle()
 		);
-		ApplicationModelHandler.getInstance().setCurrentView(
-			ApplicationModelHandler.getInstance().getCurrentCalendarViewKey() as CalendarView
-		);
+
+		//Initialize the Data handler(s)
+		void (await TimeRegistrationSetHandler.initialize(
+			this.getOdataModelCore(),
+			this,
+			this.getResourceBundle(),
+			new Date(),
+			ApplicationModelHandler.getInstance().getCurrentCalendarView() as CalendarView
+		));
 
 		//Preload some popup lists
 		this.ddHandler = new DropDownHandler(
@@ -150,10 +157,26 @@ export default class Main extends BaseController {
 		this.getCalendarControl().setFullDay(params.pressed);
 	}
 
-	public onViewChange(event: Event): void {
+	/**
+	 * Triggers when Date View is changed on the Calendar
+	 * @param event std. UI5 event
+	 */
+	public onCalendarChange(event: Event): void {
+		const params = event.getParameters() as { date?: Date };
 		const calendar: TRIXCalendar = event.getSource();
-		const viewKey: string = calendar.getViewByViewId(calendar.getSelectedView())?.getKey();
-		ApplicationModelHandler.getInstance().setCurrentView(viewKey as CalendarView);
+		const viewKey: string = calendar
+			.getViewByViewId(calendar.getSelectedView())
+			?.getKey();
+		ApplicationModelHandler.getInstance().setCurrentView(
+			viewKey as CalendarView
+		);
+
+		void TimeRegistrationSetHandler.updateDatesAndMode(
+			params.date
+				? DateHelper.addDaysToDate(params.date, 0)
+				: (calendar.getStartDate() as Date),
+			viewKey as CalendarView
+		);
 	}
 
 	async onEditUser() {

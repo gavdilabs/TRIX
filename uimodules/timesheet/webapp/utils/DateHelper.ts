@@ -2,6 +2,9 @@
  * Helper Class for Date Arithemtic functions
  */
 
+import { CalendarView } from "../dataHandlers/ApplicationModelHandler";
+import { Day } from "../model/interfaces";
+
 export default class DateHelper {
 	/**
 	 * Returns array of all dates from start to end
@@ -19,6 +22,60 @@ export default class DateHelper {
 		}
 
 		return datesOut;
+	}
+
+	/**
+	 * Returns a 2 spaced Date tuple [from,to]
+	 * @param inputDate inputDate to calculate from, defaults to today
+	 * @param mode DAY | WEEK | MONTH | YEAR enum value
+	 * @returns Tuple of 2 dates [from,to]
+	 */
+	public static getStartEndDates(
+		inputDate: Date = new Date(),
+		mode: CalendarView
+	): [Date, Date] {
+		switch (mode) {
+			case CalendarView.DAY:
+				return [inputDate, inputDate];
+			case CalendarView.WEEK:
+				return [
+					DateHelper.getNearestDayDate(inputDate, Day.MONDAY),
+					DateHelper.getNearestDayDate(inputDate, Day.SUNDAY, false),
+				];
+			case CalendarView.MONTH: {
+				return [
+					new Date(inputDate.getFullYear(), inputDate.getMonth(), 1),
+					new Date(inputDate.getFullYear(), inputDate.getMonth() + 1, 0),
+				];
+			}
+		}
+	}
+
+	/**
+	 * Function to ie. get the closest Monday Day looking forward of backward from inputdate
+	 * @param inputDate Start date
+	 * @param day2find which Day to look for Monday, Tuesday etc.
+	 * @param lookBack Should we look back or forward?
+	 * @returns Date for the found Day
+	 */
+	public static getNearestDayDate(
+		inputDate: Date,
+		day2find: Day,
+		lookBack: boolean = true
+	): Date {
+		if (!inputDate) {
+			throw new Error("Date input missing for getNearestDayDate function");
+		}
+
+		if ((inputDate.getDay() as Day) === day2find) {
+			return inputDate;
+		} else {
+			//inc/De-crement date
+			const newDate2Check = new Date(
+				inputDate.setDate(inputDate.getDate() + (lookBack ? -1 : +1))
+			);
+			return DateHelper.getNearestDayDate(newDate2Check, day2find, lookBack);
+		}
 	}
 
 	/**
@@ -76,5 +133,24 @@ export default class DateHelper {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Helper function for adding/subtracting days from a Date
+	 * @param inputDate
+	 * @param inOrDecrementInDays
+	 * @returns new Date
+	 */
+	public static addDaysToDate(
+		inputDate: Date,
+		inOrDecrementInDays: number
+	): Date {
+		if (!inputDate || !inputDate.getFullYear) {
+			throw new Error("Please input a proper date object");
+		}
+
+		const returnDate = new Date(inputDate);
+		returnDate.setDate(inputDate.getDate() + inOrDecrementInDays);
+		return returnDate;
 	}
 }

@@ -3,6 +3,8 @@ import MessageBox from "sap/m/MessageBox";
 import MessageToast from "sap/m/MessageToast";
 import MessageType from "sap/ui/core/message/MessageType";
 import Controller from "sap/ui/core/mvc/Controller";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import Context from "sap/ui/model/odata/v4/Context";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
@@ -10,9 +12,13 @@ import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import { trix } from "../model/entities-core";
 import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import DateHelper from "../utils/DateHelper";
-import ModelDataHelper from "../utils/ModelDataHelper";
 import { OdataListbindingWrapper } from "../utils/OdataListbindingWrapper";
+import { CalendarView } from "./ApplicationModelHandler";
+import DropDownHandler from "./DropDownHandler";
 
+/**
+ * Main data handler for TimeRegistrations. CRUD operations and storing into local JSON models after post processing.
+ */
 export default class TimeRegistrationSetHandler {
 	public static readonly REGISTRATIONS_MODEL_NAME = "PeriodRegistrations";
 	public static readonly REGISTRATIONS_GROUP_ID: string = undefined;
@@ -21,6 +27,8 @@ export default class TimeRegistrationSetHandler {
 	private static odataModel: ODataModel = undefined;
 	private static controller: Controller = undefined;
 	private static i18nBundle: ResourceBundle = undefined;
+	private static startDate: Date = undefined;
+	private static endDate: Date = undefined;
 
 	private static dataMap: Map<string, Partial<ITimeRegistrationAndAllocation>> =
 		new Map();
@@ -46,22 +54,39 @@ export default class TimeRegistrationSetHandler {
 		return TimeRegistrationSetHandler.instance;
 	}
 
+	/**
+	 * Call this once before main use to init the singleton
+	 * @param odataModel OData V4 model
+	 * @param controller UI controller
+	 * @param i18nBundle i18n Resource Bundle for translations
+	 * @param inputDate Date to start from
+	 * @param navMode CalendarView Week / Month etc.
+	 */
 	public static async initialize(
 		odataModel: ODataModel,
 		controller: Controller,
-		i18nBundle: ResourceBundle
+		i18nBundle: ResourceBundle,
+		inputDate: Date,
+		navMode: CalendarView
 	): Promise<void> {
 		TimeRegistrationSetHandler.odataModel = odataModel;
 		TimeRegistrationSetHandler.controller = controller;
 		this.i18nBundle = i18nBundle;
+
+		//Update the dates
+		void TimeRegistrationSetHandler.updateDatesAndMode(
+			inputDate,
+			navMode,
+			false
+		);
 
 		//Create the listbinding for backend
 		const oBinding = odataModel.bindList(
 			"/TimeRegistrationSet",
 			undefined,
 			undefined,
-			undefined,
-			{ $$updateGroupId: this.REGISTRATIONS_GROUP_ID }
+			new Filter("startDate", FilterOperator.NE, null),
+			{ $$updateGroupId: this.REGISTRATIONS_GROUP_ID, $expand: "allocation" }
 		);
 		TimeRegistrationSetHandler.timeRegistrations = new OdataListbindingWrapper(
 			oBinding,
@@ -71,6 +96,11 @@ export default class TimeRegistrationSetHandler {
 		void (await TimeRegistrationSetHandler.timeRegistrations.refreshBinding());
 	}
 
+	/**
+	 * Function to get a specific appointment context by its id
+	 * @param id Appointment id
+	 * @returns Context from the listBinding
+	 */
 	private async getAppointmentContext(id: string): Promise<Context> {
 		const contexts: Context[] =
 			await TimeRegistrationSetHandler.timeRegistrations.getContexts();
@@ -80,18 +110,30 @@ export default class TimeRegistrationSetHandler {
 		return context;
 	}
 
+	/**
+	 * Function that will update an appointment in the backend service
+	 * @param appointment appointment UI control
+	 * @param newStartDate new starting date
+	 * @param newEndDate new ending date
+	 * @param newAllocationId new allocation id if set (optional)
+	 */
 	public async updateAppointment(
 		appointment: CalendarAppointment,
 		newStartDate: Date,
 		newEndDate: Date,
-		allocationId?: string
+		newAllocationId?: string
 	): Promise<void> {
 		const timeRegData: trix.core.ITimeRegistration = appointment
-			?.getBindingContext("PeriodRegistrations")
+			?.getBindingContext(TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME)
 			.getObject() as trix.core.ITimeRegistration;
 		try {
 			timeRegData.startDate = newStartDate;
 			timeRegData.endDate = newEndDate;
+
+			//Prepare Map item
+			const mapItem: Partial<ITimeRegistrationAndAllocation> = {
+				...timeRegData,
+			};
 
 			//Update the record in DB
 			const startDateStr: string = DateHelper.dateAsSimpleFormat(newStartDate);
@@ -101,42 +143,56 @@ export default class TimeRegistrationSetHandler {
 			const endTimeStr: string = DateHelper.dateAsSimpleTimeFormat(newEndDate);
 
 			const existingContext = await this.getAppointmentContext(timeRegData.ID);
-			void existingContext?.setProperty(
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/startDate`,
 				startDateStr
-			);
-			void existingContext?.setProperty(
+			));
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/startTime`,
 				startTimeStr
-			);
+			));
 
-			void existingContext?.setProperty(
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/endDate`,
 				endDateStr
-			);
-			void existingContext?.setProperty(
+			));
+			void (await existingContext?.setProperty(
 				`${existingContext.getPath()}/endTime`,
 				endTimeStr
-			);
-			if (allocationId) {
-				void existingContext?.setProperty(
+			));
+			if (newAllocationId) {
+				void (await existingContext?.setProperty(
 					`${existingContext.getPath()}/allocation_ID`,
-					allocationId
-				);
+					newAllocationId
+				));
+				mapItem.allocation_ID = newAllocationId;
+				mapItem.allocation = this.getAllocationById(newAllocationId);
 			}
+			
+			mapItem.startDate = newStartDate;
+			mapItem.endDate = newEndDate;
+			TimeRegistrationSetHandler.dataMap.set(timeRegData.ID, mapItem);
+
 			this.updateUIModel();
 
 			this.toast("MessageAppointmentUpdatedOk");
-		} catch {
-			this.message("MessageAppointmentUpdatedFail", MessageType.Error);
+		} catch (e) {
+			this.message(
+				TimeRegistrationSetHandler.i18nBundle.getText(
+					"MessageAppointmentUpdatedFail"
+				),
+				MessageType.Error
+			);
 		}
 	}
 
-	private async commitData(): Promise<void> {
-		void (await TimeRegistrationSetHandler.odataModel.submitBatch(
-			TimeRegistrationSetHandler.REGISTRATIONS_GROUP_ID
-		));
-		this.updateUIModel();
+	/**
+	 * For new creations ids have a TEMP indicator. This function will determin if an item is TEMP by its ID
+	 * @param id Id string to check
+	 * @returns boolean true | false
+	 */
+	public static isTempItemId(id: string): boolean {
+		return id && id.indexOf("TEMP#") > -1;
 	}
 
 	/**
@@ -173,6 +229,11 @@ export default class TimeRegistrationSetHandler {
 		return newTempItem;
 	}
 
+	/**
+	 * Tooling for getting a uuid
+	 * @param length 16 in length - default
+	 * @returns uuid
+	 */
 	private uniqueId(length = 16): string {
 		return Math.ceil(Math.random() * Date.now())
 			.toPrecision(length)
@@ -180,18 +241,24 @@ export default class TimeRegistrationSetHandler {
 			.replace(".", "");
 	}
 
+	/**
+	 * Creates an item in the backend
+	 * @param startDate start date for the appointment
+	 * @param endDate end date for the appointment
+	 * @param appointmentData main payload for the appointment
+	 */
 	public async createAppointmentBackend(
 		startDate: Date,
 		endDate: Date,
-		remainingData: Partial<trix.core.ITimeRegistration>
+		appointmentData: Partial<trix.core.ITimeRegistration>
 	): Promise<void> {
-		const tempId: string = remainingData.ID;
-		delete remainingData.ID;
+		const tempId: string = appointmentData.ID;
+		delete appointmentData.ID;
 
 		//Create the record in DB
 		const newItemFromBackendContext =
 			await TimeRegistrationSetHandler.timeRegistrations.createItem({
-				...remainingData,
+				...appointmentData,
 				startDate: DateHelper.dateAsSimpleFormat(startDate) as unknown as Date, //Workaround hack to cast it
 				endDate: DateHelper.dateAsSimpleFormat(endDate) as unknown as Date,
 				startTime: DateHelper.dateAsSimpleTimeFormat(
@@ -253,10 +320,19 @@ export default class TimeRegistrationSetHandler {
 		}
 	}
 
+	/**
+	 * Show a toast message
+	 * @param messageId i18n key
+	 */
 	private toast(messageId: string) {
 		MessageToast.show(TimeRegistrationSetHandler.i18nBundle.getText(messageId));
 	}
 
+	/**
+	 * Show a popup message
+	 * @param messageId i18n key
+	 * @param type error | warning | info | success 
+	 */
 	private message(messageId: string, type: MessageType) {
 		const message = TimeRegistrationSetHandler.i18nBundle.getText(messageId);
 		switch (type) {
@@ -279,20 +355,53 @@ export default class TimeRegistrationSetHandler {
 	}
 
 	/**
+	 * Function to externally/internally set the current key dat for the Calendar View and refresh data if flag is not disabled
+	 * @param inputDate Key date to read data from
+	 * @param navMode CalendarView Week | Month | Day
+	 * @param reload default = true. Shoudl reload data after setting.?
+	 */
+	public static async updateDatesAndMode(
+		inputDate: Date,
+		navMode: CalendarView,
+		reload: boolean = true
+	) {
+		[TimeRegistrationSetHandler.startDate, TimeRegistrationSetHandler.endDate] =
+			DateHelper.getStartEndDates(inputDate, navMode);
+
+		if (reload) {
+			await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations();
+		}
+	}
+
+	/**
 	 * Function that initially loads timeregistrations into map
 	 */
 	public async loadTimeRegistrations(): Promise<void> {
-		let timeRegistrationsForPeriod = await ModelDataHelper.getModelData<
-			ITimeRegistrationAndAllocation[]
-		>(TimeRegistrationSetHandler.odataModel, "/TimeRegistrationSet", {
-			$expand: "allocation",
+		const dateFilters: Filter[] = [
+			new Filter(
+				"startDate",
+				FilterOperator.GE,
+				DateHelper.dateAsSimpleFormat(TimeRegistrationSetHandler.startDate)
+			),
+			new Filter(
+				"endDate",
+				FilterOperator.LE,
+				DateHelper.dateAsSimpleFormat(TimeRegistrationSetHandler.endDate)
+			),
+		];
+		void (await TimeRegistrationSetHandler.timeRegistrations.refreshBinding(
+			dateFilters
+		));
+		let timeRegistrationsForPeriod =
+			await TimeRegistrationSetHandler.timeRegistrations.getContexts();
+
+		timeRegistrationsForPeriod = timeRegistrationsForPeriod.filter((ctx) => {
+			const itemData = ctx.getObject() as trix.core.ITimeRegistration;
+			return itemData.startDate && itemData.endDate;
 		});
 
-		timeRegistrationsForPeriod = timeRegistrationsForPeriod.filter(
-			(item) => item.startDate && item.endDate
-		);
-
-		timeRegistrationsForPeriod.forEach((item) => {
+		timeRegistrationsForPeriod.forEach((ctx) => {
+			const item = ctx.getObject() as trix.core.ITimeRegistration;
 			//Setup the startdate
 			let [hour, minute, second] = (item.startTime as unknown as string).split(
 				":"
@@ -316,6 +425,9 @@ export default class TimeRegistrationSetHandler {
 		this.updateUIModel();
 	}
 
+	/**
+	 * This will inflate the items into
+	 */
 	private updateUIModel() {
 		TimeRegistrationSetHandler.controller
 			.getView()
@@ -323,5 +435,23 @@ export default class TimeRegistrationSetHandler {
 				new JSONModel(Array.from(TimeRegistrationSetHandler.dataMap.values())),
 				TimeRegistrationSetHandler.REGISTRATIONS_MODEL_NAME
 			);
+	}
+
+	/**
+	 * Return a TimeAllocation object structure from a given timeAllocation id
+	 * @param allocationId Allocation Id
+	 * @returns TimeAllocation data
+	 */
+	private getAllocationById(allocationId: string): trix.core.ITimeAllocation {
+		const allocationData = (
+			TimeRegistrationSetHandler.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
+		).getData() as trix.core.ITimeAllocation[];
+		if (allocationData) {
+			return allocationData.find((itemTmp) => itemTmp.ID === allocationId);
+		} else {
+			return undefined;
+		}
 	}
 }
