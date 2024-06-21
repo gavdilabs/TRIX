@@ -1,7 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import ResponsivePopover from "sap/m/ResponsivePopover";
-import SinglePlanningCalendar from "sap/m/SinglePlanningCalendar";
-import StandardTreeItem from "sap/m/StandardTreeItem";
 import Event from "sap/ui/base/Event";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import ApplicationModelHandler, {
@@ -14,15 +12,11 @@ import { trix } from "../model/entities-core";
 import DateHelper from "../utils/DateHelper";
 import BaseController from "./BaseController";
 import Dialog from "sap/m/Dialog";
-import ColorPickerPopover from "sap/ui/unified/ColorPickerPopover";
-import ColorPickerDisplayMode from "sap/ui/unified/ColorPickerDisplayMode";
 import MessageToast from "sap/m/MessageToast";
-import { ValueState } from "sap/ui/core/library";
 import Switch from "sap/m/Switch";
 import Item from "sap/ui/core/Item";
 import Formatter from "../model/formatter";
 import Fragment from "sap/ui/core/Fragment";
-import JSONModel from "sap/ui/model/json/JSONModel";
 import Context from "sap/ui/model/odata/v4/Context";
 import Table from "sap/m/Table";
 import Button from "sap/m/Button";
@@ -34,19 +28,14 @@ import List from "sap/m/List";
 import Input from "sap/m/Input";
 import MessageBox from "sap/m/MessageBox";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
-import ODataModel from "sap/ui/model/odata/v4/ODataModel";
-import CustomListItem from "sap/m/CustomListItem";
-import HBox from "sap/m/HBox";
-import Text from "sap/m/Text";
 import Select from "sap/m/Select";
+import GridListItem from "sap/f/GridListItem";
 
 /**
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
 	private dialogEditUser: Dialog;
-	private colorInputId: string;
-	private oColorPickerSimplifiedPopover: ColorPickerPopover;
 	private oFilterPopover: ResponsivePopover;
 	private oCatalogyPopover: ResponsivePopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
@@ -71,12 +60,6 @@ export default class Main extends BaseController {
 	 * Routing target - only firing if url has /Main
 	 */
 	private async onPatternMatched() {
-		//Initialize the Data handler(s)
-		void (await TimeRegistrationSetHandler.initialize(
-			this.getOdataModelCore(),
-			this,
-			this.getResourceBundle()
-		));
 
 		this.oResourceBundle = this.getResourceBundle();
 
@@ -179,19 +162,19 @@ export default class Main extends BaseController {
 		);
 	}
 
-	async onEditUser() {
+	async onEditUser(oEvent: Event) {
+		const params = oEvent.getParameters() as {listItem:GridListItem};
 		if (!this.dialogEditUser) {
 			this.dialogEditUser = (await Fragment.load({
 				id: this.getView().getId(),
 				name: "trix.timesheet.view.fragments.EditUserDialog",
 				controller: this,
 			})) as Dialog;
-
-			if (this.dialogEditUser) {
-				this.dialogEditUser.open();
-			}
 		}
-		else if (!this.dialogEditUser.isOpen()) {
+		
+		if (!this.dialogEditUser.isOpen()) {
+			this.getView().addDependent(this.dialogEditUser);
+			this.dialogEditUser.setBindingContext(params.listItem.getBindingContext());
 			this.dialogEditUser.open();
 		}
 	}
@@ -204,67 +187,12 @@ export default class Main extends BaseController {
 		return;
 	}
 
-	openSimplifiedModeSample(oEvent: Event) {
-		this.colorInputId = (oEvent.getSource()).getId() as string;
-		if (!this.oColorPickerSimplifiedPopover) {
-			this.oColorPickerSimplifiedPopover = new ColorPickerPopover("oColorPickerSimpplifiedPopover", {
-				colorString: "pink",
-				displayMode: ColorPickerDisplayMode.Simplified,
-				change: this.handleColorChange.bind(this)
-			});
-		}
-		this.oColorPickerSimplifiedPopover.openBy(oEvent.getSource());
-	}
-
-	handleColorChange() {
-		const oView = this.getView(),
-			oInput = oView.byId(this.colorInputId);
-
-		oInput.setValue(oEvent.getParameter("colorString"));
-		oInput.setValueState(ValueState.None);
-		this.colorInputId = "";
-		MessageToast.show("Chosen color string: " + oEvent.getParameter("colorString"));
-	}
-
 	toggleRegistrationTeamView() {
 		const oRegSwitch = this.byId("registrationSwitch") as Switch;
 		const oTeamSwitch = this.byId("teamSwitch") as Switch;
 		const state = oRegSwitch.getState();
 		oRegSwitch.setState(!state);
 		oTeamSwitch.setState(state);
-	}
-
-	onToggle(oEvent: Event) {
-		const oItem = oEvent.getParameter("item") as Item,
-			iItemIndex = oItem ? parseInt(oItem.getId().replace(/^\D+/g, '')) : -1,
-			bExpanded = oEvent.getParameter("expanded") as boolean;
-		const oAppModel = this.getModel('ApplicationModel') as JSONModel;
-
-		if (iItemIndex < 3) {
-			if (oItem !== this.selectedSideItem && bExpanded) {
-				oEvent.preventDefault();
-				const oRegSwitch = this.byId("registrationSwitch") as Switch;
-				const oTeamSwitch = this.byId("teamSwitch") as Switch;
-				this.selectedSideItem = oItem;
-				switch (iItemIndex) {
-					case 1:
-						oAppModel.setProperty("/registrationView", true);
-						oAppModel.setProperty("/teamView", false);
-						break;
-					case 2:
-						oAppModel.setProperty("/registrationView", false);
-						oAppModel.setProperty("/teamView", true);
-						oAppModel.setProperty("/showSidePanel", false);
-						break;
-					default:
-						break;
-				}
-			}
-			else if (oItem === this.selectedSideItem && bExpanded) {
-				oEvent.preventDefault();
-				return;
-			}
-		}
 	}
 
 	async updateRegistrationStatus(oEvent: Event) {

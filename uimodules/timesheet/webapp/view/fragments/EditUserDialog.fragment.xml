@@ -22,62 +22,62 @@
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Firstname" showColon="true" />
-                    <Input value="{/UserSet>firstName}" width="80%"/>
+                    <Input value="{firstName}" width="80%"/>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Lastname" showColon="true" />
-                    <Input value="{/UserSet>lastName}" width="80%" />
+                    <Input value="{lastName}" width="80%" />
                 </VBox>
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="User ID" showColon="true" />
-                    <Input value="{/UserSet>userID}" width="80%"/>
+                    <Input value="{userID}" width="80%"/>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Email Address" showColon="true" />
-                    <Input value="{/UserSet>email}" width="80%" />
+                    <Input value="{email}" width="80%" />
                 </VBox>
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Manager" showColon="true" />
-                    <Input value="{/UserSet>manager_userID}" width="80%"/>
+                    <Input value="{manager_userID}" width="80%"/>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Country" showColon="true" />
-                    <Input value="{country}" width="80%" />
+                    <Input value="" width="80%" />
                 </VBox>
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Needs Approval from Manager" showColon="true" />
-                    <Switch customTextOn="Yes" customTextOff="No" state="{needsManagerApproval}" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="false" />
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Register only deviations from expected work hours" showColon="true" />
-                    <Switch customTextOn="Yes" customTextOff="No" state="{deviationsOnly}" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="false" />
                 </VBox>
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Expected Start Time" showColon="true" />
-                    <TimePicker value="{expectedStartTime}"/>
+                    <TimePicker value=""/>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Expected End Time" showColon="true" />
-                    <TimePicker value="{expectedEndTime}"/>
+                    <TimePicker value=""/>
                 </VBox>
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Set as Substitute for Manager" showColon="true" />
-                    <Switch customTextOn="Yes" customTextOff="No" state="{managerSubstitute}" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="" />
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">

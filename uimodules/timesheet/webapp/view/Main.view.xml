@@ -9,416 +9,408 @@
 	xmlns:l="sap.ui.layout"
 	xmlns:lf="sap.ui.layout.form">
 
-	<uxap:ObjectPageLayout id="page" useIconTabBar="true" showAnchorBar="true" subSectionLayout="TitleOnTop" >
-		<uxap:headerTitle>
-			<uxap:ObjectPageHeader objectTitle="TRIX">
-				<uxap:actions>
-					<HBox class="sapUiSmallMarginEnd">
-						<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
-							<!-- <Text text="John Doe"/> -->
-							<Text text="{/UserSet>/firstName} {/UserSet>lastName}"/>
-							<!-- <Text text="JODO"/> -->
-							<Text text="{UserSet>userID}"/>
-						</VBox>
-						<Avatar press="onEditUser" badgeIcon="sap-icon://edit" badgeTooltip="Edit user properties"/>
-					</HBox>
-				</uxap:actions>
-			</uxap:ObjectPageHeader>
-		</uxap:headerTitle>
-			
-		<uxap:sections>
-			<uxap:ObjectPageSection title="{i18n>ttl_registerHours}" >
-				<uxap:ObjectPageSubSection >
-					<l:DynamicSideContent id="DynamicSideContent" class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
+	<!-- Main Page -->
+	<Page title="{i18n>appTitle}" id="page" showHeader="false">
+		<uxap:ObjectPageLayout useIconTabBar="true" showAnchorBar="true" subSectionLayout="TitleOnTop" >
+			<uxap:headerTitle>
+				<uxap:ObjectPageHeader objectTitle="TRIX">
+					<uxap:actions>
+						<HBox class="sapUiSmallMarginEnd">
+							<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
+								<!-- <Text text="John Doe"/> -->
+								<Text text="{/UserSet>/firstName} {/UserSet>lastName}"/>
+								<!-- <Text text="JODO"/> -->
+								<Text text="{UserSet>userID}"/>
+							</VBox>
+							<Avatar />
+						</HBox>
+					</uxap:actions>
+				</uxap:ObjectPageHeader>
+			</uxap:headerTitle>
+				
+			<uxap:sections>
+				<uxap:ObjectPageSection title="{i18n>ttl_registerHours}" >
+					<uxap:ObjectPageSubSection >
+						<!-- Right Side Pop-Out Navigation Wrapper -->
+						<l:DynamicSideContent class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
+							<VBox>
+								<!-- Main SinglePlanningCalendar wrapped in custom control for .... more control -->
+								<controls:TRIXCalendar startDateChange="onCalendarChange" viewChange="onCalendarChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
+									<!-- Appointments -->
+									<controls:appointments>
+										<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
+										</unified:CalendarAppointment>
+									</controls:appointments>
+									<!-- Top-Right Toggle Buttons -->
+									<controls:actions>
+										<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
+										<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
+									</controls:actions>
+									<!-- Calendar Views -->
+									<controls:views>
+										<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
+										<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
+										<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
+									</controls:views>
+								</controls:TRIXCalendar>
+							</VBox>
+							<!-- Right Side Pop-Out Content -->
+							<l:sideContent width="200px">
+								<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
+									<appointmentItems>
+										<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
+									</appointmentItems>
+								</PlanningCalendarLegend>
+							</l:sideContent>
+						</l:DynamicSideContent>
+					</uxap:ObjectPageSubSection>
+				</uxap:ObjectPageSection>
 
+				<uxap:ObjectPageSection title="{i18n>ttl_validateHours}">
+
+					<uxap:ObjectPageSubSection >
 						<VBox >
-							<controls:TRIXCalendar viewChange="onViewChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
-								<controls:appointments>
-									<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-									</unified:CalendarAppointment>
-								</controls:appointments>
-								<controls:actions>
-									<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
-									<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
-								</controls:actions>
-								<controls:views>
-									<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
-									<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
-									<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
-								</controls:views>
-							</controls:TRIXCalendar>
-						</VBox>
-
-						<l:sideContent >
-							<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
-								<appointmentItems>
-									<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
-								</appointmentItems>
-							</PlanningCalendarLegend>
-						</l:sideContent>
-
-					</l:DynamicSideContent>
-				</uxap:ObjectPageSubSection>
-			</uxap:ObjectPageSection>
-
-			<uxap:ObjectPageSection title="{i18n>ttl_validateHours}">
-				<uxap:ObjectPageSubSection >
-					<VBox class="tableContainer">
-
-						<OverflowToolbar >
-							<Title text="Approve Team's Hours"></Title>
-							<ToolbarSpacer />
-							<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
-							<!-- <Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
-							<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/> -->
-						</OverflowToolbar>
-
-						<Table id="ValidationTable"
-							items="{path: '/TimeRegistrationSet', 
-							sorter: [
-								{path: 'user/userID', group: 'true'}
-							],
-							filters: [
-								{path: 'registrationStatus', operator: 'EQ', value1: '1'}
-							]
-							}"
-							noDataText="{i18n>tbl_noHoursAwaitingApproval}"
-							mode="MultiSelect">
-							<columns>
-								<Column >
-									<Text text="User"/>
-								</Column>
-								<Column >
-									<Text text="Date"/>
-								</Column>
-								<Column >
-									<Text text="Start"/>
-								</Column>
-								<Column >
-									<Text text="End"/>
-								</Column>
-								<Column >
-									<Text text="Hours"/>
-								</Column>
-								<Column >
-									<Text text="Reg Item"/>
-								</Column>
-								<Column width="5rem">
-									<Text text="Approve"/>
-								</Column>
-								<Column width="5rem">
-									<Text text="Reject"/>
-								</Column>
-								<Column>
-									<Text text="Status"/>
-								</Column>
-							</columns>
-							<items>
-								<ColumnListItem >
-									<customData>
-										<core:CustomData key="regStatus" value="{path: 'registrationStatus', targetType:'string'}" writeToDom="true"/>
-									</customData>
-									<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
-									<Text text="{startDate}"/>
-									<Text text="{startTime}"/>
-									<Text text="{endTime}"/>
-									<Text text="{amount}"/>
-									<Text text="{allocation/description}"/>
-									<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
-									<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
-									<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
-								</ColumnListItem>
-							</items>
-						</Table>
-					</VBox>
-				</uxap:ObjectPageSubSection>
-			</uxap:ObjectPageSection>
-
-			<uxap:ObjectPageSection title="{i18n>ttl_configuration}" >
-				<uxap:ObjectPageSubSection title="{i18n>subTtl_globalSettings}">
-					<VBox >
-						<lf:SimpleForm id="GlobalSettings"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>formTtl_quickSettings}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="12"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="2"
-							columnsL="2"
-							columnsM="1"
-							singleContainerFullSize="false" >
-							<lf:content>
-								<!-- <core:Title text="{i18n>formTtl_quickSettings}" /> -->
-								<Label text="{i18n>formLbl_enableApproval}" />
-								<Switch state="{ApplicationModel>/globalSettings/enableApproval}" />
-							</lf:content>
-						</lf:SimpleForm>
-					</VBox>
-				</uxap:ObjectPageSubSection>
-
-				<uxap:ObjectPageSubSection title="{i18n>subTtl_validations}">
-					<VBox >
-						<lf:SimpleForm id="ValidationSettings"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>formTtl_rules}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="12"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="2"
-							columnsL="2"
-							columnsM="1"
-							singleContainerFullSize="false" >
-							<lf:content>
-								<!-- <core:Title text="{i18n>formTtl_rules}" /> -->
-								<Label text="{i18n>formLbl_11HourRule}" />
-								<Switch state="{ApplicationModel>/validations/11HourRule}" />
-								<Label text="{i18n>formLbl_48HourRule}" />
-								<Switch state="{ApplicationModel>/validations/48HourRule}" />
-								<Label text="{i18n>formLbl_onlyAbsenceInWorkHours}" />
-								<Switch state="{ApplicationModel>/validations/onlyAbsenceInWorkHours}" />
-							</lf:content>
-						</lf:SimpleForm>
-					</VBox>
-				</uxap:ObjectPageSubSection>
-
-				<uxap:ObjectPageSubSection title="{i18n>subTtl_registrationTypes}">
-					
-					<HBox width="100%">
-						<VBox width="30%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
-							<Title text="{i18n>formTtl_catalogies}"/>
-							<List id="CatalogyList" items="{admin>/RegistrationGroupSet}">
-								<items>
-									<CustomListItem >
-										<HBox justifyContent="SpaceBetween" alignItems="End">
-											<Text id="sCatalogyName" text="{admin>name}"/>
-											<Button icon="sap-icon://decline" type="Transparent" press="onRemoveCatalogy"/>
+							<Title text="Team" titleStyle="H4" class="sapUiMediumMarginBeginEnd sapUiSmallMarginTop"/>
+							<f:GridList itemPress="onEditUser"
+									items="{
+									path: '/UserSet', 
+									sorter: [{path: 'firstName'}]
+								}">
+								<f:items>
+									<CustomListItem type="Active">
+										<HBox class="sapUiTinyMargin" alignItems="Center">
+											<Avatar class="sapUiTinyMarginEnd"/>
+											<VBox justifyContent="Center">
+												<Text text="{firstName} {lastName}"/>
+												<Text text="({userID})"/>
+											</VBox>
 										</HBox>
 									</CustomListItem>
-								</items>
-							</List>
-							<Button press="onOpenCatalogyPopover" text="{i18n>txt_newCatalogy}" icon="sap-icon://add" class="sapUiTinyMarginTop"/>
+								</f:items>
+							</f:GridList>
 						</VBox>
-						
-						<VBox width="70%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
-							<Title text="{i18n>formTtl_registrationTypes}"/>
-							<Table id="RegistrationTypesTable" items="{admin>/RegistrationTypeSet}">
+					</uxap:ObjectPageSubSection>
+
+					<uxap:ObjectPageSubSection >
+						<VBox class="tableContainer">
+
+							<OverflowToolbar >
+								<Title text="Approve Team's Hours"></Title>
+								<ToolbarSpacer />
+								<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
+								<!-- <Button text="Sort" icon="sap-icon://sort" press="onOpenSortPopover"/>
+								<Button text="Group" icon="sap-icon://group" press="onOpenGroupPopover"/> -->
+							</OverflowToolbar>
+
+							<Table id="ValidationTable"
+								items="{path: '/TimeRegistrationSet', 
+								sorter: [
+									{path: 'user/userID', group: 'true'}
+								],
+								filters: [
+									{path: 'registrationStatus', operator: 'EQ', value1: '1'}
+								]
+								}"
+								noDataText="{i18n>tbl_noHoursAwaitingApproval}"
+								mode="MultiSelect">
 								<columns>
 									<Column >
-										<Text text="{i18n>colHdr_name}"/>
+										<Text text="User"/>
 									</Column>
 									<Column >
-										<Text text="{i18n>colHdr_catalogy}"/>
+										<Text text="Date"/>
 									</Column>
-									<Column width="3rem"/>
+									<Column >
+										<Text text="Start"/>
+									</Column>
+									<Column >
+										<Text text="End"/>
+									</Column>
+									<Column >
+										<Text text="Hours"/>
+									</Column>
+									<Column >
+										<Text text="Reg Item"/>
+									</Column>
+									<Column width="5rem">
+										<Text text="Approve"/>
+									</Column>
+									<Column width="5rem">
+										<Text text="Reject"/>
+									</Column>
+									<Column>
+										<Text text="Status"/>
+									</Column>
 								</columns>
 								<items>
 									<ColumnListItem >
-										<cells>
-											<Input value="{admin>name}"/>
-											<Select selectedKey="{admin>group_ID}" items="{admin>/RegistrationGroupSet}" forceSelection="false" width="100%">
-												<items>
-													<core:Item key="{admin>ID}" text="{admin>name}"/>
-												</items>
-											</Select>
-											<Button icon="sap-icon://decline" press="onRemoveRegType" type="Transparent"/>
-										</cells>
+										<customData>
+											<core:CustomData key="regStatus" value="{path: 'registrationStatus', targetType:'string'}" writeToDom="true"/>
+										</customData>
+										<Text text="{user/firstName} {user/lastName} ({user/userID})"/>
+										<Text text="{startDate}"/>
+										<Text text="{startTime}"/>
+										<Text text="{endTime}"/>
+										<Text text="{amount}"/>
+										<Text text="{allocation/description}"/>
+										<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
+										<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
+										<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
 									</ColumnListItem>
 								</items>
 							</Table>
-							<Button press="onAddNewRegType" text="Add Registration Type" icon="sap-icon://add"/>
 						</VBox>
-					</HBox>
-				</uxap:ObjectPageSubSection>
+					</uxap:ObjectPageSubSection>
+				</uxap:ObjectPageSection>
 
-				<uxap:ObjectPageSubSection title="{i18n>subTtl_integrations}">
-					<VBox >
-						<lf:SimpleForm id="Integration4ECC"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>formTtl_SAP_ECC_integration}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="12"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="2"
-							columnsL="2"
-							columnsM="1"
-							singleContainerFullSize="false" >
-							<lf:content>
-								<Label text="{i18n>formLbl_destination}" />
-								<Input value="" />
-								<Label text="Street/No." />
-								<Input value=""/>
-								<Input value="">
-									<layoutData>
-										<l:GridData span="XL2 L3 M4 S4" />
-									</layoutData>
-								</Input>
-								<Label text="ZIP Code/City" />
-								<Input value="">
-									<layoutData>
-										<l:GridData span="XL2 L3 M4 S4" />
-									</layoutData>
-								</Input>
-								<Input value="" />
-								<Label text="Country" />
-								<Select selectedKey="">
+				<uxap:ObjectPageSection title="{i18n>ttl_configuration}" >
+					<uxap:ObjectPageSubSection title="{i18n>subTtl_globalSettings}">
+						<VBox >
+							<lf:SimpleForm id="GlobalSettings"
+								editable="true"
+								layout="ResponsiveGridLayout"
+								title="{i18n>formTtl_quickSettings}"
+								labelSpanXL="4"
+								labelSpanL="4"
+								labelSpanM="12"
+								labelSpanS="12"
+								adjustLabelSpan="false"
+								emptySpanXL="0"
+								emptySpanL="0"
+								emptySpanM="0"
+								emptySpanS="0"
+								columnsXL="2"
+								columnsL="2"
+								columnsM="1"
+								singleContainerFullSize="false" >
+								<lf:content>
+									<Label text="{i18n>formLbl_enableApproval}" />
+									<Switch state="{ApplicationModel>/globalSettings/enableApproval}" />
+								</lf:content>
+							</lf:SimpleForm>
+						</VBox>
+					</uxap:ObjectPageSubSection>
+
+					<uxap:ObjectPageSubSection title="{i18n>subTtl_validations}">
+						<VBox >
+							<lf:SimpleForm id="ValidationSettings"
+								editable="true"
+								layout="ResponsiveGridLayout"
+								title="{i18n>formTtl_rules}"
+								labelSpanXL="4"
+								labelSpanL="4"
+								labelSpanM="12"
+								labelSpanS="12"
+								adjustLabelSpan="false"
+								emptySpanXL="0"
+								emptySpanL="0"
+								emptySpanM="0"
+								emptySpanS="0"
+								columnsXL="2"
+								columnsL="2"
+								columnsM="1"
+								singleContainerFullSize="false" >
+								<lf:content>
+									<Label text="{i18n>formLbl_11HourRule}" />
+									<Switch state="{ApplicationModel>/validations/11HourRule}" />
+									<Label text="{i18n>formLbl_48HourRule}" />
+									<Switch state="{ApplicationModel>/validations/48HourRule}" />
+									<Label text="{i18n>formLbl_onlyAbsenceInWorkHours}" />
+									<Switch state="{ApplicationModel>/validations/onlyAbsenceInWorkHours}" />
+								</lf:content>
+							</lf:SimpleForm>
+						</VBox>
+					</uxap:ObjectPageSubSection>
+
+					<uxap:ObjectPageSubSection title="{i18n>subTtl_registrationTypes}">
+						
+						<HBox width="100%">
+							<VBox width="30%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
+								<Title text="{i18n>formTtl_catalogies}"/>
+								<List id="CatalogyList" items="{admin>/RegistrationGroupSet}">
 									<items>
-										<core:Item text="England" key="England"/>
-										<core:Item text="Germany" key="Germany"/>
-										<core:Item text="USA" key="USA"/>
+										<CustomListItem >
+											<HBox justifyContent="SpaceBetween" alignItems="End">
+												<Text id="sCatalogyName" text="{admin>name}"/>
+												<Button icon="sap-icon://decline" type="Transparent" press="onRemoveCatalogy"/>
+											</HBox>
+										</CustomListItem>
 									</items>
-								</Select>
-							</lf:content>
-						</lf:SimpleForm>
-						<lf:SimpleForm id="Integration4S4H"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>formTtl_SAP_S4H_integration}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="12"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="2"
-							columnsL="2"
-							columnsM="1"
-							singleContainerFullSize="false">
-							<lf:content>
-								<Label text="{i18n>formLbl_destination}" />
-									<Input value="" />
-									<Label text="Street/No." />
-									<Input value=""/>
-									<Input value="">
-										<layoutData>
-											<l:GridData span="XL2 L3 M4 S4" />
-										</layoutData>
-									</Input>
-									<Label text="ZIP Code/City" />
-									<Input value="">
-										<layoutData>
-											<l:GridData span="XL2 L3 M4 S4" />
-										</layoutData>
-									</Input>
-									<Input value="" />
-									<Label text="Country" />
-									<Select selectedKey="">
-										<items>
-											<core:Item text="England" key="England"/>
-											<core:Item text="Germany" key="Germany"/>
-											<core:Item text="USA" key="USA"/>
-										</items>
-									</Select>
-							</lf:content>
-						</lf:SimpleForm>
-						<lf:SimpleForm id="Integration4SF"
-							editable="true"
-							layout="ResponsiveGridLayout"
-							title="{i18n>formTtl_SAP_SF_integration}"
-							labelSpanXL="4"
-							labelSpanL="4"
-							labelSpanM="12"
-							labelSpanS="12"
-							adjustLabelSpan="false"
-							emptySpanXL="0"
-							emptySpanL="0"
-							emptySpanM="0"
-							emptySpanS="0"
-							columnsXL="2"
-							columnsL="2"
-							columnsM="1"
-							singleContainerFullSize="false">
-							<lf:content>
-								<Label text="{i18n>formLbl_destination}" />
-									<Input value="" />
-									<Label text="Street/No." />
-									<Input value=""/>
-									<Input value="">
-										<layoutData>
-											<l:GridData span="XL2 L3 M4 S4" />
-										</layoutData>
-									</Input>
-									<Label text="ZIP Code/City" />
-									<Input value="">
-										<layoutData>
-											<l:GridData span="XL2 L3 M4 S4" />
-										</layoutData>
-									</Input>
-									<Input value="" />
-									<Label text="Country" />
-									<Select selectedKey="">
-										<items>
-											<core:Item text="England" key="England"/>
-											<core:Item text="Germany" key="Germany"/>
-											<core:Item text="USA" key="USA"/>
-										</items>
-									</Select>
-							</lf:content>
-						</lf:SimpleForm>
-					</VBox>
-				</uxap:ObjectPageSubSection>
-			</uxap:ObjectPageSection>
+								</List>
+								<Button press="onOpenCatalogyPopover" text="{i18n>txt_newCatalogy}" icon="sap-icon://add" class="sapUiTinyMarginTop"/>
+							</VBox>
+							
+							<VBox width="70%" class="sapUiSmallMarginTopBottom sapUiLargeMarginBeginEnd">
+								<Title text="{i18n>formTtl_registrationTypes}"/>
+								<Table id="RegistrationTypesTable" items="{admin>/RegistrationTypeSet}">
+									<columns>
+										<Column >
+											<Text text="{i18n>colHdr_name}"/>
+										</Column>
+										<Column >
+											<Text text="{i18n>colHdr_catalogy}"/>
+										</Column>
+										<Column width="3rem"/>
+									</columns>
+									<items>
+										<ColumnListItem >
+											<cells>
+												<Input value="{admin>name}"/>
+												<Select selectedKey="{admin>group_ID}" items="{admin>/RegistrationGroupSet}" forceSelection="false" width="100%">
+													<items>
+														<core:Item key="{admin>ID}" text="{admin>name}"/>
+													</items>
+												</Select>
+												<Button icon="sap-icon://decline" press="onRemoveRegType" type="Transparent"/>
+											</cells>
+										</ColumnListItem>
+									</items>
+								</Table>
+								<Button press="onAddNewRegType" text="Add Registration Type" icon="sap-icon://add"/>
+							</VBox>
+						</HBox>
+					</uxap:ObjectPageSubSection>
 
-		</uxap:sections>
-	</uxap:ObjectPageLayout>
-	xmlns:l="sap.ui.layout">
-	<!-- Main Page -->
-	<Page title="{i18n>appTitle}" id="page">
-		<!-- Right Side Pop-Out Navigation Wrapper -->
-		<l:DynamicSideContent class="sapUiDSCExplored sapUiContentPadding" sideContentVisibility="AlwaysShow" showSideContent="{path: 'ApplicationModel>/showSidePanel'}" containerQuery="true">
-			<VBox>
-				<!-- Main SinglePlanningCalendar wrapped in custom control for .... more control -->
-				<controls:TRIXCalendar startDateChange="onCalendarChange" viewChange="onCalendarChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
-					<!-- Appointments -->
-					<controls:appointments>
-						<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/allocationType','PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-						</unified:CalendarAppointment>
-					</controls:appointments>
-					<!-- Top-Right Toggle Buttons -->
-					<controls:actions>
-						<ToggleButton text="{i18n>CalendarFullDay}" press="onToggleFullDay"/>
-						<ToggleButton pressed="{path: 'ApplicationModel>/showSidePanel'}" icon="sap-icon://legend"/>
-					</controls:actions>
-					<!-- Calendar Views -->
-					<controls:views>
-						<SinglePlanningCalendarDayView calendarWeekNumbering="Default" key="DayView" title="{i18n>CalendarViewDayView}" />
-						<SinglePlanningCalendarWeekView firstDayOfWeek="1" calendarWeekNumbering="Default" key="WeekView" title="{i18n>CalendarViewWeekView}" />
-						<SinglePlanningCalendarMonthView firstDayOfWeek="1" calendarWeekNumbering="Default" key="MonthView" title="{i18n>CalendarViewMonthView}" />
-					</controls:views>
-				</controls:TRIXCalendar>
-			</VBox>
-			<!-- Right Side Pop-Out Content -->
-			<l:sideContent width="200px">
-				<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
-					<appointmentItems>
-						<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />
-					</appointmentItems>
-				</PlanningCalendarLegend>
-			</l:sideContent>
-		</l:DynamicSideContent>
+					<uxap:ObjectPageSubSection title="{i18n>subTtl_integrations}">
+						<VBox >
+							<lf:SimpleForm id="Integration4ECC"
+								editable="true"
+								layout="ResponsiveGridLayout"
+								title="{i18n>formTtl_SAP_ECC_integration}"
+								labelSpanXL="4"
+								labelSpanL="4"
+								labelSpanM="12"
+								labelSpanS="12"
+								adjustLabelSpan="false"
+								emptySpanXL="0"
+								emptySpanL="0"
+								emptySpanM="0"
+								emptySpanS="0"
+								columnsXL="2"
+								columnsL="2"
+								columnsM="1"
+								singleContainerFullSize="false" >
+								<lf:content>
+									<Label text="{i18n>formLbl_destination}" />
+									<Input value="" />
+									<Label text="Street/No." />
+									<Input value=""/>
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Label text="ZIP Code/City" />
+									<Input value="">
+										<layoutData>
+											<l:GridData span="XL2 L3 M4 S4" />
+										</layoutData>
+									</Input>
+									<Input value="" />
+									<Label text="Country" />
+									<Select selectedKey="">
+										<items>
+											<core:Item text="England" key="England"/>
+											<core:Item text="Germany" key="Germany"/>
+											<core:Item text="USA" key="USA"/>
+										</items>
+									</Select>
+								</lf:content>
+							</lf:SimpleForm>
+							<lf:SimpleForm id="Integration4S4H"
+								editable="true"
+								layout="ResponsiveGridLayout"
+								title="{i18n>formTtl_SAP_S4H_integration}"
+								labelSpanXL="4"
+								labelSpanL="4"
+								labelSpanM="12"
+								labelSpanS="12"
+								adjustLabelSpan="false"
+								emptySpanXL="0"
+								emptySpanL="0"
+								emptySpanM="0"
+								emptySpanS="0"
+								columnsXL="2"
+								columnsL="2"
+								columnsM="1"
+								singleContainerFullSize="false">
+								<lf:content>
+									<Label text="{i18n>formLbl_destination}" />
+										<Input value="" />
+										<Label text="Street/No." />
+										<Input value=""/>
+										<Input value="">
+											<layoutData>
+												<l:GridData span="XL2 L3 M4 S4" />
+											</layoutData>
+										</Input>
+										<Label text="ZIP Code/City" />
+										<Input value="">
+											<layoutData>
+												<l:GridData span="XL2 L3 M4 S4" />
+											</layoutData>
+										</Input>
+										<Input value="" />
+										<Label text="Country" />
+										<Select selectedKey="">
+											<items>
+												<core:Item text="England" key="England"/>
+												<core:Item text="Germany" key="Germany"/>
+												<core:Item text="USA" key="USA"/>
+											</items>
+										</Select>
+								</lf:content>
+							</lf:SimpleForm>
+							<lf:SimpleForm id="Integration4SF"
+								editable="true"
+								layout="ResponsiveGridLayout"
+								title="{i18n>formTtl_SAP_SF_integration}"
+								labelSpanXL="4"
+								labelSpanL="4"
+								labelSpanM="12"
+								labelSpanS="12"
+								adjustLabelSpan="false"
+								emptySpanXL="0"
+								emptySpanL="0"
+								emptySpanM="0"
+								emptySpanS="0"
+								columnsXL="2"
+								columnsL="2"
+								columnsM="1"
+								singleContainerFullSize="false">
+								<lf:content>
+									<Label text="{i18n>formLbl_destination}" />
+										<Input value="" />
+										<Label text="Street/No." />
+										<Input value=""/>
+										<Input value="">
+											<layoutData>
+												<l:GridData span="XL2 L3 M4 S4" />
+											</layoutData>
+										</Input>
+										<Label text="ZIP Code/City" />
+										<Input value="">
+											<layoutData>
+												<l:GridData span="XL2 L3 M4 S4" />
+											</layoutData>
+										</Input>
+										<Input value="" />
+										<Label text="Country" />
+										<Select selectedKey="">
+											<items>
+												<core:Item text="England" key="England"/>
+												<core:Item text="Germany" key="Germany"/>
+												<core:Item text="USA" key="USA"/>
+											</items>
+										</Select>
+								</lf:content>
+							</lf:SimpleForm>
+						</VBox>
+					</uxap:ObjectPageSubSection>
+				</uxap:ObjectPageSection>
+
+			</uxap:sections>
+		</uxap:ObjectPageLayout>
+
 	</Page>
-
 </mvc:View>
