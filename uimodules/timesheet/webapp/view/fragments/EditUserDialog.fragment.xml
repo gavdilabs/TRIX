@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Dialog title="Edit User Info" contentHeight="50%" contentWidth="50%">
+    <Dialog title="Edit User Info" contentHeight="50%" contentWidth="80%">
         <VBox >
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
@@ -64,20 +64,28 @@
                 </VBox>
             </HBox>
             <HBox width="100%">
-                <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
-                    <Label text="Expected Start Time" showColon="true" />
+                <VBox width="100%" class="sapUiSmallMargin">
+                    <Label text="Expected Work Hours" showColon="true"/>
+                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: false}">
+                        <CustomListItem >
+                            <core:Fragment fragmentName="trix.timesheet.view.fragments.ExpectedWorkHours" type="XML" />
+                        </CustomListItem>
+                    </List>
+                </VBox>
+                <!-- <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
+                    <Label text="Expected Start Time  showColon="true"Time" showColon="true" />
                     <TimePicker value=""/>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Expected End Time" showColon="true" />
                     <TimePicker value=""/>
-                </VBox>
+                </VBox> -->
             </HBox>
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Set as Substitute for Manager" showColon="true" />
-                    <Switch customTextOn="Yes" customTextOff="No" state="" />
+                    <Switch customTextOn="Yes" customTextOff="No" state="false" />
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">

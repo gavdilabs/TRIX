@@ -1,0 +1,102 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core">
+        <Title text="{week/name}" class="sapUiMediumMarginTop"/>
+        <Table >
+            <columns>
+                <Column >
+                    <Text text="Monday"/>
+                </Column>
+                <Column >
+                    <Text text="Tueday"/>
+                </Column>
+                <Column >
+                    <Text text="Wednesday"/>
+                </Column>
+                <Column >
+                    <Text text="Thursday"/>
+                </Column>
+                <Column >
+                    <Text text="Friday"/>
+                </Column>
+                <Column >
+                    <Text text="Saturday"/>
+                </Column>
+                <Column >
+                    <Text text="Sunday"/>
+                </Column>
+                <Column styleClass="quickSetColumn">
+                    <Text text="Quick set"/>
+                </Column>
+            </columns>
+            <items>
+                <ColumnListItem >
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/monday/startTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/tuesday/startTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/wednesday/startTime}" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/thursday/startTime}" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/friday/startTime}" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/saturday/startTime}" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Start Time" showColon="true"/>
+                        <TimePicker value="{week/sunday/startTime}" />
+                    </VBox>
+                    <VBox >
+                        <Label text="Set row start times" showColon="true"/>
+                        <TimePicker change="onQuickSetTimes"/>
+                    </VBox>
+                </ColumnListItem>
+                <ColumnListItem >
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/monday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/tuesday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/wednesday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/thursday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/friday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/saturday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="End Time" showColon="true"/>
+                        <TimePicker value="{week/sunday/endTime}"/>
+                    </VBox>
+                    <VBox >
+                        <Label text="Set row end times" showColon="true"/>
+                        <TimePicker change="onQuickSetTimes"/>
+                    </VBox>
+                </ColumnListItem>                            
+            </items>
+        </Table>
+</core:FragmentDefinition>

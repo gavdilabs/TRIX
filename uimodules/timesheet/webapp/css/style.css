@@ -19,3 +19,6 @@
 .sapMListTblRow[data-regStatus="4"]{
     background: #e76400b2 !important;
 }
+.quickSetColumn{
+    border-left: 2px solid #e5e5e5;
+}

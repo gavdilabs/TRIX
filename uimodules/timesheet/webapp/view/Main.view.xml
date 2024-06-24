@@ -55,7 +55,7 @@
 								</controls:TRIXCalendar>
 							</VBox>
 							<!-- Right Side Pop-Out Content -->
-							<l:sideContent width="200px">
+							<l:sideContent >
 								<PlanningCalendarLegend appointmentItemsHeader="{i18n>CalendarLegendItems}" appointmentItems="{path : 'ListAllocationTypes>/',templateShareable: true}" class="sapUiSmallMarginTop">
 									<appointmentItems>
 										<unified:CalendarLegendItem color="{ListAllocationTypes>color}" text="{ListAllocationTypes>value}" tooltip="{ListAllocationTypes>value}" />

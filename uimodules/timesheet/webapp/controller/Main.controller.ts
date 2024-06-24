@@ -30,6 +30,8 @@ import MessageBox from "sap/m/MessageBox";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import Select from "sap/m/Select";
 import GridListItem from "sap/f/GridListItem";
+import TimePicker from "sap/m/TimePicker";
+import VBox from "sap/m/VBox";
 
 /**
  * @namespace trix.timesheet.controller
@@ -162,6 +164,9 @@ export default class Main extends BaseController {
 		);
 	}
 
+
+	////// Edit User Dialog //////
+
 	async onEditUser(oEvent: Event) {
 		const params = oEvent.getParameters() as {listItem:GridListItem};
 		if (!this.dialogEditUser) {
@@ -176,6 +181,12 @@ export default class Main extends BaseController {
 			this.getView().addDependent(this.dialogEditUser);
 			this.dialogEditUser.setBindingContext(params.listItem.getBindingContext());
 			this.dialogEditUser.open();
+			
+			// const oFilter = new Filter("/WorkScheduleSet/user/userID", FilterOperator.EQ, 
+			// 	params.listItem.getBindingContext().getProperty("userID"));
+			// const oListBinding = (this.byId("WorkScheduleList") as List).getBinding("items") as ODataListBinding;
+			// oListBinding.filter(oFilter);
+			// oListBinding.isSuspended() ? oListBinding.resume() : oListBinding.refresh();
 		}
 	}
 
@@ -187,13 +198,32 @@ export default class Main extends BaseController {
 		return;
 	}
 
-	toggleRegistrationTeamView() {
-		const oRegSwitch = this.byId("registrationSwitch") as Switch;
-		const oTeamSwitch = this.byId("teamSwitch") as Switch;
-		const state = oRegSwitch.getState();
-		oRegSwitch.setState(!state);
-		oTeamSwitch.setState(state);
+	// Expected Work Hours //
+	onQuickSetTimes(oEvent: Event) {
+		const oPicker = oEvent.getSource() as TimePicker;
+		const oItem = oEvent.getSource().getEventingParent().getEventingParent() as Item;
+		const aPickContainers = oItem.findElements(false) as Array<VBox>;
+		let aTimePickers: TimePicker[] = [];
+
+		for (const container of aPickContainers) {
+			const aItems = container.getItems();
+			aTimePickers.push(aItems.find((el) => el.getId().includes("picker") && 
+				el.getId() !== oPicker.getId()) as TimePicker);
+		}
+		for (const picker of aTimePickers) {
+			if (picker == undefined) {
+				continue;
+			}
+			picker.setValue(oPicker.getValue());
+		}
 	}
+
+
+
+	
+
+
+	////// Approval Page //////
 
 	async updateRegistrationStatus(oEvent: Event) {
 		const oBtn = oEvent.getSource() as Button;
@@ -244,29 +274,6 @@ export default class Main extends BaseController {
 		}
 	}
 
-	async onOpenCatalogyPopover(oEvent: Event) {
-		const oButton = oEvent.getSource() as Button,
-			oView = this.getView();
-
-		if (!this.oCatalogyPopover) {
-			this.oCatalogyPopover = (await Fragment.load({
-				id: oView.getId(),
-				name: "trix.timesheet.view.popovers.CatalogyPopover",
-				controller: this,
-			})) as ResponsivePopover;
-
-			if (this.oCatalogyPopover) {
-				oView.addDependent(this.oCatalogyPopover);				
-				this.oCatalogyPopover.openBy(oButton);
-				return;
-			}
-		}
-		if (this.oCatalogyPopover) {
-			oView.addDependent(this.oCatalogyPopover);			
-			this.oCatalogyPopover.openBy(oButton);
-		}
-	}
-
 	onFilterRegistrations() {
 		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
 			oTable = this.byId("ValidationTable") as Table,
@@ -290,6 +297,32 @@ export default class Main extends BaseController {
 		oFilterComboBox.setSelectedKeys([]);
 		oBinding.filter(aFilters);
 		oBinding.refresh();
+	}
+
+
+	////// Configuration Page //////
+
+	async onOpenCatalogyPopover(oEvent: Event) {
+		const oButton = oEvent.getSource() as Button,
+			oView = this.getView();
+
+		if (!this.oCatalogyPopover) {
+			this.oCatalogyPopover = (await Fragment.load({
+				id: oView.getId(),
+				name: "trix.timesheet.view.popovers.CatalogyPopover",
+				controller: this,
+			})) as ResponsivePopover;
+
+			if (this.oCatalogyPopover) {
+				oView.addDependent(this.oCatalogyPopover);				
+				this.oCatalogyPopover.openBy(oButton);
+				return;
+			}
+		}
+		if (this.oCatalogyPopover) {
+			oView.addDependent(this.oCatalogyPopover);			
+			this.oCatalogyPopover.openBy(oButton);
+		}
 	}
 
 	onAddNewCatalogy() {
