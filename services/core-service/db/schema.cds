@@ -4,6 +4,7 @@ using {
   sap,
   cuid
 } from '@sap/cds/common';
+using {trix.admin as admin} from '../../admin-service/db/schema';
 
 namespace trix.core;
 
@@ -60,7 +61,7 @@ entity User : managed {
 entity User2Allocation : managed, temporal {
   key userID       : String(255);
   key allocationID : String(255);
-      default      : Boolean;
+      isDefault    : Boolean;
       favorite     : Boolean;
       allocation   : Association to TimeAllocation
                        on allocation.ID = allocationID;
@@ -74,7 +75,7 @@ entity TimeRegistration : cuid, managed {
   startTime          : Time;
   endTime            : Time;
   wholeDay           : Boolean;
-  amount             : Decimal(2, 1);
+  amount             : Decimal(3, 1);
   registrationStatus : RegistrationStatus;
   registrationType   : RegistrationType;
   comment            : String(255);
@@ -86,9 +87,9 @@ entity TimeRegistration : cuid, managed {
 }
 
 entity WorkSchedule : cuid, managed {
-  order : Integer; // Week number in some cases
-  week  : Association to WorkWeek;
-  user  : Association to User;
+  scheduleOrder : Integer; // Week number in some cases
+  week          : Association to WorkWeek;
+  user          : Association to User;
 }
 
 entity WorkWeek : cuid, managed {
@@ -114,6 +115,17 @@ entity Team : cuid, sap.common.CodeList {
   manager      : Association to User;
   members      : Association to many User
                    on members.team = $self;
+}
+
+entity WeeklyRecording : managed {
+  key user         : Association to User;
+  key record       : String(255); // YYYY-WeekNumber
+      weekNumber   : Integer;
+      year         : Integer;
+      workHours    : Double;
+      absenceHours : Double;
+      weekStart    : Date;
+      weekEnd      : Date;
 }
 
 /*** EVENT CONTEXT TYPES ***/
@@ -144,4 +156,9 @@ type AllocationEventContext {
   isAbsence : Boolean;
   validFrom : DateTime;
   validTo   : DateTime;
+}
+
+context trix.admin {
+  view SolutionConfiguration as select from admin.Configuration;
+  view ValidationRules as select from admin.ValidationRule;
 }

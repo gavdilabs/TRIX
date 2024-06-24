@@ -1,4 +1,3 @@
-import { TimeRegistrationEventContext } from "#cds-models/trix/core";
 import { TimeRegistrationSet } from "#cds-models/TrixCoreService";
 import {
   EntityHandler,
@@ -13,6 +12,8 @@ import {
   Inject,
   CDS_DISPATCHER,
   Service,
+  BeforeCreate,
+  BeforeUpdate,
 } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import LoggingMiddleware from "../../middleware/LoggingMiddleware";
@@ -22,6 +23,8 @@ import {
   TimeRegistrationDeletedContext,
   TimeRegistrationUpdatedContext,
 } from "../../lib/utils/events";
+import ValidationService from "../../service/internal/validation";
+import RegistrationService from "../../service/internal/registration";
 
 @EntityHandler(TimeRegistrationSet)
 @Use(LoggingMiddleware)
@@ -31,8 +34,48 @@ export default class TimeRegistrationSetHandler {
   @Inject(CDS_DISPATCHER.SRV)
   private srv: Service;
 
+  @Inject(ValidationService)
+  private validation: ValidationService;
+
+  @Inject(RegistrationService)
+  private registration: RegistrationService;
+
   constructor() {
     this._logger = LoggerFactory.createLogger("time-registration-set");
+  }
+
+  @BeforeCreate()
+  @BeforeUpdate()
+  public async validateIncomingRegistration(
+    @Req() req: TypedRequest<TimeRegistrationSet>,
+    @Next() next: NextEvent
+  ): Promise<unknown> {
+    const data = req.data;
+    const validationResult =
+      await this.validation.validateAgainstConfiguredRules(data);
+
+    for (const res of validationResult) {
+      if (res.success) continue;
+      return req.error(400, res.errorMsg as string);
+    }
+
+    return next(req);
+  }
+
+  @AfterUpdate()
+  @AfterCreate()
+  public async updateWeeklyRecordedHours(
+    @Req() req: TypedRequest<TimeRegistrationSet>,
+    @Next() next: NextEvent
+  ): Promise<unknown> {
+    try {
+      const data = req.data;
+      await this.registration.updateWeeklyRecordedHours(data);
+      return next(req);
+    } catch (e) {
+      this._logger.error("Failed to update weekly recorded hours", e);
+      return req.error(500, "Failed to update weekly recorded hours");
+    }
   }
 
   @AfterCreate()

@@ -24,11 +24,7 @@ service TrixCoreService {
   entity ManagerSet as
     select from UserSet
     where
-      isManager = true
-    actions {
-      function getTeam()    returns TeamSet;
-      function getReports() returns many UserSet;
-    };
+      isManager = true;
 
   entity TimeAllocationSet @(restrict: [
     {
@@ -89,8 +85,6 @@ service TrixCoreService {
       ]
     }
   ])                as projection on model.TimeRegistration actions {
-                         action   clockIn()     returns String;
-                         action   clockOut()    returns String;
                          function elapsedTime() returns DateTime;
                          action   validate()    returns Boolean;
                        };
@@ -175,6 +169,7 @@ service TrixCoreService {
   ])                as projection on model.Team actions {
                          function getTeamSize() returns Integer;
                        };
+
 
   /** FUNCTION IMPORTS **/
   function getRecordStatuses()       returns many types.EnumPair;
