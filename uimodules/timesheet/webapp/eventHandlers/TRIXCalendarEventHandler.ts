@@ -7,6 +7,9 @@ import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
+import ApplicationModelHandler, {
+	CalendarView,
+} from "../dataHandlers/ApplicationModelHandler";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
@@ -82,6 +85,11 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		event: Event,
 		mode: AppointmentPopoverMode
 	): Promise<void> {
+		//Check if we should allow registering
+		if (!this.canRegister()) {
+			return;
+		}
+
 		const parameters = event.getParameters() as {
 			startDate: Date;
 			endDate: Date;
@@ -169,6 +177,22 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	}
 
 	/**
+	 * Function that evaluates based on current states/data if registrations should be allowed
+	 * @returns boolean true | false
+	 */
+	public canRegister(): boolean {
+		//For now we do not support registrations on Month View - makes little sense.
+		if (
+			ApplicationModelHandler.getInstance().getCurrentCalendarView() ===
+			CalendarView.MONTH
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Function for opening the Time Registration
 	 * @param openByControl UI Control to link the popover to
 	 * @param mode Which mode popup is in
@@ -179,6 +203,7 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		mode: AppointmentPopoverMode,
 		delayInMs: number = 0
 	): Promise<void> {
+		
 		//Set the global for return events to use
 		this.tempAppointmentControl = openByControl;
 
