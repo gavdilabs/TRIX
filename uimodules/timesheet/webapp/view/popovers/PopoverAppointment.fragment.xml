@@ -6,8 +6,8 @@
 
             <!-- Shows the timepickers to allow setting of new time(s) -->
             <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED'}">
-                <TimePicker dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15" />
-                <TimePicker dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15"/>
+                <TimePicker support2400="true" dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'HH:mm'}}" minutesStep="15" />
+                <TimePicker support2400="true" dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'HH:mm'}}" minutesStep="15"/>
             </VBox>
 
             <!-- Date/Time Display Mode when Appointment is dragged -->
