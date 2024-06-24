@@ -1,6 +1,6 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
-    <Dialog title="Edit User Info" contentHeight="50%" contentWidth="80%">
+    <Dialog title="Edit User Info" contentHeight="65%" contentWidth="80%">
         <VBox >
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
@@ -66,11 +66,19 @@
             <HBox width="100%">
                 <VBox width="100%" class="sapUiSmallMargin">
                     <Label text="Expected Work Hours" showColon="true"/>
-                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: false}">
+                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: true}">
+                        <!-- <headerToolbar>
+                            <OverflowToolbar >
+                                <Title text="Work Schedules"></Title>
+                                <ToolbarSpacer />
+                                <Button text="New Work Schedule" type="Emphasized"/>
+                            </OverflowToolbar>
+                        </headerToolbar> -->
                         <CustomListItem >
                             <core:Fragment fragmentName="trix.timesheet.view.fragments.ExpectedWorkHours" type="XML" />
                         </CustomListItem>
                     </List>
+                    <Button press="onOpenWorkScheduleNamePopover" text="New Work Schedule" icon="sap-icon://add" type="Emphasized"/>
                 </VBox>
                 <!-- <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Expected Start Time  showColon="true"Time" showColon="true" />

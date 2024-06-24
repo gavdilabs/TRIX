@@ -1,28 +1,87 @@
 <core:FragmentDefinition xmlns="sap.m"
     xmlns:core="sap.ui.core">
-        <Title text="{week/name}" class="sapUiMediumMarginTop"/>
+    <HBox alignItems="End" class="sapUiSmallMarginTop">
+        <VBox alignItems="Start" class="sapUiTinyMarginBeginEnd">
+            <!-- <Title text="{week/name}" /> -->
+            <Select items="{/WorkWeekSet}" selectedKey="{week_ID}">
+                <items>
+                    <core:Item key="{ID}" text="{name}"/>
+                </items>
+            </Select>
+        </VBox>
+        <Button press="" icon="sap-icon://delete" type="Reject" />
+    </HBox>
         <Table >
             <columns>
                 <Column >
-                    <Text text="Monday"/>
+                    <VBox >
+                        <Text text="Monday" class="sapUiSmallMarginEnd"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Tueday"/>
+                    <VBox >
+                        <Text text="Tueday"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Wednesday"/>
+                    <VBox >
+                        <Text text="Wednesday"/>
+                        <Select  items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Thursday"/>
+                    <VBox >
+                        <Text text="Thursday"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Friday"/>
+                    <VBox >
+                        <Text text="Friday"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Saturday"/>
+                    <VBox >
+                        <Text text="Saturday"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column >
-                    <Text text="Sunday"/>
+                    <VBox >
+                        <Text text="Sunday"/>
+                        <Select items="{/WorkDaySet}">
+                            <items>
+                                <core:Item key="{ID}" text="{name}"/>
+                            </items>
+                        </Select>
+                    </VBox>
                 </Column>
                 <Column styleClass="quickSetColumn">
                     <Text text="Quick set"/>

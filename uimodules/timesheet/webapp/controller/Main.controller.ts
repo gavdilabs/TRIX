@@ -32,6 +32,7 @@ import Select from "sap/m/Select";
 import GridListItem from "sap/f/GridListItem";
 import TimePicker from "sap/m/TimePicker";
 import VBox from "sap/m/VBox";
+import Time from "sap/ui/model/type/Time";
 
 /**
  * @namespace trix.timesheet.controller
@@ -40,6 +41,7 @@ export default class Main extends BaseController {
 	private dialogEditUser: Dialog;
 	private oFilterPopover: ResponsivePopover;
 	private oCatalogyPopover: ResponsivePopover;
+	private oWorkSchedulePopover: ResponsivePopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private cellPressed: boolean = false;
 	private selectedSideItem: Item;
@@ -182,11 +184,11 @@ export default class Main extends BaseController {
 			this.dialogEditUser.setBindingContext(params.listItem.getBindingContext());
 			this.dialogEditUser.open();
 			
-			// const oFilter = new Filter("/WorkScheduleSet/user/userID", FilterOperator.EQ, 
-			// 	params.listItem.getBindingContext().getProperty("userID"));
-			// const oListBinding = (this.byId("WorkScheduleList") as List).getBinding("items") as ODataListBinding;
-			// oListBinding.filter(oFilter);
-			// oListBinding.isSuspended() ? oListBinding.resume() : oListBinding.refresh();
+			const oFilter = new Filter("user_userID", FilterOperator.EQ, 
+				params.listItem.getBindingContext().getProperty("userID"));
+			const oListBinding = (this.byId("WorkScheduleList") as List).getBinding("items") as ODataListBinding;
+			oListBinding.filter(oFilter);
+			oListBinding.isSuspended() ? oListBinding.resume() : oListBinding.refresh();
 		}
 	}
 
@@ -218,7 +220,85 @@ export default class Main extends BaseController {
 		}
 	}
 
+	async onOpenWorkScheduleNamePopover(oEvent: Event) {
+		const oButton = oEvent.getSource() as Button,
+			oView = this.getView();
 
+		if (!this.oWorkSchedulePopover) {
+			this.oWorkSchedulePopover = (await Fragment.load({
+				id: oView.getId(),
+				name: "trix.timesheet.view.popovers.WorkScheduleNamePopover",
+				controller: this,
+			})) as ResponsivePopover;
+
+			if (this.oWorkSchedulePopover) {
+				oView.addDependent(this.oWorkSchedulePopover);				
+				this.oWorkSchedulePopover.openBy(oButton);
+				return;
+			}
+		}
+		if (this.oWorkSchedulePopover) {
+			oView.addDependent(this.oWorkSchedulePopover);			
+			this.oWorkSchedulePopover.openBy(oButton);
+		}
+	}
+
+	onAddNewWorkSchedule(oEvent: Event) {
+		const oScheduleList = this.byId("WorkScheduleList") as List;
+		const oListBinding = oScheduleList.getBinding("items") as ODataListBinding;
+		
+		const oInitData = {
+			order: oScheduleList.getItems().length,
+			user: "test",
+			week: {
+				name: "test",
+				monday: {
+					name: "joe",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				tuesday: {
+					name: "bob",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				wednesday: {
+					name: "babs",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				thursday: {
+					name: "bill",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				friday: {
+					name: "hortio",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				saturday: {
+					name: "roger",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+				sunday: {
+					name: "nigel",
+					crossingMidnight: false,
+					startTime: new Time,
+					endTime: new Time
+				},
+			}
+		}
+
+		oListBinding.create(oInitData)
+	}
 
 	
 
