@@ -1,4 +1,4 @@
-import { User2Allocation } from "#cds-models/trix/core";
+import { User2Allocation } from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 

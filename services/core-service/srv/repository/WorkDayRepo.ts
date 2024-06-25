@@ -1,4 +1,4 @@
-import { WorkDay } from "#cds-models/trix/core";
+import { WorkDay } from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 

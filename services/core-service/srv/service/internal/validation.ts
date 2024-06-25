@@ -1,5 +1,5 @@
-import { ValidationType } from "#cds-models/trix/admin";
-import { TimeRegistrationSet } from "#cds-models/TrixCoreService";
+import { ValidationType } from "../../utils/entities/trix/admin";
+import { TimeRegistrationSet } from "../../utils/entities/TrixCoreService";
 import { Inject, ServiceLogic } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import {

@@ -1,4 +1,4 @@
-import { Team } from "#cds-models/trix/core";
+import { Team } from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 

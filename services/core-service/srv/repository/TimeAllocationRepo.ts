@@ -1,4 +1,4 @@
-import { TimeAllocation as EntityData } from "#cds-models/trix/core";
+import { TimeAllocation as EntityData } from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import cds from "@sap/cds";

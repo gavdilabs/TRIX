@@ -1,4 +1,4 @@
-import { ManagerSet } from "#cds-models/TrixCoreService";
+import { ManagerSet } from "../../utils/entities/TrixCoreService";
 import { EntityHandler, Use } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import LoggingMiddleware from "../../middleware/LoggingMiddleware";

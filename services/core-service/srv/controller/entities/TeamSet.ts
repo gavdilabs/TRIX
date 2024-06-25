@@ -1,4 +1,4 @@
-import { TeamSet } from "#cds-models/TrixCoreService";
+import { TeamSet } from "../../utils/entities/TrixCoreService";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import {
   ActionRequest,

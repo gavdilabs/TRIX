@@ -1,4 +1,4 @@
-import { TimeRegistrationSet } from "#cds-models/TrixCoreService";
+import { TimeRegistrationSet } from "../../utils/entities/TrixCoreService";
 import { Inject, ServiceLogic } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import {
@@ -50,7 +50,8 @@ export default class RegistrationService {
       registration.user_userID,
       weekNo,
       year,
-      hoursRecorded
+      hoursRecorded,
+      startDate
     );
   }
 }

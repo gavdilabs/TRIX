@@ -1,4 +1,4 @@
-import { WeeklyRecording as EntityData } from "#cds-models/trix/core";
+import { WeeklyRecording as EntityData } from "../utils/entities/trix/core";
 import {
   CDS_DISPATCHER,
   Inject,
