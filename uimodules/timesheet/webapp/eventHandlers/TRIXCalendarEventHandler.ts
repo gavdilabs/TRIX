@@ -7,9 +7,13 @@ import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import CalendarAppointment from "sap/ui/unified/CalendarAppointment";
 import TRIXCalendar from "../controls/TRIXCalendar";
+import ApplicationModelHandler, {
+	CalendarView,
+} from "../dataHandlers/ApplicationModelHandler";
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
+import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
 
 /**
@@ -18,6 +22,7 @@ import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
 interface IPopupModel {
 	mode: AppointmentPopoverMode;
 	allocationId?: string;
+	allocationDescription?: string;
 	startDate: Date;
 	endDate: Date;
 	recordId: string;
@@ -82,6 +87,11 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		event: Event,
 		mode: AppointmentPopoverMode
 	): Promise<void> {
+		//Check if we should allow registering
+		if (!this.canRegister()) {
+			return;
+		}
+
 		const parameters = event.getParameters() as {
 			startDate: Date;
 			endDate: Date;
@@ -169,6 +179,22 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 	}
 
 	/**
+	 * Function that evaluates based on current states/data if registrations should be allowed
+	 * @returns boolean true | false
+	 */
+	public canRegister(): boolean {
+		//For now we do not support registrations on Month View - makes little sense.
+		if (
+			ApplicationModelHandler.getInstance().getCurrentCalendarView() ===
+			CalendarView.MONTH
+		) {
+			return false;
+		}
+
+		return true;
+	}
+
+	/**
 	 * Function for opening the Time Registration
 	 * @param openByControl UI Control to link the popover to
 	 * @param mode Which mode popup is in
@@ -184,7 +210,7 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 
 		const appointmentData = openByControl
 			.getBindingContext("PeriodRegistrations")
-			.getObject() as trix.core.ITimeAllocation;
+			.getObject() as ITimeRegistrationAndAllocation;
 
 		this.tempUiRecord = appointmentData;
 
@@ -211,6 +237,8 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 					isTemporary:
 						appointmentData?.ID?.indexOf("TEMP") === 0 ? true : false,
 					recordId: appointmentData?.ID,
+					allocationId: appointmentData?.allocation?.ID,
+					allocationDescription: appointmentData?.allocation?.description,
 				};
 
 				popover.setModel(new JSONModel(data), this.POPOVER_MODEL_NAME);
