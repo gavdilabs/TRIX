@@ -1,0 +1,32 @@
+<core:FragmentDefinition xmlns="sap.m"
+    xmlns:core="sap.ui.core"
+    xmlns:controls="trix.timesheet.controls">
+    <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
+        <content>
+
+            <!-- Shows the timepickers to allow setting of new time(s) -->
+            <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED'}">
+                <TimePicker dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15" />
+                <TimePicker dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15"/>
+            </VBox>
+
+            <!-- Date/Time Display Mode when Appointment is dragged -->
+            <HBox visible="{=${PopoverControl>/mode} === 'DRAGGED'}">
+                <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/startDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
+                <Text class="sapUiTinyMarginEnd" text="to" />
+                <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/endDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
+            </HBox>
+
+            <!-- Tree based Project Selection -->
+            <controls:TRIXTree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+                <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
+            </controls:TRIXTree>
+
+            <!-- Save Button to appear in certain modes -->
+            <HBox visible="{=${PopoverControl>/mode} === 'SELECTED'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">
+                <Button text="{i18n>CommonDelete}" type="Reject" press="onDeleteAppointment" />
+                <Button text="{i18n>CommonSave}" press="onSaveAppointmentChanges" />
+            </HBox>
+        </content>
+    </ResponsivePopover>
+</core:FragmentDefinition>

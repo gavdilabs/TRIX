@@ -1,0 +1,21 @@
+{
+	"showSidePanel": false,
+	"view": "WeekView",
+	"viewTitle": "",
+	"colors": {
+		"absence": "#BD9AD8",
+		"attendance": "#509624",
+		"service": "#c1d8f0",
+		"project": "#f9ff9f"
+	},
+	"workHours": {
+		"default": {
+			"from": 8,
+			"to": 16
+		},
+		"personal": {
+			"from": null,
+			"to": null
+		}
+	}
+}

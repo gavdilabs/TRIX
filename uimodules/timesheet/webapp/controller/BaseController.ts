@@ -1,11 +1,12 @@
-import Controller from "sap/ui/core/mvc/Controller";
-import UIComponent from "sap/ui/core/UIComponent";
-import AppComponent from "../Component";
-import Model from "sap/ui/model/Model";
-import ResourceModel from "sap/ui/model/resource/ResourceModel";
 import ResourceBundle from "sap/base/i18n/ResourceBundle";
-import Router from "sap/ui/core/routing/Router";
+import Controller from "sap/ui/core/mvc/Controller";
 import History from "sap/ui/core/routing/History";
+import Router from "sap/ui/core/routing/Router";
+import UIComponent from "sap/ui/core/UIComponent";
+import Model from "sap/ui/model/Model";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
+import ResourceModel from "sap/ui/model/resource/ResourceModel";
+import AppComponent from "../Component";
 
 /**
  * @namespace trix.timesheet.controller
@@ -31,9 +32,9 @@ export default abstract class BaseController extends Controller {
 	 * Convenience method for getting the i18n resource bundle of the component.
 	 * @returns The i18n resource bundle of the component
 	 */
-	public getResourceBundle(): ResourceBundle | Promise<ResourceBundle> {
+	public getResourceBundle(): ResourceBundle {
 		const oModel = this.getOwnerComponent().getModel("i18n") as ResourceModel;
-		return oModel.getResourceBundle();
+		return oModel.getResourceBundle() as ResourceBundle;
 	}
 
 	/**
@@ -79,5 +80,13 @@ export default abstract class BaseController extends Controller {
 		} else {
 			this.getRouter().navTo("main", {}, undefined, true);
 		}
+	}
+
+	/**
+	 * Tooling funciton for easy access to the Code OdataModel in V4 flavoud
+	 * @returns
+	 */
+	public getOdataModelCore(): ODataModel {
+		return this.getModel() as ODataModel;
 	}
 }
