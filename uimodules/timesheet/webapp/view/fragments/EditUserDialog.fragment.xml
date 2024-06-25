@@ -53,7 +53,11 @@
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Country" showColon="true" />
-                    <Input value="" width="80%" />
+                    <Select selectedKey="{User>country_code}" items="{/Country}" width="80%" >
+                        <items>
+                            <core:Item key="{code}" text="{descr}" />
+                        </items>
+                    </Select>
                 </VBox>
             </HBox>
             <HBox width="100%">

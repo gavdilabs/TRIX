@@ -1,6 +1,7 @@
 using {
   temporal,
   managed,
+  Country,
   sap,
   cuid
 } from '@sap/cds/common';
@@ -52,6 +53,7 @@ entity User : managed {
       lastName    : String(255);
       email       : String(255);
       isManager   : Boolean;
+      country     : Country;
       team        : Association to Team;
       manager     : Association to User;
       allocations : Association to many User2Allocation
