@@ -18,9 +18,12 @@
             </HBox>
 
             <!-- Tree based Project Selection -->
-            <controls:TRIXTree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+            <controls:TRIXTree visible="{=${ApplicationModel>/view} !== 'MonthView'}" selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                 <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
             </controls:TRIXTree>
+
+            <!-- Allocation Text - Shown in Month View -->
+            <Text text="{PopoverControl>/allocationDescription}" />
 
             <!-- Save Button to appear in certain modes -->
             <HBox visible="{=${PopoverControl>/mode} === 'SELECTED' &amp;&amp; ${ApplicationModel>/view} !== 'MonthView'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">

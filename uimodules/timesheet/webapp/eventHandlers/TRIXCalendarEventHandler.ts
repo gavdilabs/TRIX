@@ -13,6 +13,7 @@ import ApplicationModelHandler, {
 import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import { trix } from "../model/entities-core";
+import { ITimeRegistrationAndAllocation } from "../model/interfaces";
 import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
 
 /**
@@ -21,6 +22,7 @@ import { AppointmentPopoverMode, ICalendarEventHandler } from "./EventTypes";
 interface IPopupModel {
 	mode: AppointmentPopoverMode;
 	allocationId?: string;
+	allocationDescription?: string;
 	startDate: Date;
 	endDate: Date;
 	recordId: string;
@@ -203,13 +205,12 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 		mode: AppointmentPopoverMode,
 		delayInMs: number = 0
 	): Promise<void> {
-		
 		//Set the global for return events to use
 		this.tempAppointmentControl = openByControl;
 
 		const appointmentData = openByControl
 			.getBindingContext("PeriodRegistrations")
-			.getObject() as trix.core.ITimeAllocation;
+			.getObject() as ITimeRegistrationAndAllocation;
 
 		this.tempUiRecord = appointmentData;
 
@@ -236,6 +237,8 @@ export default class TRIXCalendarEventHandler implements ICalendarEventHandler {
 					isTemporary:
 						appointmentData?.ID?.indexOf("TEMP") === 0 ? true : false,
 					recordId: appointmentData?.ID,
+					allocationId: appointmentData?.allocation?.ID,
+					allocationDescription: appointmentData?.allocation?.description,
 				};
 
 				popover.setModel(new JSONModel(data), this.POPOVER_MODEL_NAME);
