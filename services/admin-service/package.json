@@ -18,7 +18,7 @@
     "build:types": "npx @cap-js/cds-typer '*' --outputDirectory ./@cds-models",
     "build:clean": "npx rimraf gen",
     "db:load": "cds deploy --profile pg",
-    "cleanup:ts": "npx rimraf gen/srv/srv/**/**/*.ts",
+    "clean:ts": "npx rimraf gen/srv/srv/**/**/*.ts",
     "build:mta": "mbt build --mtar archive.mtar",
     "build:ts": "echo 'Compiling TypeScript sources...' && tsc",
     "build:cp": "shx cp .npmrc gen/srv",
