@@ -18,6 +18,7 @@
     "build:cds": "cds build && npm run build:cp",
     "build:cds:prod": "npx cds build --production",
     "build:types": "npx @cap-js/cds-typer '*' --outputDirectory ./srv/utils/entities",
+    "build:types:windows": "npx @cap-js/cds-typer * --outputDirectory ./srv/utils/entities",
     "build:clean": "rm -r gen",
     "db:load": "cds deploy --profile pg",
     "clean:ts": "rm -r ./gen/srv/srv/**/**/*.ts",
