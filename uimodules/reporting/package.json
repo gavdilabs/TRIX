@@ -1,7 +1,7 @@
 {
 	"name": "trix.reporting",
 	"version": "1.0.0",
-	"description": "UI5 Application: trix.reporting",
+	"description": "trix.reporting",
 	"author": "Gavdi Labs",
 	"license": "Apache-2.0",
 	"scripts": {

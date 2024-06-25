@@ -1,7 +1,7 @@
 {
 	"name": "trix.approval",
 	"version": "1.0.0",
-	"description": "UI5 Application: trix.approval",
+	"description": "trix.approval",
 	"author": "Gavdi Labs",
 	"license": "Apache-2.0",
 	"scripts": {

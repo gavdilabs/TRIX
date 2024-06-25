@@ -1,8 +1,8 @@
 {
   "name": "trix-admin-service",
   "version": "1.0.0",
-  "description": "Time Registration - Core Service",
-  "license": "UNLICENSED",
+  "description": "TRIX - Core Service",
+  "license": "Apache-2.0",
   "scripts": {
     "start": "cds-serve",
     "dev": "cds-ts watch --profile pg",

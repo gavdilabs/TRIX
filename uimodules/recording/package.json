@@ -1,7 +1,7 @@
 {
 	"name": "trix.recording",
 	"version": "1.0.0",
-	"description": "UI5 Application: trix.recording",
+	"description": "trix.recording",
 	"author": "Gavdi Labs",
 	"license": "Apache-2.0",
 	"scripts": {

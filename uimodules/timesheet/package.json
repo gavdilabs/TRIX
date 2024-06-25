@@ -1,7 +1,7 @@
 {
 	"name": "trix.timesheet",
 	"version": "1.0.0",
-	"description": "UI5 Application: TRIX TimeSheet",
+	"description": "trix.timesheet",
 	"author": "Gavdi Labs",
 	"license": "Apache-2.0",
 	"scripts": {
