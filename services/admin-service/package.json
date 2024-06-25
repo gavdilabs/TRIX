@@ -74,6 +74,14 @@
   },
   "cds": {
     "requires": {
+      "[development]": {
+        "db": {
+          "kind": "sqlite",
+          "credentials": {
+            "url": ":memory:"
+          }
+        }
+      },
       "[pg]": {
         "db": {
           "kind": "postgres",

@@ -52,6 +52,7 @@ entity User : managed {
       lastName    : String(255);
       email       : String(255);
       isManager   : Boolean;
+      substitute  : Association to User null;
       team        : Association to Team;
       manager     : Association to User;
       allocations : Association to many User2Allocation

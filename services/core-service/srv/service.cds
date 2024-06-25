@@ -34,7 +34,11 @@ service TrixCoreService {
     },
     {
       grant: ['READ'],
-      to   : []
+      where: 'allocatedUsers.substitute.userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      where: 'allocatedUsers.manager.userID = $user.id'
     },
     {
       grant: ['*'],
@@ -54,7 +58,11 @@ service TrixCoreService {
     },
     {
       grant: ['READ'],
-      to   : ['TeamLead']
+      where: 'allocation.allocatedUsers.manager.userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      where: 'allocation.allocatedUsers.substitute.userID = $user.id'
     },
     {
       grant: ['*'],
@@ -67,21 +75,26 @@ service TrixCoreService {
 
   entity TimeRegistrationSet @(restrict: [
     {
-      grant: [
-        'READ',
-        'clockIn',
-        'clockOut',
-        'elapsedTime'
-      ],
-      to   : ['TimeUser']
+      grant: ['*'],
+      to   : ['TimeUser'],
+      where: 'user.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      to   : ['TimeUser'],
+      where: 'user.manager.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      to   : ['TimeUser'],
+      where: 'user.substitute.userID = $user.id'
     },
     {
       grant: ['*'],
       to   : [
         'Admin',
         'TimeRegistration',
-        'TimeManagement',
-        'TeamLead'
+        'TimeManagement'
       ]
     }
   ])                as projection on model.TimeRegistration actions {
@@ -96,8 +109,12 @@ service TrixCoreService {
       where: 'user.userID = $user.id'
     },
     {
-      grant: ['READ'],
-      to   : ['TeamLead']
+      grant: ['*'],
+      where: 'user.manager.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      where: 'user.substitute.userID = $user.id'
     },
     {
       grant: ['*'],
@@ -117,7 +134,7 @@ service TrixCoreService {
       ]
     },
     {
-      grant: ['CHANGE'],
+      grant: ['*'],
       to   : ['TeamLead']
     },
     {
@@ -138,10 +155,6 @@ service TrixCoreService {
       ]
     },
     {
-      grant: ['CHANGE'],
-      to   : ['TeamLead']
-    },
-    {
       grant: ['*'],
       to   : [
         'Admin',
@@ -151,13 +164,20 @@ service TrixCoreService {
   ])                as projection on model.WorkDay;
 
   entity TeamSet @(restrict: [
-    {grant: [
-      'READ',
-      'getTeamSize'
-    ]},
     {
-      grant: ['CHANGE'],
-      to   : ['TeamLead']
+      grant: [
+        'READ',
+        'getTeamSize'
+      ],
+      where: 'members.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      where: 'manager.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      where: 'manager.substitute.userID = $user.id'
     },
     {
       grant: ['*'],
