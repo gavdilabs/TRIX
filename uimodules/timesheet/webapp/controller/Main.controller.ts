@@ -42,12 +42,14 @@ export default class Main extends BaseController {
 	private oFilterPopover: ResponsivePopover;
 	private oCatalogyPopover: ResponsivePopover;
 	private oWorkSchedulePopover: ResponsivePopover;
+	private oWorkWeekSelectPopover: ResponsivePopover;
 	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
 	private cellPressed: boolean = false;
 	private selectedSideItem: Item;
 	private formatter = new Formatter("Formatter");
 	private ddHandler: DropDownHandler = undefined;
 	private oResourceBundle: ResourceBundle;
+	private editingUserID: string;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -171,6 +173,7 @@ export default class Main extends BaseController {
 
 	async onEditUser(oEvent: Event) {
 		const params = oEvent.getParameters() as {listItem:GridListItem};
+		this.editingUserID = params.listItem.getBindingContext().getProperty("userID");
 		if (!this.dialogEditUser) {
 			this.dialogEditUser = (await Fragment.load({
 				id: this.getView().getId(),
@@ -185,7 +188,7 @@ export default class Main extends BaseController {
 			this.dialogEditUser.open();
 			
 			const oFilter = new Filter("user_userID", FilterOperator.EQ, 
-				params.listItem.getBindingContext().getProperty("userID"));
+				this.editingUserID);
 			const oListBinding = (this.byId("WorkScheduleList") as List).getBinding("items") as ODataListBinding;
 			oListBinding.filter(oFilter);
 			oListBinding.isSuspended() ? oListBinding.resume() : oListBinding.refresh();
@@ -198,6 +201,12 @@ export default class Main extends BaseController {
 
 	onChangeAvatar() {
 		return;
+	}
+
+	onChangeWorkWeek(oEvent: Event) {
+		const oScheduleList = this.byId("WorkWeeksTable") as Table;
+		const oListBinding = oScheduleList.getBinding("items") as ODataListBinding;
+		oListBinding.refresh();
 	}
 
 	// Expected Work Hours //
@@ -243,61 +252,78 @@ export default class Main extends BaseController {
 		}
 	}
 
-	onAddNewWorkSchedule(oEvent: Event) {
+	onAddNewWorkSchedule() {
+		const oInput =this.byId("WorkScheduleInput") as Input;
 		const oScheduleList = this.byId("WorkScheduleList") as List;
 		const oListBinding = oScheduleList.getBinding("items") as ODataListBinding;
 		
 		const oInitData = {
 			order: oScheduleList.getItems().length,
-			user: "test",
+			user: this.editingUserID,
 			week: {
-				name: "test",
-				monday: {
-					name: "joe",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				tuesday: {
-					name: "bob",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				wednesday: {
-					name: "babs",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				thursday: {
-					name: "bill",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				friday: {
-					name: "hortio",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				saturday: {
-					name: "roger",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
-				sunday: {
-					name: "nigel",
-					crossingMidnight: false,
-					startTime: new Time,
-					endTime: new Time
-				},
+				name: oInput.getValue()
 			}
 		}
 
 		oListBinding.create(oInitData)
+	}
+
+	async onOpenSelectWorkWeekPopover(oEvent: Event) {
+		const oButton = oEvent.getSource() as Button,
+			oView = this.getView();
+
+		if (!this.oWorkWeekSelectPopover) {
+			this.oWorkWeekSelectPopover = (await Fragment.load({
+				id: oView.getId(),
+				name: "trix.timesheet.view.popovers.SelectWorkWeekPopover",
+				controller: this,
+			})) as ResponsivePopover;
+
+			if (this.oWorkWeekSelectPopover) {
+				oView.addDependent(this.oWorkWeekSelectPopover);				
+				this.oWorkWeekSelectPopover.openBy(oButton);
+				return;
+			}
+		}
+		if (this.oWorkWeekSelectPopover) {
+			oView.addDependent(this.oWorkWeekSelectPopover);			
+			this.oWorkWeekSelectPopover.openBy(oButton);
+		}
+	}
+
+	onAddExistingWorkSchedule(oEvent: Event) {
+		const oSelect =this.byId("WorkWeekSelect") as Select;
+		const oScheduleList = this.byId("WorkScheduleList") as List;
+		const oListBinding = oScheduleList.getBinding("items") as ODataListBinding;
+		
+		const oInitData = {
+			order: oScheduleList.getItems().length,
+			user: this.editingUserID,
+			week: oSelect.getSelectedKey()
+		}
+
+		oListBinding.create(oInitData)
+	}
+
+	onRemoveWorkSchedule(oEvent: Event) {
+		const oContext = (oEvent.getSource() as Button).getBindingContext() as Context;
+
+		MessageBox.warning(this.oResourceBundle.getText("msg_deleteWorkScheduleWarning"), {
+			actions: [(MessageBox as any).Action.YES, (MessageBox as any).Action.CANCEL],
+			emphasizedAction: (MessageBox as any).Action.YES,
+			onClose: (sAction: any) => {
+				if (sAction === (MessageBox as any).Action.YES) {
+					oContext.delete().then(async () => {
+						if (!oContext.isDeleted()) {
+							await oContext.delete();
+						}
+						MessageToast.show(this.oResourceBundle.getText("msg_workScheduleDeleted"), {
+							closeOnBrowserNavigation: false
+						});
+					});
+				}
+			}
+		});
 	}
 
 	

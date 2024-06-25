@@ -3,20 +3,20 @@
     <HBox alignItems="End" class="sapUiSmallMarginTop">
         <VBox alignItems="Start" class="sapUiTinyMarginBeginEnd">
             <!-- <Title text="{week/name}" /> -->
-            <Select items="{/WorkWeekSet}" selectedKey="{week_ID}">
+            <Select items="{path: '/WorkWeekSet', templateShareable: true}" selectedKey="{week_ID}" change="onChangeWorkWeek">
                 <items>
                     <core:Item key="{ID}" text="{name}"/>
                 </items>
             </Select>
         </VBox>
-        <Button press="" icon="sap-icon://delete" type="Reject" />
+        <Button press="onRemoveWorkSchedule" icon="sap-icon://delete" type="Reject" />
     </HBox>
-        <Table >
+        <Table id="WorkWeeksTable">
             <columns>
                 <Column >
                     <VBox >
                         <Text text="Monday" class="sapUiSmallMarginEnd"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/monday_ID}" items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -26,7 +26,7 @@
                 <Column >
                     <VBox >
                         <Text text="Tueday"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/tuesday_ID}" items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -36,7 +36,7 @@
                 <Column >
                     <VBox >
                         <Text text="Wednesday"/>
-                        <Select  items="{/WorkDaySet}">
+                        <Select selectedKey="{week/wednesday_ID}"  items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -46,7 +46,7 @@
                 <Column >
                     <VBox >
                         <Text text="Thursday"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/thursday_ID}"  items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -56,7 +56,7 @@
                 <Column >
                     <VBox >
                         <Text text="Friday"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/friday_ID}" items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -66,7 +66,7 @@
                 <Column >
                     <VBox >
                         <Text text="Saturday"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/saturday_ID}" items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>
@@ -76,7 +76,7 @@
                 <Column >
                     <VBox >
                         <Text text="Sunday"/>
-                        <Select items="{/WorkDaySet}">
+                        <Select selectedKey="{week/sunday_ID}" items="{path: '/WorkDaySet', templateShareable: true}">
                             <items>
                                 <core:Item key="{ID}" text="{name}"/>
                             </items>

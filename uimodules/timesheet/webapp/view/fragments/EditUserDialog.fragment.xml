@@ -44,7 +44,11 @@
             <HBox width="100%">
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Manager" showColon="true" />
-                    <Input value="{manager_userID}" width="80%"/>
+                    <Select selectedKey="{User>manager_userID}" items="{/ManagerSet}" width="80%" >
+                        <items>
+                            <core:Item key="{userID}" text="{firstName} {lastName} ({userID})" />
+                        </items>
+                    </Select>
                 </VBox>
                 
                 <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
@@ -66,7 +70,7 @@
             <HBox width="100%">
                 <VBox width="100%" class="sapUiSmallMargin">
                     <Label text="Expected Work Hours" showColon="true"/>
-                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: true}">
+                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: true, sorter: {path: 'order', descending: false}}">
                         <!-- <headerToolbar>
                             <OverflowToolbar >
                                 <Title text="Work Schedules"></Title>
@@ -78,7 +82,10 @@
                             <core:Fragment fragmentName="trix.timesheet.view.fragments.ExpectedWorkHours" type="XML" />
                         </CustomListItem>
                     </List>
-                    <Button press="onOpenWorkScheduleNamePopover" text="New Work Schedule" icon="sap-icon://add" type="Emphasized"/>
+                    <HBox >
+                        <Button press="onOpenSelectWorkWeekPopover" text="Add Existing Schedule" icon="sap-icon://add" type="Emphasized" class="sapUiSmallMarginEnd"/>
+                        <Button press="onOpenWorkScheduleNamePopover" text="New Work Schedule" icon="sap-icon://add" type="Ghost"/>
+                    </HBox>
                 </VBox>
                 <!-- <VBox width="50%" class="sapUiSmallMarginBeginEnd sapUiSmallMarginTop">
                     <Label text="Expected Start Time  showColon="true"Time" showColon="true" />
