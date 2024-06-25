@@ -86,6 +86,30 @@
           }
         }
       },
+      "[pg]": {
+        "db": {
+          "kind": "postgres",
+          "credentials": {
+            "host": "localhost",
+            "port": 5432,
+            "user": "postgres",
+            "password": "postgres",
+            "database": "postgres",
+            "dbname": "trix"
+          }
+        },
+        "kind": "postgres",
+        "impl": "@cap-js/postgres",
+        "dialect": "postgres",
+        "vcap": {
+          "label": "postgresql-db"
+        },
+        "pool": {
+          "min": 0,
+          "max": 100,
+          "fifo": false
+        }
+      },
       "cats": {
         "kind": "odata",
         "model": "srv/external/cats",

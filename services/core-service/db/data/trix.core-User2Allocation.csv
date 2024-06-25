@@ -1,4 +1,4 @@
-userID;allocationID;default;favorite;createdAt;createdBy;modifiedAt;modifiedBy;validFrom;validTo
+userID;allocationID;isDefault;favorite;createdAt;createdBy;modifiedAt;modifiedBy;validFrom;validTo
 DON;df97008f-ebbf-4b8d-8f43-dc95f19460de;true;true;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01;9999-12-31
 DON;b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31;false;false;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01;9999-12-31
 DON;8baed15a-6e4a-403f-9fd1-d32af05b19af;false;false;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01T12:12:00.123Z;SYSTEM;2024-01-01;9999-12-31
