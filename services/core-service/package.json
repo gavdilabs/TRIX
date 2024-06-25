@@ -25,8 +25,7 @@
     "build:ts": "echo 'Compiling TypeScript sources...' && tsc",
     "build:cp": "shx cp .npmrc gen/srv",
     "deploy": "run-s build:prod build:mta deploy:cf",
-    "deploy:cf": "cf deploy mta_archives/archive.mtar",
-    "build:entities:ui": "cds2types --cds ./srv/service.cds --output ../../uimodules/timesheet/webapp/model/entities-core.ts --prefix I -f -d"
+    "deploy:cf": "cf deploy mta_archives/archive.mtar"
   },
   "dependencies": {
     "@cap-js/postgres": "^1.4.1",
@@ -38,13 +37,13 @@
     "@grpc/grpc-js": "^1.10.1",
     "@opentelemetry/exporter-metrics-otlp-grpc": "^0.48.0",
     "@opentelemetry/exporter-trace-otlp-grpc": "^0.48.0",
-    "@sap-cloud-sdk/connectivity": "^3.12.1",
+    "@sap-cloud-sdk/connectivity": "^3.15.0",
     "@sap-cloud-sdk/http-client": "^3.10.0",
     "@sap-cloud-sdk/resilience": "^3.10.0",
     "@sap-cloud-sdk/util": "^3.10.0",
     "@sap/cds": "^7.6.3",
     "@sap/xsenv": "^3.2.2",
-    "@sap/xssec": "^3",
+    "@sap/xssec": "^4.1.2",
     "express": "^4",
     "passport": "^0"
   },
@@ -70,8 +69,7 @@
     "shx": "^0.3.4",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.1",
-    "typescript": "^4.7.2",
-    "cds2types": "^2.7.2"
+    "typescript": "^4.7.2"
   },
   "imports": {
     "#cds-models/*": "./@cds-models/*/index.js"
