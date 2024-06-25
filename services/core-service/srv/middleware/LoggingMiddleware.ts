@@ -1,4 +1,9 @@
-import { MiddlewareImpl, Next, Request } from "@dxfrontier/cds-ts-dispatcher";
+import {
+  MiddlewareImpl,
+  NextEvent,
+  NextMiddleware,
+  Request,
+} from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 
 export default class LoggingMiddleware implements MiddlewareImpl {
@@ -8,9 +13,9 @@ export default class LoggingMiddleware implements MiddlewareImpl {
     this._logger = LoggerFactory.createLogger("middleware");
   }
 
-  public async use(req: Request, next: Next) {
+  public use(req: Request, next: NextMiddleware): Promise<unknown> {
     this._logger.debug(`Received request: ${req.event} - ${req.id}`, req.data);
     this._logger.trace(`Received request: ${req.event}`);
-    return await next();
+    return next();
   }
 }
