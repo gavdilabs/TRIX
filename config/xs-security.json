@@ -9,35 +9,35 @@
     },
     {
       "name": "$XSAPPNAME.UserManagement",
-      "description": "UserManagement"
+      "description": "User Management"
     },
     {
       "name": "$XSAPPNAME.AllocationManagement",
-      "description": "AllocationManagement"
+      "description": "Allocation Management"
     },
     {
       "name": "$XSAPPNAME.TimeUser",
-      "description": "TimeUser"
+      "description": "Time User"
     },
     {
       "name": "$XSAPPNAME.TeamLead",
-      "description": "TeamLead"
+      "description": "Team Lead"
     },
     {
       "name": "$XSAPPNAME.TimeRegistration",
-      "description": "TimeRegistration"
+      "description": "Time Registration"
     },
     {
       "name": "$XSAPPNAME.TimeManagement",
-      "description": "TimeManagement"
+      "description": "Time Management"
     },
     {
       "name": "$XSAPPNAME.WorkScheduleManagement",
-      "description": "WorkScheduleManagement"
+      "description": "WorkSchedule Management"
     },
     {
       "name": "$XSAPPNAME.TeamManagement",
-      "description": "TeamManagement"
+      "description": "Team Management"
     },
     {
       "name": "$XSAPPNAME.SolutionManagement",
@@ -52,61 +52,61 @@
   "role-templates": [
     {
       "name": "SolutionManagement",
-      "description": "generated",
+      "description": "Solution Management",
       "scope-references": ["$XSAPPNAME.SolutionManagement"],
       "attribute-references": []
     },
     {
       "name": "SolutionAdmin",
-      "description": "generated",
+      "description": "Solution Administrator",
       "scope-references": ["$XSAPPNAME.SolutionAdmin"],
       "attribute-references": []
     },
     {
       "name": "UserManagement",
-      "description": "generated",
+      "description": "User Management",
       "scope-references": ["$XSAPPNAME.UserManagement"],
       "attribute-references": []
     },
     {
       "name": "AllocationManagement",
-      "description": "generated",
+      "description": "Allocation Management",
       "scope-references": ["$XSAPPNAME.AllocationManagement"],
       "attribute-references": []
     },
     {
       "name": "TimeUser",
-      "description": "generated",
+      "description": "Time User",
       "scope-references": ["$XSAPPNAME.TimeUser"],
       "attribute-references": []
     },
     {
       "name": "TeamLead",
-      "description": "generated",
+      "description": "Team Lead",
       "scope-references": ["$XSAPPNAME.TeamLead"],
       "attribute-references": []
     },
     {
       "name": "TimeRegistration",
-      "description": "generated",
+      "description": "Time Registration",
       "scope-references": ["$XSAPPNAME.TimeRegistration"],
       "attribute-references": []
     },
     {
       "name": "TimeManagement",
-      "description": "generated",
+      "description": "Time Management",
       "scope-references": ["$XSAPPNAME.TimeManagement"],
       "attribute-references": []
     },
     {
       "name": "WorkScheduleManagement",
-      "description": "generated",
+      "description": "Workschedule Management",
       "scope-references": ["$XSAPPNAME.WorkScheduleManagement"],
       "attribute-references": []
     },
     {
       "name": "TeamManagement",
-      "description": "generated",
+      "description": "TeamManagement",
       "scope-references": ["$XSAPPNAME.TeamManagement"],
       "attribute-references": []
     }
@@ -122,7 +122,7 @@
     },
     {
       "name": "TRIX-TeamLeader",
-      "description": "Team Lead access for managers in TRIX",
+      "description": "Team Lead/Manager access for managers in TRIX",
       "role-template-references": [
         "$XSAPPNAME.TimeUser",
         "$XSAPPNAME.TeamLead",
