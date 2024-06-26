@@ -4,9 +4,9 @@
         <VBox alignItems="Center" class="sapUiTinyMargin">
             <Label text="Registration Status" showColon="true"/>
             <MultiComboBox id="FilterComboBox" showButton="true" showSelectAll="false" showClearIcon="false"
-                items="{ApplicationModel>/regStatus}" >
+                items="{RecordStatusList>/}" >
                 <items>
-                    <core:ListItem key="{ApplicationModel>key}" text="{ApplicationModel>text}"/>
+                    <core:ListItem key="{RecordStatusList>index}" text="{parts:['RecordStatusList>index','RecordStatusList>name'], formatter:'.formatter.registrationStatusTxt'}" />
                 </items>
             </MultiComboBox>
             <HBox >

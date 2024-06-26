@@ -18,4 +18,7 @@ module.exports = {
 	},
 	plugins: ["@typescript-eslint"],
 	ignorePatterns: [".eslintrc.js"],
+	rules: {
+		"@typescript-eslint/no-namespace": "off",
+	},
 };
