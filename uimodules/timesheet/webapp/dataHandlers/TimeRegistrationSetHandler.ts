@@ -366,8 +366,12 @@ export default class TimeRegistrationSetHandler {
 		navMode: CalendarView,
 		reload: boolean = true
 	) {
-		[TimeRegistrationSetHandler.startDate, TimeRegistrationSetHandler.endDate] =
+
+		const [startDate, endDate] =
 			DateHelper.getStartEndDates(inputDate, navMode);
+
+		TimeRegistrationSetHandler.startDate = startDate;
+		TimeRegistrationSetHandler.endDate = endDate;
 
 		if (reload) {
 			await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations();

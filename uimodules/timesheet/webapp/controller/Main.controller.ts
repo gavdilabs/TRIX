@@ -1,4 +1,23 @@
+import ResourceBundle from "sap/base/i18n/ResourceBundle";
+import GridListItem from "sap/f/GridListItem";
+import Dialog from "sap/m/Dialog";
+import Input from "sap/m/Input";
+import List from "sap/m/List";
+import MessageBox from "sap/m/MessageBox";
+import MessageToast from "sap/m/MessageToast";
+import MultiComboBox from "sap/m/MultiComboBox";
+import ResponsivePopover from "sap/m/ResponsivePopover";
+import Select from "sap/m/Select";
+import Table from "sap/m/Table";
+import TimePicker from "sap/m/TimePicker";
+import VBox from "sap/m/VBox";
 import Event from "sap/ui/base/Event";
+import Fragment from "sap/ui/core/Fragment";
+import Item from "sap/ui/core/Item";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import Context from "sap/ui/model/odata/v4/Context";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import ApplicationModelHandler, {
 	CalendarView,
@@ -7,30 +26,9 @@ import DropDownHandler from "../dataHandlers/DropDownHandler";
 import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
 import { trix } from "../model/entities-core";
-import DateHelper from "../utils/DateHelper";
-import ResponsivePopover from "sap/m/ResponsivePopover";
-import BaseController from "./BaseController";
-import Dialog from "sap/m/Dialog";
-import MessageToast from "sap/m/MessageToast";
-import Item from "sap/ui/core/Item";
 import Formatter from "../model/formatter";
-import Fragment from "sap/ui/core/Fragment";
-import Context from "sap/ui/model/odata/v4/Context";
-import Table from "sap/m/Table";
-import Button from "sap/m/Button";
-import MultiComboBox from "sap/m/MultiComboBox";
-import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
-import Filter from "sap/ui/model/Filter";
-import FilterOperator from "sap/ui/model/FilterOperator";
-import List from "sap/m/List";
-import Input from "sap/m/Input";
-import MessageBox from "sap/m/MessageBox";
-import ResourceBundle from "sap/base/i18n/ResourceBundle";
-import Select from "sap/m/Select";
-import GridListItem from "sap/f/GridListItem";
-import TimePicker from "sap/m/TimePicker";
-import VBox from "sap/m/VBox";
-import Time from "sap/ui/model/type/Time";
+import DateHelper from "../utils/DateHelper";
+import BaseController from "./BaseController";
 
 /**
  * @namespace trix.timesheet.controller
@@ -156,7 +154,7 @@ export default class Main extends BaseController {
 
 		void TimeRegistrationSetHandler.updateDatesAndMode(
 			params.date
-				? DateHelper.addDaysToDate(params.date, 0)
+				? DateHelper.addDaysToDate(params.date, 1)
 				: (calendar.getStartDate() as Date),
 			viewKey as CalendarView
 		);
@@ -204,10 +202,10 @@ export default class Main extends BaseController {
 
 	// Sets all hours in the same row to the value entered
 	onQuickSetTimes(oEvent: Event) {
-		const oPicker = oEvent.getSource() as TimePicker;
+		const oPicker = oEvent.getSource();
 		const oItem = oEvent.getSource().getEventingParent().getEventingParent() as Item;
 		const aPickContainers = oItem.findElements(false) as Array<VBox>;
-		let aTimePickers: TimePicker[] = [];
+		const aTimePickers: TimePicker[] = [];
 
 		for (const container of aPickContainers) {
 			const aItems = container.getItems();
@@ -224,7 +222,7 @@ export default class Main extends BaseController {
 
 	// Opens the popever to enter name of new work schedule
 	async onOpenWorkScheduleNamePopover(oEvent: Event) {
-		const oButton = oEvent.getSource() as Button,
+		const oButton = oEvent.getSource(),
 			oView = this.getView();
 
 		if (!this.oWorkSchedulePopover) {
@@ -265,7 +263,7 @@ export default class Main extends BaseController {
 
 	// Opens popover to select which work schedule to assign
 	async onOpenSelectWorkWeekPopover(oEvent: Event) {
-		const oButton = oEvent.getSource() as Button,
+		const oButton = oEvent.getSource(),
 			oView = this.getView();
 
 		if (!this.oWorkWeekSelectPopover) {
@@ -304,7 +302,7 @@ export default class Main extends BaseController {
 
 	// Deletes a work schedule from the user
 	onRemoveWorkSchedule(oEvent: Event) {
-		const oContext = (oEvent.getSource() as Button).getBindingContext() as Context;
+		const oContext = (oEvent.getSource()).getBindingContext() as Context;
 
 		MessageBox.warning(this.oResourceBundle.getText("msg_deleteWorkScheduleWarning"), {
 			actions: [(MessageBox as any).Action.YES, (MessageBox as any).Action.CANCEL],
@@ -331,7 +329,7 @@ export default class Main extends BaseController {
 
 	// Approve or decline a registration
 	async updateRegistrationStatus(oEvent: Event) {
-		const oBtn = oEvent.getSource() as Button;
+		const oBtn = oEvent.getSource();
 		const sBtnType = oBtn.getType();
 		const iCode = sBtnType === "Success" ? 3 : 4;
 		const oRegistration = oBtn.getEventingParent() as Item;
@@ -355,7 +353,7 @@ export default class Main extends BaseController {
 
 	// Opens the filter popover
 	async onOpenFilterPopover(oEvent: Event) {
-		const oButton = oEvent.getSource() as Button,
+		const oButton = oEvent.getSource(),
 			oView = this.getView();
 
 		if (!this.oFilterPopover) {
@@ -386,7 +384,7 @@ export default class Main extends BaseController {
 			oTable = this.byId("ValidationTable") as Table,
 			oBinding = oTable.getBinding("items") as ODataListBinding,
 			aSelectedKeys = oFilterComboBox.getSelectedKeys();
-		let aFilters: Filter[] = [];
+		const aFilters: Filter[] = [];
 
 		for (const key of aSelectedKeys) {
 			aFilters.push(new Filter("registrationStatus", FilterOperator.EQ, key));
@@ -400,7 +398,7 @@ export default class Main extends BaseController {
 		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
 			oTable = this.byId("ValidationTable") as Table,
 			oBinding = oTable.getBinding("items") as ODataListBinding;
-		let aFilters: Filter[] = [];
+		const aFilters: Filter[] = [];
 
 		oFilterComboBox.setSelectedKeys([]);
 		oBinding.filter(aFilters);
@@ -412,7 +410,7 @@ export default class Main extends BaseController {
 
 	// Opens popover to enter name of new Catalogy
 	async onOpenCatalogyPopover(oEvent: Event) {
-		const oButton = oEvent.getSource() as Button,
+		const oButton = oEvent.getSource(),
 			oView = this.getView();
 
 		if (!this.oCatalogyPopover) {
@@ -463,7 +461,7 @@ export default class Main extends BaseController {
 
 	// Deletes given Catalogy
 	onRemoveCatalogy(oEvent: Event) {
-		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
+		const oContext = (oEvent.getSource()).getBindingContext("admin") as Context;
 		const oRegTypeTable = this.byId("RegistrationTypesTable") as List;
 
 		MessageBox.warning(this.oResourceBundle.getText("msg_deleteCatalogyWarning"), {
@@ -497,7 +495,7 @@ export default class Main extends BaseController {
 
 	// Deletes registration type
 	async onRemoveRegType(oEvent: Event) {
-		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
+		const oContext = (oEvent.getSource()).getBindingContext("admin") as Context;
 
 		MessageBox.warning(this.oResourceBundle.getText("msg_deleteRegTypeWarning"), {
 			actions: [(MessageBox as any).Action.YES, (MessageBox as any).Action.CANCEL],
