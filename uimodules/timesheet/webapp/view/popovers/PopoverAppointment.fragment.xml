@@ -17,7 +17,7 @@
             <!-- Date/Time Display Mode when Appointment is dragged -->
             <HBox visible="{=${PopoverControl>/mode} === 'DRAGGED' || ${ApplicationModel>/view} === 'MonthView'}">
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/startDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
-                <Text class="sapUiTinyMarginEnd" text="to" />
+                <Text class="sapUiTinyMarginEnd" text="-" />
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/endDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
             </HBox>
 
