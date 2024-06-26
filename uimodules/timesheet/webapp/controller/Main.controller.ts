@@ -170,7 +170,8 @@ export default class Main extends BaseController {
 
 
 	////// Edit User Dialog //////
-
+	
+	// Opens the User Profile Dialog and binds the selected user to it
 	async onEditUser(oEvent: Event) {
 		const params = oEvent.getParameters() as {listItem:GridListItem};
 		this.editingUserID = params.listItem.getBindingContext().getProperty("userID");
@@ -195,21 +196,19 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Closes the User Profile Dialog
 	onCloseEditUser(oEvent: Event) {
 		(oEvent.getSource().getEventingParent() as Dialog).close();
 	}
 
+	// TODO: Allow users to add profile pictures to their profile
 	onChangeAvatar() {
 		return;
 	}
 
-	onChangeWorkWeek(oEvent: Event) {
-		const oScheduleList = this.byId("WorkWeeksTable") as Table;
-		const oListBinding = oScheduleList.getBinding("items") as ODataListBinding;
-		oListBinding.refresh();
-	}
-
 	// Expected Work Hours //
+
+	// Sets all hours in the same row to the value entered
 	onQuickSetTimes(oEvent: Event) {
 		const oPicker = oEvent.getSource() as TimePicker;
 		const oItem = oEvent.getSource().getEventingParent().getEventingParent() as Item;
@@ -229,6 +228,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Opens the popever to enter name of new work schedule
 	async onOpenWorkScheduleNamePopover(oEvent: Event) {
 		const oButton = oEvent.getSource() as Button,
 			oView = this.getView();
@@ -252,6 +252,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Assigns a new work schedule
 	onAddNewWorkSchedule() {
 		const oInput =this.byId("WorkScheduleInput") as Input;
 		const oScheduleList = this.byId("WorkScheduleList") as List;
@@ -268,6 +269,7 @@ export default class Main extends BaseController {
 		oListBinding.create(oInitData)
 	}
 
+	// Opens popover to select which work schedule to assign
 	async onOpenSelectWorkWeekPopover(oEvent: Event) {
 		const oButton = oEvent.getSource() as Button,
 			oView = this.getView();
@@ -291,6 +293,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Assigns an existing work schedule to the user
 	onAddExistingWorkSchedule(oEvent: Event) {
 		const oSelect =this.byId("WorkWeekSelect") as Select;
 		const oScheduleList = this.byId("WorkScheduleList") as List;
@@ -305,6 +308,7 @@ export default class Main extends BaseController {
 		oListBinding.create(oInitData)
 	}
 
+	// Deletes a work schedule from the user
 	onRemoveWorkSchedule(oEvent: Event) {
 		const oContext = (oEvent.getSource() as Button).getBindingContext() as Context;
 
@@ -331,6 +335,7 @@ export default class Main extends BaseController {
 
 	////// Approval Page //////
 
+	// Approve or decline a registration
 	async updateRegistrationStatus(oEvent: Event) {
 		const oBtn = oEvent.getSource() as Button;
 		const sBtnType = oBtn.getType();
@@ -354,6 +359,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Opens the filter popover
 	async onOpenFilterPopover(oEvent: Event) {
 		const oButton = oEvent.getSource() as Button,
 			oView = this.getView();
@@ -380,6 +386,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Filters the registration list
 	onFilterRegistrations() {
 		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
 			oTable = this.byId("ValidationTable") as Table,
@@ -394,6 +401,7 @@ export default class Main extends BaseController {
 		oBinding.refresh();
 	}
 
+	// Clears filters on registration list
 	onClearRegFilters() {
 		const oFilterComboBox = this.byId("FilterComboBox") as MultiComboBox,
 			oTable = this.byId("ValidationTable") as Table,
@@ -408,6 +416,7 @@ export default class Main extends BaseController {
 
 	////// Configuration Page //////
 
+	// Opens popover to enter name of new Catalogy
 	async onOpenCatalogyPopover(oEvent: Event) {
 		const oButton = oEvent.getSource() as Button,
 			oView = this.getView();
@@ -431,6 +440,7 @@ export default class Main extends BaseController {
 		}
 	}
 
+	// Adds a new Catalogy with the given name
 	onAddNewCatalogy() {
 		const oCatalogyList = this.byId("CatalogyList") as List;
 		const oRegTypeTable = this.byId("RegistrationTypesTable") as Table;
@@ -457,6 +467,7 @@ export default class Main extends BaseController {
 		});
 	}
 
+	// Deletes given Catalogy
 	onRemoveCatalogy(oEvent: Event) {
 		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
 		const oRegTypeTable = this.byId("RegistrationTypesTable") as List;
@@ -480,6 +491,7 @@ export default class Main extends BaseController {
 		});
 	}
 
+	// Adds a new registration type
 	onAddNewRegType() {
 		const oRegTypeTable = this.byId("RegistrationTypesTable") as Table;
 		const oBinding = oRegTypeTable.getBinding("items") as ODataListBinding;
@@ -489,6 +501,7 @@ export default class Main extends BaseController {
 		});
 	}
 
+	// Deletes registration type
 	async onRemoveRegType(oEvent: Event) {
 		const oContext = (oEvent.getSource() as Button).getBindingContext("admin") as Context;
 
