@@ -4,6 +4,16 @@
       "auth": {
         "strategy": "mocked",
         "users": {
+          "RAT": {
+            "password": "rat1234",
+            "id": "RAT",
+            "roles": ["TimeUser"]
+          },
+          "SUP": {
+            "password": "sup1234",
+            "id": "SUP",
+            "roles": ["TimeUser", "TeamLead"]
+          },
           "TIM": {
             "password": "tim1234",
             "id": "TIM",

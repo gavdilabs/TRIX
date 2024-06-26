@@ -1,0 +1,24 @@
+.sapMCrslFluid .sapMCrslItem {
+    margin-right: 0 !important;
+}
+.sapUiSizeCompact .sapMPageWithHeader > section {
+    top: 5rem;
+}
+.tableContainer{
+    padding: 1rem !important;
+    border-radius: 1rem !important;
+    box-shadow: 5px 5px 5px rgb(196, 196, 196) !important;
+    background: white !important;
+}
+.sapMListTblRow[data-regStatus="2"]{
+    background: #307291c7 !important;
+}
+.sapMListTblRow[data-regStatus="3"]{
+    background: #30914cc7 !important;
+}
+.sapMListTblRow[data-regStatus="4"]{
+    background: #e76400b2 !important;
+}
+.quickSetColumn{
+    border-left: 2px solid #e5e5e5;
+}

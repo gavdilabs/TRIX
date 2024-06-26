@@ -7,7 +7,11 @@ framework:
   version: "1.121.0"
   libraries:
     - name: sap.m
+    - name: sap.f
+    - name: sap.uxap
     - name: sap.ui.core
+    - name: sap.ui.comp
+    - name: sap.ui.unified
     - name: themelib_sap_horizon
 builder:
   customTasks:
@@ -21,6 +25,11 @@ server:
       afterMiddleware: compression
     - name: ui5-middleware-simpleproxy
       afterMiddleware: compression
-      mountPath: /odata
+      mountPath: /odata/core
       configuration:
         baseUri: "http://localhost:4004/odata/v4/core"
+    - name: ui5-middleware-simpleproxy
+      afterMiddleware: compression
+      mountPath: /odata/admin
+      configuration:
+        baseUri: "http://localhost:4005/odata/v4/admin"

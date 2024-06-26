@@ -168,7 +168,7 @@ export default class TimeRegistrationSetHandler {
 				mapItem.allocation_ID = newAllocationId;
 				mapItem.allocation = this.getAllocationById(newAllocationId);
 			}
-			
+
 			mapItem.startDate = newStartDate;
 			mapItem.endDate = newEndDate;
 			TimeRegistrationSetHandler.dataMap.set(timeRegData.ID, mapItem);
@@ -203,7 +203,8 @@ export default class TimeRegistrationSetHandler {
 	 */
 	public createTemporaryAppointMent(
 		startDate: Date,
-		endDate: Date
+		endDate: Date,
+		comment?: string
 	): Partial<trix.core.ITimeRegistration> {
 		//Create the new UI element
 		const itemID = `TEMP#${this.uniqueId()}`;
@@ -215,12 +216,12 @@ export default class TimeRegistrationSetHandler {
 			endTime: endDate,
 			wholeDay: false,
 			amount: 0,
-			registrationStatus: 2,
-			registrationType: 0,
-			comment: "",
+			registrationStatus: trix.core.RegistrationStatus.InProcess,
+			registrationType: trix.core.RegistrationType.Manual,
+			comment: comment ? comment : "",
 			invalid: false,
 			statusContext: null,
-			recordStatus: 2,
+			recordStatus: trix.core.RecordStatus.Processing,
 			user_userID: "TAG",
 		};
 		TimeRegistrationSetHandler.dataMap.set(itemID, newTempItem);
@@ -331,7 +332,7 @@ export default class TimeRegistrationSetHandler {
 	/**
 	 * Show a popup message
 	 * @param messageId i18n key
-	 * @param type error | warning | info | success 
+	 * @param type error | warning | info | success
 	 */
 	private message(messageId: string, type: MessageType) {
 		const message = TimeRegistrationSetHandler.i18nBundle.getText(messageId);

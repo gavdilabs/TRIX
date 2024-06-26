@@ -1,6 +1,7 @@
 using {trix.admin as schema} from '../db/schema';
 using {trix.common.types} from '../../shared/types';
 
+@path    : 'admin'
 @requires: 'authenticated-user'
 service TrixAdminService {
 
@@ -11,6 +12,14 @@ service TrixAdminService {
       to   : ['Admin']
     }
   ]) as projection on schema.Configuration;
+
+  entity RegistrationGroupSet @(restrict: [
+    {grant: ['READ']},
+    {
+      grant: ['*'],
+      to   : ['Admin']
+    }
+  ]) as projection on schema.RegistrationGroup;
 
   entity RegistrationTypeSet @(restrict: [
     {grant: ['READ']},

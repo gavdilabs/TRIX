@@ -1,5 +1,7 @@
 {
 	"showSidePanel": false,
+	"registrationView": true,
+	"teamView": false,
 	"view": "WeekView",
 	"viewTitle": "",
 	"colors": {
@@ -17,5 +19,21 @@
 			"from": null,
 			"to": null
 		}
+	},
+	"regStatus": [
+		{"text": "In Progress", "key": 1},
+		{"text": "Complete", "key": 2},
+		{"text": "Approved", "key": 3},
+		{"text": "Rejected", "key": 4}
+	],
+
+	"globalSettings": {
+		"enableApproval": false
+	},
+	"validations": {
+		"11HourRule": true,
+		"48HourRule": true,
+		"onlyAbsenceInWorkHours": true
 	}
+
 }

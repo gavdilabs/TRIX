@@ -35,22 +35,21 @@ type ConfigurationType : Integer enum {
   Global              = 0;
 }
 
-@assert.range
-type RegistrationGroup : Integer enum {
-  Project             = 0;
-  Service             = 1;
-  AbsenceAttendance   = 2;
-  Custom              = 3;
-}
-
 entity ValidationRule : managed {
   key rule    : ValidationType;
       enabled : Boolean;
 }
 
+entity RegistrationGroup : cuid, managed {
+  name: String(255);
+  description: String(255);
+}
+
 entity RegistrationType : cuid, managed {
   // NOTE: This needs to be fleshed out further
-  group : RegistrationGroup;
+  name: String(255);
+  description: String(255);
+  group : Association to one RegistrationGroup;
 }
 
 entity Configuration : cuid, managed {

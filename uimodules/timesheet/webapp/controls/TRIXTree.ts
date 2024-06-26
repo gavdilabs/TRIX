@@ -11,7 +11,13 @@ export default class TRIXTree extends Tree {
 	static readonly metadata = {
 		properties: {},
 	};
-	
+
+	constructor(idOrSettings?: string | $TRIXTreeSettings);
+	constructor(id?: string, settings?: $TRIXTreeSettings);
+	constructor(id?: string, settings?: $TRIXTreeSettings) {
+		super(id, settings);
+	}
+
 	onAfterRendering(oEvent: jQuery.Event): void {
 		super.onAfterRendering(oEvent);
 		this.removeSelections(true); //When being reopened in popover same type cannot be selected w/o this

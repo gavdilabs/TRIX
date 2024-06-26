@@ -31,3 +31,5 @@ mta_archives/
 # .idea
 
 @cds-models
+
+.npmrc
