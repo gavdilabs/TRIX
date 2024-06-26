@@ -8,22 +8,10 @@ import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandl
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
 import { trix } from "../model/entities-core";
 import DateHelper from "../utils/DateHelper";
-/* eslint-disable @typescript-eslint/no-unnecessary-type-assertion */
 import ResponsivePopover from "sap/m/ResponsivePopover";
-import Event from "sap/ui/base/Event";
-import TRIXCalendar from "../controls/TRIXCalendar";
-import ApplicationModelHandler, {
-	CalendarView,
-} from "../dataHandlers/ApplicationModelHandler";
-import DropDownHandler from "../dataHandlers/DropDownHandler";
-import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandler";
-import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
-import { trix } from "../model/entities-core";
-import DateHelper from "../utils/DateHelper";
 import BaseController from "./BaseController";
 import Dialog from "sap/m/Dialog";
 import MessageToast from "sap/m/MessageToast";
-import Switch from "sap/m/Switch";
 import Item from "sap/ui/core/Item";
 import Formatter from "../model/formatter";
 import Fragment from "sap/ui/core/Fragment";
@@ -49,129 +37,12 @@ import Time from "sap/ui/model/type/Time";
  */
 export default class Main extends BaseController {
 	private ddHandler: DropDownHandler = undefined;
-
-	/**
-	 * UI5 Hook Function - Called once on initialization
-	 */
-	public onInit(): void {
-		this.getRouter()
-			.getRoute("main")
-			.attachPatternMatched(() => {
-				void this.onPatternMatched();
-			}, this);
-	}
-
-	/**
-	 * Routing target - only firing if url has /Main
-	 */
-	private async onPatternMatched() {
-		//ApplicationModelHandler init
-		ApplicationModelHandler.getInstance().initialize(
-			this,
-			this.getResourceBundle()
-		);
-
-		//Initialize the Data handler(s)
-		void (await TimeRegistrationSetHandler.initialize(
-			this.getOdataModelCore(),
-			this,
-			this.getResourceBundle(),
-			new Date(),
-			ApplicationModelHandler.getInstance().getCurrentCalendarView() as CalendarView
-		));
-
-		//Preload some popup lists
-		this.ddHandler = new DropDownHandler(
-			this,
-			this.getOdataModelCore(),
-			this.getResourceBundle()
-		);
-
-		//Preload the allocation tree data
-		void (await this.ddHandler.loadAllocationTree());
-
-		//Load last as other dependencies, formatter etc. need to use the ddhandler based on calendar data
-		void (await TimeRegistrationSetHandler.getInstance().loadTimeRegistrations());
-
-		//Set the Calendar EventHandler on the Trix Calendar
-		this.getCalendarControl()?.setEventHandler(
-			new TRIXCalendarEventHandler(this, this.getCalendarControl())
-		);
-	}
-
-	/**
-	 * Function for gettting a ref to the Calendar Control
-	 * @returns an instance of a TRIXCalendar UI Control
-	 */
-	private getCalendarControl(): TRIXCalendar {
-		return this.byId(this.createId("trixCalendar")) as TRIXCalendar;
-	}
-
-	/**
-	 * Formatter: Sets configured color on the appointments
-	 * @param appointmentType Appointment typ ie. Service, Absence, Attendance etc.
-	 * @param appointmentSubtypeId Id of the subtype
-	 * @returns color #hex
-	 */
-	public formatterAppointmentColor(
-		appointmentType: trix.core.AllocationType,
-		appointmentSubtypeId: string
-	) {
-		switch (appointmentType) {
-			case trix.core.AllocationType.AbsenceAttendance:
-				return ApplicationModelHandler.getInstance().getColorByAllocationType(
-					appointmentType,
-					this.ddHandler?.isSubtypeAttendance(
-						appointmentType,
-						appointmentSubtypeId
-					)
-				);
-			default:
-				return ApplicationModelHandler.getInstance().getColorByAllocationType(
-					appointmentType
-				);
-		}
-	}
-
-	/**
-	 * Event Function for the ToggleButton "FullDay | WS Day"
-	 * @param event Std. UI5 event
-	 */
-	public onToggleFullDay(event: Event) {
-		const params = event.getParameters() as { pressed: boolean };
-		this.getCalendarControl().setFullDay(params.pressed);
-	}
-
-	/**
-	 * Triggers when Date View is changed on the Calendar
-	 * @param event std. UI5 event
-	 */
-	public onCalendarChange(event: Event): void {
-		const params = event.getParameters() as { date?: Date };
-		const calendar: TRIXCalendar = event.getSource();
-		const viewKey: string = calendar
-			.getViewByViewId(calendar.getSelectedView())
-			?.getKey();
-		ApplicationModelHandler.getInstance().setCurrentView(
-			viewKey as CalendarView
-		);
-
-		void TimeRegistrationSetHandler.updateDatesAndMode(
-			params.date
-				? DateHelper.addDaysToDate(params.date, 0)
-				: (calendar.getStartDate() as Date),
-			viewKey as CalendarView
-		);
 	private dialogEditUser: Dialog;
 	private oFilterPopover: ResponsivePopover;
 	private oCatalogyPopover: ResponsivePopover;
 	private oWorkSchedulePopover: ResponsivePopover;
 	private oWorkWeekSelectPopover: ResponsivePopover;
-	private tempUiRecord: Partial<trix.core.ITimeRegistration> = undefined;
-	private cellPressed: boolean = false;
-	private selectedSideItem: Item;
 	private formatter = new Formatter("Formatter");
-	private ddHandler: DropDownHandler = undefined;
 	private oResourceBundle: ResourceBundle;
 	private editingUserID: string;
 
@@ -190,14 +61,13 @@ export default class Main extends BaseController {
 	 * Routing target - only firing if url has /Main
 	 */
 	private async onPatternMatched() {
-
-		this.oResourceBundle = this.getResourceBundle();
-
 		//ApplicationModelHandler init
 		ApplicationModelHandler.getInstance().initialize(
 			this,
 			this.getResourceBundle()
 		);
+
+		this.oResourceBundle = this.getResourceBundle();
 
 		//Initialize the Data handler(s)
 		void (await TimeRegistrationSetHandler.initialize(
