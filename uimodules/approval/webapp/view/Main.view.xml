@@ -33,7 +33,7 @@
 				<OverflowToolbar >
 					<Title text="{i18n>tit_approve_team_hours}"></Title>
 					<ToolbarSpacer />
-					<Button text="Filter" icon="sap-icon://filter" press="onOpenFilterPopover"/>
+					<Button text="{i18n>but_filter}" icon="sap-icon://filter" press="onOpenFilterPopover"/>
 				</OverflowToolbar>
 
 				<Table id="ValidationTable" items="{path: '/TimeRegistrationSet', 
@@ -86,7 +86,7 @@
 							<Text text="{allocation/description}"/>
 							<Button icon="sap-icon://accept" type="Success" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
 							<Button icon="sap-icon://decline" type="Critical" press="updateRegistrationStatus" visible="{path:'registrationStatus', targetType:'any', formatter:'.formatter.showApproveRejectBtns'}"/>
-							<Text text="{path:'registrationStatus', targetType:'any', formatter:'.formatter.registrationStatusTxt'}"/>
+							<Text text="{path:'registrationStatus', formatter:'.formatter.registrationStatusTxt'}"/>
 						</ColumnListItem>
 					</items>
 				</Table>
