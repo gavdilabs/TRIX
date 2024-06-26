@@ -8,6 +8,7 @@ framework:
   libraries:
     - name: sap.m
     - name: sap.ui.core
+    - name: sap.f
     - name: themelib_sap_horizon
 builder:
   customTasks:
@@ -19,3 +20,8 @@ server:
       afterMiddleware: compression
     - name: ui5-middleware-livereload
       afterMiddleware: compression
+    - name: ui5-middleware-simpleproxy
+      afterMiddleware: compression
+      mountPath: /odata/core
+      configuration:
+        baseUri: "http://localhost:4004/odata/v4/core"
