@@ -74,7 +74,7 @@
             <HBox width="100%">
                 <VBox width="100%" class="sapUiSmallMargin">
                     <Label text="Expected Work Hours" showColon="true"/>
-                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: true, sorter: {path: 'order', descending: false}}">
+                    <List id="WorkScheduleList" items="{path: '/WorkScheduleSet', suspended: true, sorter: {path: 'scheduleOrder', descending: false}}">
                         <!-- <headerToolbar>
                             <OverflowToolbar >
                                 <Title text="Work Schedules"></Title>
