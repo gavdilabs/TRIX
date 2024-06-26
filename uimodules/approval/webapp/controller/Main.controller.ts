@@ -14,6 +14,7 @@ import FilterOperator from "sap/ui/model/FilterOperator";
 import Context from "sap/ui/model/odata/v4/Context";
 import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
 import Formatter from "../model/formatter";
+import ModelDataHelper from "../utils/ModelDataHelper";
 import BaseController from "./BaseController";
 /**
  * @namespace trix.approval.controller
@@ -23,6 +24,30 @@ export default class Main extends BaseController {
 	private oFilterPopover: ResponsivePopover;
 	private editingUserID: string;
 	private dialogEditUser: Dialog;
+
+	/**
+	 * UI5 Hook Function - Called once on initialization
+	 */
+	public onInit(): void {
+		this.getRouter()
+			.getRoute("main")
+			.attachPatternMatched(() => {
+				void this.onPatternMatched();
+			}, this);
+	}
+
+	/**
+	 * Routing target - only firing if url has /Main
+	 */
+	private async onPatternMatched() {
+		void (await ModelDataHelper.getModelData2JsonModel(
+			this.getOdataModelCore(),
+			"/getRecordStatuses()",
+			this,
+			"RecordStatusList",
+			{}
+		));
+	}
 
 	/**
 	 * Event function for updating a selected record to approved
@@ -99,6 +124,9 @@ export default class Main extends BaseController {
 
 		for (const key of aSelectedKeys) {
 			aFilters.push(new Filter("registrationStatus", FilterOperator.EQ, key));
+			if (key === "0") {
+				aFilters.push(new Filter("registrationStatus", FilterOperator.EQ, 4));
+			}
 		}
 		oBinding.filter(aFilters);
 		oBinding.refresh();

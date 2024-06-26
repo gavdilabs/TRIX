@@ -8,8 +8,9 @@ export default class Formatter extends BaseController{
 	enableAcceptBtn(code: number) {
 		return code === 1 || code === 3 ? true : false
 	}
-	registrationStatusTxt(code: number) {
-		return this.getResourceBundle().getText(`reg_status_${code}`);
+	registrationStatusTxt(code: number, serverText:string) {
+		const text = this.getResourceBundle().getText(`reg_status_${code}`);
+		return text ? text : serverText;
 	}
 	showApproveRejectBtns(code: number) {
 		return code === 2 ? false : true;
