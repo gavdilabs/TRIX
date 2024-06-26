@@ -4,6 +4,10 @@
     <ResponsivePopover showHeader="false" class="sapUiContentPadding" placement="Auto" afterClose="onAppointmentPopoverClose">
         <content>
 
+
+            <!-- Allocation Text - Shown in Month View -->
+            <Text visible="{=${PopoverControl>/allocationDescription} !== undefined}" class="sapUiTinyMargin" text="{PopoverControl>/allocationDescription}" />
+
             <!-- Shows the timepickers to allow setting of new time(s) -->
             <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED' &amp;&amp; ${ApplicationModel>/view} !== 'MonthView'}">
                 <TimePicker support2400="true" dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'HH:mm'}}" minutesStep="15" />
@@ -22,8 +26,6 @@
                 <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
             </controls:TRIXTree>
 
-            <!-- Allocation Text - Shown in Month View -->
-            <Text text="{PopoverControl>/allocationDescription}" />
 
             <!-- Save Button to appear in certain modes -->
             <HBox visible="{=${PopoverControl>/mode} === 'SELECTED' &amp;&amp; ${ApplicationModel>/view} !== 'MonthView'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">

@@ -25,6 +25,12 @@ export default class TRIXCalendar extends SinglePlanningCalendar {
 		},
 	};
 
+	constructor(idOrSettings?: string | $TRIXCalendarSettings);
+	constructor(id?: string, settings?: $TRIXCalendarSettings);
+	constructor(id?: string, settings?: $TRIXCalendarSettings) {
+		super(id, settings);
+	}
+
 	/**
 	 * Possible to set an external eventhandler class so as to not flood controllers with event impl functions
 	 * @param eventHandler ICalendarEventHandler implementation
