@@ -2,7 +2,7 @@ import {
   AllocationEventContext,
   TimeRegistrationEventContext,
   UserEventContext,
-} from "#cds-models/trix/core";
+} from "../../utils/entities//trix/core";
 
 export enum ServiceEvents {
   TimeRegistrationCreated = "timeRegistrationCreated",
@@ -15,17 +15,17 @@ export enum ServiceEvents {
 
 export interface AllocationCreatedContext {
   allocation: AllocationEventContext;
-  allocatedUsers: UserEventContext[];
+  allocatedUsers?: UserEventContext[];
 }
 
 export interface AllocationUpdatedContext {
   allocation: AllocationEventContext;
-  allocatedUsers: UserEventContext[];
+  allocatedUsers?: UserEventContext[];
 }
 
 export interface AllocationDeletedContext {
   allocation: AllocationEventContext;
-  allocatedUsers: UserEventContext[];
+  allocatedUsers?: UserEventContext[];
 }
 
 export interface TimeRegistrationCreatedContext {

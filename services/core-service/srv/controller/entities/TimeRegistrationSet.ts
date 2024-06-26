@@ -1,4 +1,4 @@
-import { TimeRegistrationSet } from "#cds-models/TrixCoreService";
+import { TimeRegistrationSet } from "../../utils/entities/TrixCoreService";
 import {
   EntityHandler,
   Use,

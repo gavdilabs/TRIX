@@ -1,4 +1,4 @@
-import { ValidationRule } from "#cds-models/trix/core/trix/admin";
+import { ValidationRule } from "../utils/entities/trix/core/trix/admin";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 

@@ -25,11 +25,6 @@ server:
       afterMiddleware: compression
     - name: ui5-middleware-simpleproxy
       afterMiddleware: compression
-      mountPath: /odata/core
+      mountPath: /odata
       configuration:
         baseUri: "http://localhost:4004/odata/v4/core"
-    - name: ui5-middleware-simpleproxy
-      afterMiddleware: compression
-      mountPath: /odata/admin
-      configuration:
-        baseUri: "http://localhost:4005/odata/v4/admin"

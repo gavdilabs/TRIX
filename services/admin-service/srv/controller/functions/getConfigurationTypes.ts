@@ -1,5 +1,5 @@
-import { ConfigurationType } from "#cds-models/trix/admin";
-import { getConfigurationTypes } from "#cds-models/TrixAdminService";
+import { ConfigurationType } from "../../utils/entities/trix/admin";
+import { getConfigurationTypes } from "../../utils/entities/TrixAdminService";
 import {
   OnFunction,
   ActionRequest,

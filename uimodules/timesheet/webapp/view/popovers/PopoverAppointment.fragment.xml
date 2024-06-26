@@ -5,25 +5,28 @@
         <content>
 
             <!-- Shows the timepickers to allow setting of new time(s) -->
-            <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED'}">
-                <TimePicker dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15" />
-                <TimePicker dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'hh:mm'}}" minutesStep="15"/>
+            <VBox visible="{=${PopoverControl>/mode} !== 'DRAGGED' &amp;&amp; ${ApplicationModel>/view} !== 'MonthView'}">
+                <TimePicker support2400="true" dateValue="{PopoverControl>/startDate}" value="{'path':'PopoverControl>/startDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'HH:mm'}}" minutesStep="15" />
+                <TimePicker support2400="true" dateValue="{PopoverControl>/endDate}" value="{'path':'PopoverControl>/endDate','type': 'sap.ui.model.type.Time','formatOptions': {'pattern': 'HH:mm'}}" minutesStep="15"/>
             </VBox>
 
             <!-- Date/Time Display Mode when Appointment is dragged -->
-            <HBox visible="{=${PopoverControl>/mode} === 'DRAGGED'}">
+            <HBox visible="{=${PopoverControl>/mode} === 'DRAGGED' || ${ApplicationModel>/view} === 'MonthView'}">
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/startDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
                 <Text class="sapUiTinyMarginEnd" text="to" />
                 <Text class="sapUiTinyMarginEnd" text="{path:'PopoverControl>/endDate',type:'sap.ui.model.type.Date',formatOptions:{pattern:'HH:mm',UTC:false}}"/>
             </HBox>
 
             <!-- Tree based Project Selection -->
-            <controls:TRIXTree selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
+            <controls:TRIXTree visible="{=${ApplicationModel>/view} !== 'MonthView'}" selectionChange="onAppointmentPopoverItemSelect" mode="SingleSelectMaster" items="{path: 'TreeAllocations>/'}">
                 <StandardTreeItem type="{=${TreeAllocations>InacisSelectabletive} ? 'Active' : 'Inactive'}" title="{TreeAllocations>text}"/>
             </controls:TRIXTree>
 
+            <!-- Allocation Text - Shown in Month View -->
+            <Text text="{PopoverControl>/allocationDescription}" />
+
             <!-- Save Button to appear in certain modes -->
-            <HBox visible="{=${PopoverControl>/mode} === 'SELECTED'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">
+            <HBox visible="{=${PopoverControl>/mode} === 'SELECTED' &amp;&amp; ${ApplicationModel>/view} !== 'MonthView'}" justifyContent="SpaceBetween" width="100%" class="sapUiTinyMarginTop">
                 <Button text="{i18n>CommonDelete}" type="Reject" press="onDeleteAppointment" />
                 <Button text="{i18n>CommonSave}" press="onSaveAppointmentChanges" />
             </HBox>

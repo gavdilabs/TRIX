@@ -1,5 +1,5 @@
-import { RegistrationType } from "#cds-models/trix/core";
-import { getRegistrationTypes } from "#cds-models/TrixCoreService";
+import { RegistrationType } from "../../utils/entities/trix/core";
+import { getRegistrationTypes } from "../../utils/entities/TrixCoreService";
 import {
   OnFunction,
   ActionRequest,

@@ -27,5 +27,8 @@
     "./test",
     "./@cds-models"
   ],
-  "exclude": ["./node_modules"]
+  "exclude": [
+    "./node_modules",
+    "./srv/utils/entities/"
+  ]
 }

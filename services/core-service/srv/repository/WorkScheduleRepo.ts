@@ -1,4 +1,7 @@
-import { WorkSchedule as EntityData, WorkWeek } from "#cds-models/trix/core";
+import {
+  WorkSchedule as EntityData,
+  WorkWeek,
+} from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
 import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import cds from "@sap/cds";

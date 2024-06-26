@@ -1,4 +1,4 @@
-import { TimeAllocationSet } from "#cds-models/TrixCoreService";
+import { TimeAllocationSet } from "../../utils/entities/TrixCoreService";
 import {
   EntityHandler,
   Use,

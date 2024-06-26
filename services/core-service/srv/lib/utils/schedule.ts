@@ -1,4 +1,4 @@
-import { WorkDay, WorkWeek } from "#cds-models/trix/core";
+import { WorkDay, WorkWeek } from "../../utils/entities/trix/core";
 import { DayOfWeek } from "./dates";
 
 export function getWorkDayFromSchedule(

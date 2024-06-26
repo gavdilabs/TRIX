@@ -1,5 +1,5 @@
-import { ValidationType } from "#cds-models/trix/admin";
-import { getValidationTypes } from "#cds-models/TrixAdminService";
+import { ValidationType } from "../../utils/entities/trix/admin";
+import { getValidationTypes } from "../../utils/entities/TrixAdminService";
 import {
   OnFunction,
   ActionRequest,

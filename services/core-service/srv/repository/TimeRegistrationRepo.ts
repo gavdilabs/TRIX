@@ -1,4 +1,4 @@
-import { TimeRegistration as TimeRegistrationData } from "#cds-models/trix/core";
+import { TimeRegistration as TimeRegistrationData } from "../utils/entities/trix/core";
 import {
   CDS_DISPATCHER,
   Inject,

@@ -1,5 +1,5 @@
-import { RegistrationGroup } from "#cds-models/trix/admin";
-import { getRegistrationGroups } from "#cds-models/TrixAdminService";
+import { RegistrationGroup } from "../../utils/entities/trix/admin";
+import { getRegistrationGroups } from "../../utils/entities/TrixAdminService";
 import {
   OnFunction,
   ActionRequest,

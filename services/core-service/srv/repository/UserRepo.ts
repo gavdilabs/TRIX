@@ -1,4 +1,4 @@
-import { User as UserEntity } from "#cds-models/trix/core";
+import { User as UserEntity } from "../utils/entities/trix/core";
 import {
   Inject,
   Repository,

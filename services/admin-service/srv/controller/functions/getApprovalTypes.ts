@@ -1,5 +1,5 @@
-import { ApprovalType } from "#cds-models/trix/admin";
-import { getApprovalTypes } from "#cds-models/TrixAdminService";
+import { ApprovalType } from "../../utils/entities/trix/admin";
+import { getApprovalTypes } from "../../utils/entities/TrixAdminService";
 import {
   OnFunction,
   ActionRequest,

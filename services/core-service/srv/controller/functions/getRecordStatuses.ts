@@ -1,5 +1,5 @@
-import { RecordStatus } from "#cds-models/trix/core";
-import { getRecordStatuses } from "#cds-models/TrixCoreService";
+import { RecordStatus } from "../../utils/entities/trix/core";
+import { getRecordStatuses } from "../../utils/entities/TrixCoreService";
 import {
   OnFunction,
   ActionRequest,

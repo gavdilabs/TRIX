@@ -1,5 +1,5 @@
-import { AllocationType } from "#cds-models/trix/core";
-import { getAllocationTypes } from "#cds-models/TrixCoreService";
+import { AllocationType } from "../../utils/entities/trix/core";
+import { getAllocationTypes } from "../../utils/entities/TrixCoreService";
 import {
   OnFunction,
   ActionRequest,
