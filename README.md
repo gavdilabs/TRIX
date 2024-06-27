@@ -20,19 +20,18 @@
 
 ## About The Project
 
-**TRIX** - Time Registration Improvement eXperience - is designed to be a lightweight solution for capturing and managing Time Registration in response to the many heavy and cumbersome solutions out there.
+**TRIX** - _Time Registration Improvement eXperience_ - is designed to be a lightweight solution for capturing and managing Time Registration in response to the many heavy and cumbersome solutions out there.
 It is designed with a minimal core around two types registration:
-* Timesheet - Enter a Daily, Weekly or Monthly Sheet with Hours
-* Timerecorder - Capture Realtime Hours spent
+* _Timesheet_ - Enter Daily, Weekly or Monthly Sheet with Hours
+* _Timerecorder_ - Capture Realtime Hours spent
 
 On top of there are features to handle the process of Approval of hours and the all important option of adding Integrations to other systems, allowing third party systems to receive the registered and approved hours.
-The solution includes a lot of useful features in the Baseline Version, including:
+The solution includes a lot of useful features in the Core Version, including:
 1. Setting up your Profile, including Expected Work Hours
 2. Manager Approval/Rejection of Hours for Direct Reports
-3. Appoint Substitute for Vacation Periods
-4. Full Configuration of Categories and Time Registration Types
-5. Configuration of Approval Flow
-6. Built-In Validations
+3. Full Configuration of Categories and Time Registration Types
+4. Configuration of Approval Flow
+5. Built-In Validations
 
 ### Built With
 
@@ -49,7 +48,7 @@ Verify that you have the Requirements for the Solution in place and then you can
 
 ### Requirements
 
-The solution can be deployed on SAP Business Technology Platform, so ensure that you have an Account and on that account you need a Subaccount with the following entitlements:
+The solution can be deployed on [SAP Business Technology Platform](https://www.sap.com/products/technology-platform.html), so ensure that you have an Account and on that account you need a Subaccount with the following entitlements:
 * [PostgreSQL on SAP BTP, hyperscaler option](https://discovery-center.cloud.sap/serviceCatalog/postgresql-hyperscaler-option)
 * [SAP BTP, Cloud Foundry Runtime](https://discovery-center.cloud.sap/serviceCatalog/cloud-foundry-runtime)
 
@@ -84,18 +83,24 @@ Be sure to verify the solution before opening it up to your users by checking:
 
 ## Roadmap
 
+There is still a lot of baseline features planned for the Core Solution, but the main focus is on adding Integrations into other solutions, as Hours from Time Registrations are typically needed in other contexts.
+
+The next release will add one or more Integrations, also showcasing how other Loosely Coupled Integrations can be added and active at the same time with the chosen Event-Driven Architecture.
+
+The main features planned are:
 - Default Time Registration from Favorite/Starred Week
 - Time Recorder
+- Appoint Substitute
 - Automated Testing using WDI5
 - Reporting
-    - For Employee
-	- For Manager
-	- For Audit
+  - For Employee
+  - For Manager
+  - For Audit
 - Integrations
-    - To SAP CATS on SAP ECC
-    - To SAP CATS on SAP S/4HANA (Public Cloud Edition and Private Managed)
-	- To SAP SuccessFactors Time Mgt.
-	- From Outlook
+  - To SAP CATS on SAP ECC
+  - To SAP CATS on SAP S/4HANA (Public Cloud Edition and Private Managed)
+  - To SAP SuccessFactors Time Mgt.
+  - From Outlook
 - A "Jump To Date" button, allowing the user to jump to any random week
 
 Plus fixes - See the [open issues](https://github.com/gavdilabs/trix/issues) for a full list of proposed features (and known issues).
@@ -112,7 +117,7 @@ If you have a suggestion that would make this better, please fork the repo and c
 5. Make sure that you clearly state what you are committing in your commit message (and rather commit often with clear messages than committing a large, complex mess)
 6. Once you implemented the changes, tested the code, it quality and speed and verified that all unit tests are green do a Pull Request, where you title the Pull Request the Feature/Fix you implemented
 7. Make requested changes if asked by the reviewer
-8. Receive a huge thanks and eternal appreciation from the team when your contribution is merged!
+8. Receive a huge thanks and eternal appreciation from the team when your contribution is merged (we might even throw in a trophy for best contribution down the line)!
 
 Rules that needs to be respected:
 - Don't include code or dependencies that violates or breaks either the code's licenses or the provided license of this solution
