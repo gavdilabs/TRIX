@@ -5,7 +5,7 @@
   "license": "Apache-2.0",
   "scripts": {
     "start": "cds-serve",
-    "dev": "cds-ts watch --profile pg --port 4005",
+    "dev": "cds-ts watch --profile development --port 4005",
     "debug": "cds-ts run --profile pg",
     "test": "jest",
     "coverage": "nyc npm run test",
@@ -25,7 +25,8 @@
     "build:ts": "echo 'Compiling TypeScript sources...' && tsc",
     "build:cp": "shx cp .npmrc gen/srv",
     "deploy": "run-s build:prod build:mta deploy:cf",
-    "deploy:cf": "cf deploy mta_archives/archive.mtar"
+    "deploy:cf": "cf deploy mta_archives/archive.mtar",
+    "build:entities:ui": "cds2types --cds ./srv/service.cds --output ../../uimodules/timesheet/webapp/model/entities-admin.ts --prefix I -f -d"
   },
   "dependencies": {
     "@cap-js/postgres": "^1.4.1",
@@ -57,6 +58,7 @@
     "@types/node": "^18.7.13",
     "chai": "^4.3.7",
     "chai-as-promised": "^7.1.1",
+    "cds2types": "^2.7.2",
     "chai-http": "^4.3.0",
     "chai-subset": "^1.6.0",
     "eslint": "^8.57.0",

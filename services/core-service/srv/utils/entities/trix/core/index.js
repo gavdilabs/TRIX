@@ -1,6 +1,8 @@
 // This is an automatically generated file. Please do not change its contents manually!
 const cds = require('@sap/cds')
 const csn = cds.entities('trix.core')
+module.exports.TimeAllocationGroup = csn.TimeAllocationGroup
+module.exports.TimeAllocationGroup_ = csn.TimeAllocationGroup
 module.exports.TimeAllocation = csn.TimeAllocation
 module.exports.TimeAllocation_ = csn.TimeAllocation
 module.exports.User = csn.User
@@ -31,4 +33,3 @@ module.exports.AllocationEventContext_ = csn.AllocationEventContext
 module.exports.RecordStatus ??= { Awaiting: 0, Processing: 1, Complete: 2, Error: 3 }
 module.exports.RegistrationStatus ??= { InProcess: 1, Complete: 2, Approved: 3, Rejected: 4 }
 module.exports.RegistrationType ??= { Manual: 0, ClockInOut: 1 }
-module.exports.AllocationType ??= { Project: "Project", Service: "Service", AbsenceAttendance: "AbsenceAttendance" }

@@ -50,6 +50,30 @@ service TrixCoreService {
   ])                as projection on model.TimeAllocation;
 
 
+  entity TimeAllocationGroupSet @(restrict: [
+    {
+      grant: ['READ'],
+      to   : ['TimeUser'],
+      where: 'allocatedUsers.userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      where: 'allocatedUsers.substitute.userID = $user.id'
+    },
+    {
+      grant: ['READ'],
+      where: 'allocatedUsers.manager.userID = $user.id'
+    },
+    {
+      grant: ['*'],
+      to   : [
+        'Admin',
+        'AllocationManagement'
+      ]
+    }
+  ])                as projection on model.TimeAllocationGroup;
+
+
   entity User2AllocationSet @(restrict: [
     {
       grant: ['READ'],
@@ -195,7 +219,7 @@ service TrixCoreService {
   function getRecordStatuses()       returns many types.EnumPair;
   function getRegistrationStatuses() returns many types.EnumPair;
   function getRegistrationTypes()    returns many types.EnumPair;
-  function getAllocationTypes()      returns many model.AllocationType;
+  function getAllocationTypes()      returns many String;
 
 /** ACTION IMPORTS **/
 // NOTE: All unbound actions should go here

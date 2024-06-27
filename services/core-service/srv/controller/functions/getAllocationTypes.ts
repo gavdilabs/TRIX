@@ -1,14 +1,13 @@
-import { AllocationType } from "../../utils/entities/trix/core";
-import { getAllocationTypes } from "../../utils/entities/TrixCoreService";
 import {
-  OnFunction,
   ActionRequest,
   ActionReturn,
+  OnFunction,
   UnboundActions,
   Use,
 } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import LoggingMiddleware from "../../middleware/LoggingMiddleware";
+import { getAllocationTypes } from "../../utils/entities/TrixCoreService";
 
 @UnboundActions()
 @Use(LoggingMiddleware)
@@ -25,6 +24,6 @@ export default class AllocationTypesHandler {
     next: Function
   ): ActionReturn<typeof getAllocationTypes> {
     this._logger.trace("Returning available allocation types");
-    return Object.values(AllocationType);
+    return req.error(500, "Not Implemented");
   }
 }

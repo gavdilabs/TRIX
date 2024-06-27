@@ -8,6 +8,8 @@ module.exports.ManagerSet = csn.ManagerSet
 module.exports.ManagerSet_ = csn.ManagerSet
 module.exports.TimeAllocationSet = csn.TimeAllocationSet
 module.exports.TimeAllocationSet_ = csn.TimeAllocationSet
+module.exports.TimeAllocationGroupSet = csn.TimeAllocationGroupSet
+module.exports.TimeAllocationGroupSet_ = csn.TimeAllocationGroupSet
 module.exports.User2AllocationSet = csn.User2AllocationSet
 module.exports.User2AllocationSet_ = csn.User2AllocationSet
 module.exports.TimeRegistrationSet = csn.TimeRegistrationSet
@@ -20,6 +22,8 @@ module.exports.WorkDaySet = csn.WorkDaySet
 module.exports.WorkDaySet_ = csn.WorkDaySet
 module.exports.TeamSet = csn.TeamSet
 module.exports.TeamSet_ = csn.TeamSet
+module.exports.Country = csn.Countries
+module.exports.Countries = csn.Countries
 // events
 module.exports.timeRegistrationCreated = 'TrixCoreService.timeRegistrationCreated'
 module.exports.timeRegistrationUpdated = 'TrixCoreService.timeRegistrationUpdated'

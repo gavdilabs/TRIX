@@ -34,15 +34,6 @@ export const ConfigurationType = {
 } as const;
 export type ConfigurationType = 0
 
-// enum
-export const RegistrationGroup = {
-  Project: 0,
-  Service: 1,
-  AbsenceAttendance: 2,
-  Custom: 3,
-} as const;
-export type RegistrationGroup = 0 | 1 | 2 | 3
-
 export function _ValidationRuleAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
   return class ValidationRule extends Base {
         rule?: ValidationType;
@@ -56,9 +47,25 @@ export class ValidationRule_ extends Array<ValidationRule> {}
 Object.defineProperty(ValidationRule, 'name', { value: 'trix.admin.ValidationRule' })
 Object.defineProperty(ValidationRule_, 'name', { value: 'trix.admin.ValidationRule' })
 
+export function _RegistrationGroupAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
+  return class RegistrationGroup extends Base {
+        name?: string | null;
+        description?: string | null;
+      static actions: {
+    }
+  };
+}
+export class RegistrationGroup extends _._cuidAspect(_._managedAspect(_RegistrationGroupAspect(__.Entity))) {}
+export class RegistrationGroup_ extends Array<RegistrationGroup> {}
+Object.defineProperty(RegistrationGroup, 'name', { value: 'trix.admin.RegistrationGroup' })
+Object.defineProperty(RegistrationGroup_, 'name', { value: 'trix.admin.RegistrationGroup' })
+
 export function _RegistrationTypeAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
   return class RegistrationType extends Base {
-        group?: RegistrationGroup | null;
+        name?: string | null;
+        description?: string | null;
+        group?: __.Association.to<RegistrationGroup> | null;
+        group_ID?: string | null;
       static actions: {
     }
   };
