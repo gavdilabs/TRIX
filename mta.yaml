@@ -1,0 +1,277 @@
+ID: trix
+_schema-version: 3.3.0
+version: 1.0.0
+parameters:
+  deploy_mode: html5-repo
+  enable-parallel-deployments: false
+
+build-parameters:
+  before-all:
+    - builder: custom
+      commands:
+        - npm run build:solution
+
+modules:
+  - name: trix-core-srv
+    type: nodejs
+    path: ./services/core-service/gen/srv
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+      instances: 3
+    properties:
+      EXIT: 1
+    requires:
+      - name: trix-destination-srv
+      - name: trix-xsuaa-srv
+      - name: trix-psql-db
+    provides:
+      - name: trix-core-api
+        properties:
+          url: ${default-url}
+
+  - name: trix-core-schema-deployer
+    type: nodejs
+    path: ./services/core-service/gen/pg
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+      instances: 1
+    requires:
+      - name: trix-psql-db
+
+  - name: trix-admin-srv
+    type: nodejs
+    path: ./services/admin-service/gen/srv
+    parameters:
+      disk-quota: 256M
+      memory: 256M
+      instances: 3
+    properties:
+      EXIT: 1
+    requires:
+      - name: trix-destination-srv
+      - name: trix-xsuaa-srv
+      - name: trix-psql-db
+    provides:
+      - name: trix-admin-api
+        properties:
+          url: ${default-url}
+
+  - name: trix-admin-schema-deployer
+    type: nodejs
+    path: ./services/admin-service/gen/pg
+    parameters:
+      disk-quota: 512M
+      memory: 512M
+      instances: 1
+    requires:
+      - name: trix-psql-db
+
+  - name: trix-destination-content
+    type: com.sap.application.content
+    build-paramters:
+      no-source: true
+    requires:
+      - name: trix-core-srv-api
+      - name: trix-admin-api
+      - name: trix-xsuaa-srv
+        parameters:
+          service-key:
+            name: trix-xsuaa-dest-key
+      - name: trix-destination-srv
+        parameters:
+          content-target: true
+      - name: trix-xsuaa-api-srv
+        parameters:
+          service-key:
+            name: trix-xsuaa-api-key
+    parameters:
+      disk-quota: 124M
+      memory: 512M
+      content:
+        instance:
+          - Name: TRIX-CORE-API
+            Description: Principal propagation access to TRIX core service
+            URL: ~{trix-core-api/url}/odata/v4/core/
+            Authentication: OAuth2UserTokenExchange
+            TokenServiceInstanceName: trix-xsuaa-srv
+            TokenServiceKeyName: trix-xsuaa-dest-key
+          - Name: TRIX-ADMIN-API
+            Description: Principal propagation access to TRIX admin service
+            URL: ~{trix-admin-api/url}/odata/v4/admin/
+            Authentication: OAuth2UserTokenExchange
+            TokenServiceInstanceName: trix-xsuaa-srv
+            TokenServiceKeyName: trix-xsuaa-dest-key
+          - Name: XsuaaApi
+            Description: BTP XSUAA API (SCIM + Role-collections lookup)
+            Authentication: OAuth2ClientCredentials
+            TokenServiceInstanceName: crx-xsuaa-api
+            TokenServiceKeyName: crx-xsuaa-api-key
+            sap.cloud.service: my_service
+
+  - name: trix-approuter
+    type: approuter.nodejs
+    path: ./approuter
+    parameters:
+      instances: 2
+      disk-quota: 256M
+      memory: 256M
+    requires:
+      - name: trix-html5-runtime
+      - name: trix-destination-srv
+      - name: trix-xsuaa-srv
+
+  - name: trix-ui-approval-resources
+    type: html5
+    path: ./uimodules/approval
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+
+  - name: trix-ui-approval-deployer
+    type: com.sap.html5.application-content
+    path: ./uimodules/approval/deployer
+    parameters:
+      no-route: true
+      memory: 380M
+    requires:
+      - name: trix-ui-approval-host
+        parameters:
+          content-target: true
+
+  - name: trix-ui-recording-resources
+    type: html5
+    path: ./uimodules/recording
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+
+  - name: trix-ui-recording-deployer
+    type: com.sap.html5.application-content
+    path: ./uimodules/recording/deployer
+    parameters:
+      no-route: true
+      memory: 380M
+    requires:
+      - name: trix-ui-recording-host
+        parameters:
+          content-target: true
+
+  - name: trix-ui-reporting-resources
+    type: html5
+    path: ./uimodules/reporting
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+
+  - name: trix-ui-reporting-deployer
+    type: com.sap.html5.application-content
+    path: ./uimodules/reporting/deployer
+    parameters:
+      no-route: true
+      memory: 380M
+    requires:
+      - name: trix-ui-reporting-host
+        parameters:
+          content-target: true
+
+  - name: trix-ui-timesheet-resources
+    type: html5
+    path: ./uimodules/timesheet
+    build-parameters:
+      build-result: dist
+      builder: custom
+      commands:
+        - npm run build
+      supported-platforms: []
+
+  - name: trix-ui-timesheet-deployer
+    type: com.sap.html5.application-content
+    path: ./uimodules/timesheet/deployer
+    parameters:
+      no-route: true
+      memory: 380M
+    requires:
+      - name: trix-ui-timesheet-host
+        parameters:
+          content-target: true
+
+resources:
+  - name: trix-psql-db
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: postgresql-db
+      service-name: crx-postgresql ## TODO: REMOVE THIS BEFORE RELEASE!!!!!!!
+      service-plan: free
+      skip-service-updates:
+        parameters: true
+
+  - name: trix-destination-srv
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config:
+        HTML5Runtime_enabled: true
+        init_data:
+          instance:
+            destinations:
+              - Authentication: NoAuthentication
+                Name: ui5
+                ProxyType: Internet
+                Type: HTTP
+                URL: https://ui5.sap.com
+            existing_destinations_policy: update
+      service: destination
+      service-plan: lite
+
+  - name: trix-xsuaa-srv
+    type: org.cloudfoundry.managed-service
+    parameters:
+      config-path: ./config/xs-security.json
+      service-plan: application
+      service: xsuaa
+
+  - name: trix-xsuaa-api-srv
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service: xsuaa
+      service-plan: apiaccess
+
+  - name: trix-html5-runtime
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-runtime
+      service: html5-apps-repo
+
+  - name: trix-ui-approval-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+
+  - name: trix-ui-recording-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+
+  - name: trix-ui-reporting-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo
+
+  - name: trix-ui-timesheet-host
+    type: org.cloudfoundry.managed-service
+    parameters:
+      service-plan: app-host
+      service: html5-apps-repo

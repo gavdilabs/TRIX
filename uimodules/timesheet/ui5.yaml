@@ -17,6 +17,10 @@ builder:
   customTasks:
     - name: ui5-tooling-transpile-task
       afterTask: replaceVersion
+    - name: ui5-task-zipper
+      afterTask: generateVersionInfo
+      configuration:
+        archiveName: "archive"
 server:
   customMiddleware:
     - name: ui5-tooling-transpile-middleware
@@ -38,3 +42,4 @@ server:
       mountPath: /library
       configuration:
         rootPath: "../library/dist/resources/trix/library"
+

@@ -5,9 +5,11 @@
 	"author": "Gavdi Labs",
 	"license": "Apache-2.0",
 	"scripts": {
-		"clean": "rimraf dist coverage",
-		"build": "ui5 build --clean-dest",
+		"clean": "rimraf dist coverage deployer/resources",
+		"build": "run-s build:ui5 build:cp",
+		"build:ui5": "ui5 build --clean-dest",
 		"build:opt": "ui5 build self-contained --clean-dest --all",
+		"build:cp": "npx shx mkdir -p deployer/resources && npx shx cp -r dist/archive.zip deployer/resources/archive.zip",
 		"start": "ui5 serve --port 8082 -o index.html",
 		"start-cdn": "ui5 serve --port 8080 -o index-cdn.html",
 		"start:dist": "npm start -- --config ui5-dist.yaml",
@@ -42,6 +44,8 @@
 		"ui5-middleware-livereload": "^3.0.2",
 		"ui5-middleware-simpleproxy": "^0.9.1",
 		"ui5-tooling-transpile": "^3.3.3",
-		"wdio-ui5-service": "^2.0.6"
+		"wdio-ui5-service": "^2.0.6",
+		"ui5-task-zipper": "^3.1.4",
+		"npm-run-all": "^4.1.5"
 	}
 }

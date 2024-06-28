@@ -27,6 +27,34 @@
       "csrfProtection": false
     },
     {
+      "source": "^/timesheet/(.*)$",
+      "target": "/trixtimesheet/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/approval/(.*)$",
+      "target": "/trixapproval/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/reporting/(.*)$",
+      "target": "/trixreporting/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
+      "source": "^/recording/(.*)$",
+      "target": "/trixrecording/$1",
+      "service": "html5-apps-repo-rt",
+      "authenticationType": "xsuaa",
+      "csrfProtection": false
+    },
+    {
       "source": "^/home(.*)$",
       "target": "$1",
       "authenticationType": "xsuaa",
