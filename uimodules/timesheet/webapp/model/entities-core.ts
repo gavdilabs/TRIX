@@ -45,6 +45,8 @@ export namespace trix.core {
     description: string;
     isAbsence: boolean;
     allocationGroupId: string;
+    hex: string;
+    icon: string;
     allocationGroup?: ITimeAllocationGroup;
     allocatedUsers?: IUser2Allocation[];
   }
@@ -499,6 +501,8 @@ export namespace TrixCoreService {
     description: string;
     isAbsence: boolean;
     allocationGroupId: string;
+    hex: string;
+    icon: string;
     allocationGroup?: ITimeAllocationGroupSet;
     allocatedUsers?: IUser2AllocationSet[];
   }
@@ -685,6 +689,12 @@ export namespace TrixCoreService {
   }
 
   export type FuncGetAllocationTypesReturn = string[];
+
+  export enum FuncGetActiveUser {
+    name = "getActiveUser",
+  }
+
+  export type FuncGetActiveUserReturn = IUserSet;
 
   export enum Entity {
     UserSet = "TrixCoreService.UserSet",

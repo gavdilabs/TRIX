@@ -1,31 +1,31 @@
-ID;description;allocationGroupId;isAbsence;createdAt;createdBy;modifiedAt;modifiedBy;validFrom;validTo
-6b6dec25-95eb-4a08-bea8-aaf9d71e0f48;Project Sunrise;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-01-01;2024-12-31
-b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31;Internal Course;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-085d4aa0-d0c3-45ee-b286-bdae4e669e8d;Normal Work;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-1d4c6247-e294-4245-ae68-e0c7849a2846;Project Horizon;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-02-01;2024-12-31
-8baed15a-6e4a-403f-9fd1-d32af05b19af;Illness;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-d7f5e1d2-8b33-48b9-b7c6-31bf98a205e4;Vacation;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-e8e3bded-bb22-4d2d-9fa4-c82dfdfcea8c;Project Optimal 2.0;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2025-12-31
-65cb63e2-5643-4e5d-81a2-b8e3e4055f78;New CRM System;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-02-01;2024-12-31
-78335824-4ea8-44b9-b52f-b75796037975;Flex;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-1a0b06b4-1dd3-4757-881f-a0c8afe29ce5;Maternity Leave;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-55b1a903-68fe-4e82-9b72-b46b7dbdcbf0;Paternity Leave;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-04f75d73-796c-4de2-a6c3-e5cc2c2c57ca;Internal Meeting;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-27b7321f-2b4c-409d-9e66-33046e0d7d11;Compliance Audit;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-04-01;2024-12-31
-9b22f4b6-7722-4290-9378-69f4ef12a5a7;Technical Upgrade;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-02-01;2024-08-15
-ace80a37-2fd8-4935-a177-e60ec9dbd2e6;Project Highland;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-12-31;2024-01-01
-f5978be8-352b-4d88-b848-bc1e6918c80e;Project Runway;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-01-15;2024-12-31
-2fa95bbc-eb1f-4d5d-b9cd-fa09ca698eeb;Sales Activity;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-d977784c-0131-4e43-8b54-4932955b7081;Customer Support;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-76d39da7-e882-4608-980a-7849ac9abf39;Workshops;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-f5c4e60a-489b-47f9-b755-016047f53b67;Test;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-5c718ab9-09eb-4d63-82c5-0d889df55880;Project Eternal;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-04-01;2024-12-31
-2a407d38-ffe4-4ca4-8467-5beae2c2f7d4;Project Wonderworld;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2024-11-15
-6e012d0d-8683-4944-a5cb-c4cf94814bc8;External Course;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-9c96353d-886e-4c17-8424-508f0bf6fe57;Travel;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-bd3aabea-8fdd-48e9-aeb4-c5c5503bc567;Project Moonshot;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2024-12-31
-650c4c4c-ea47-420b-8af5-9fff30cda5e6;Project Silver;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-02-01;2024-06-30
-da0eb6c4-fabe-4411-a17a-5e1613ca47d1;Teamwork Exercises;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-bdc16e55-9cdf-453d-a308-2fcfb4798bee;Scrum Meetings;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-df97008f-ebbf-4b8d-8f43-dc95f19460de;Management;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31
-4bd28a95-c41b-41f2-90e4-53b54b2f22d6;Project Dawn;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-04-01;2024-12-31
+ID;description;allocationGroupId;isAbsence;createdAt;createdBy;modifiedAt;modifiedBy;validFrom;validTo;hex;icon;
+6b6dec25-95eb-4a08-bea8-aaf9d71e0f48;Project Sunrise;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-01-01;2024-12-31;;
+b2de965f-6dbf-4d63-9e7c-2e4bc5be0f31;Internal Course;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+085d4aa0-d0c3-45ee-b286-bdae4e669e8d;Normal Work;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+1d4c6247-e294-4245-ae68-e0c7849a2846;Project Horizon;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-02-01;2024-12-31;;
+8baed15a-6e4a-403f-9fd1-d32af05b19af;Illness;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+d7f5e1d2-8b33-48b9-b7c6-31bf98a205e4;Vacation;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+e8e3bded-bb22-4d2d-9fa4-c82dfdfcea8c;Project Optimal 2.0;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2025-12-31;;
+65cb63e2-5643-4e5d-81a2-b8e3e4055f78;New CRM System;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-02-01;2024-12-31;;
+78335824-4ea8-44b9-b52f-b75796037975;Flex;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+1a0b06b4-1dd3-4757-881f-a0c8afe29ce5;Maternity Leave;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+55b1a903-68fe-4e82-9b72-b46b7dbdcbf0;Paternity Leave;6b6dac23-95eb-4a08-byd1-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+04f75d73-796c-4de2-a6c3-e5cc2c2c57ca;Internal Meeting;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;true;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+27b7321f-2b4c-409d-9e66-33046e0d7d11;Compliance Audit;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-04-01;2024-12-31;;
+9b22f4b6-7722-4290-9378-69f4ef12a5a7;Technical Upgrade;6b6dec25-95eb-4a08-bea8-aaf9d71e0123;false;;POP;;POP;2024-02-01;2024-08-15;;
+ace80a37-2fd8-4935-a177-e60ec9dbd2e6;Project Highland;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-12-31;2024-01-01;;
+f5978be8-352b-4d88-b848-bc1e6918c80e;Project Runway;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-01-15;2024-12-31;;
+2fa95bbc-eb1f-4d5d-b9cd-fa09ca698eeb;Sales Activity;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+d977784c-0131-4e43-8b54-4932955b7081;Customer Support;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+76d39da7-e882-4608-980a-7849ac9abf39;Workshops;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+f5c4e60a-489b-47f9-b755-016047f53b67;Test;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+5c718ab9-09eb-4d63-82c5-0d889df55880;Project Eternal;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-04-01;2024-12-31;;
+2a407d38-ffe4-4ca4-8467-5beae2c2f7d4;Project Wonderworld;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2024-11-15;;
+6e012d0d-8683-4944-a5cb-c4cf94814bc8;External Course;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+9c96353d-886e-4c17-8424-508f0bf6fe57;Travel;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;#64d01f;sap-icon://flight
+bd3aabea-8fdd-48e9-aeb4-c5c5503bc567;Project Moonshot;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-03-01;2024-12-31;;
+650c4c4c-ea47-420b-8af5-9fff30cda5e6;Project Silver;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-02-01;2024-06-30;;
+da0eb6c4-fabe-4411-a17a-5e1613ca47d1;Teamwork Exercises;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+bdc16e55-9cdf-453d-a308-2fcfb4798bee;Scrum Meetings;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+df97008f-ebbf-4b8d-8f43-dc95f19460de;Management;6b6dac23-95eb-4a08-byd2-aaf9d71e0123;false;;SYSTEM;;SYSTEM;2024-01-01;9999-12-31;;
+4bd28a95-c41b-41f2-90e4-53b54b2f22d6;Project Dawn;6b6dac23-95eb-4a08-bea8-aaf9d71e0123;false;;CLA;;CLA;2024-04-01;2024-12-31;;

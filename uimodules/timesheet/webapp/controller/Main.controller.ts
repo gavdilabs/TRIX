@@ -48,8 +48,7 @@ export default class Main extends BaseController {
 		//Preload some popup lists
 		this.ddHandler = new DropDownHandler(
 			this,
-			this.getOdataModelCore(),
-			this.getResourceBundle()
+			this.getOdataModelCore()
 		);
 
 		//Preload the allocation tree data
@@ -74,8 +73,7 @@ export default class Main extends BaseController {
 
 	/**
 	 * Formatter: Sets configured color on the appointments
-	 * @param appointmentType Appointment typ ie. Service, Absence, Attendance etc.
-	 * @param appointmentSubtypeId Id of the subtype
+	 * @param appointmentSubtypeId Id of the TimeAllocation
 	 * @returns color #hex
 	 */
 	public formatterAppointmentColor(appointmentSubtypeId: string) {
@@ -83,6 +81,18 @@ export default class Main extends BaseController {
 			return "#FFFFFF";
 		} else {
 			return this.ddHandler.getTimeAllocationColor(appointmentSubtypeId);
+		}
+	}
+/**
+	 * Formatter: Sets configured color on the appointments
+	 * @param appointmentSubtypeId Id of the TimeAllocation
+	 * @returns color #hex
+	 */
+	public formatterAppointmentIcon(appointmentSubtypeId: string) {
+		if (!appointmentSubtypeId) {
+			return null;
+		} else {
+			return this.ddHandler.getTimeAllocationIcon(appointmentSubtypeId);
 		}
 	}
 

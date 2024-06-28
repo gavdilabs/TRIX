@@ -1,4 +1,3 @@
-import ResourceBundle from "sap/base/i18n/ResourceBundle";
 import Controller from "sap/ui/core/mvc/Controller";
 import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
@@ -31,6 +30,7 @@ export interface IAllocationType {
 	value: string;
 	color: string;
 	order: number;
+	icon?: string;
 }
 
 /**
@@ -45,16 +45,10 @@ export default class DropDownHandler {
 	public static readonly MODELNAME_ALLOCATION_TREE = "TreeAllocations";
 	private controller: Controller = undefined;
 	private odataModel: ODataModel = undefined;
-	private i18nBundle: ResourceBundle = undefined;
 
-	constructor(
-		controller: Controller,
-		odataModel: ODataModel,
-		i18nBundle: ResourceBundle
-	) {
+	constructor(controller: Controller, odataModel: ODataModel) {
 		this.controller = controller;
 		this.odataModel = odataModel;
-		this.i18nBundle = i18nBundle;
 	}
 
 	/**
@@ -86,6 +80,7 @@ export default class DropDownHandler {
 					value: item.title,
 					color: item.hex,
 					order: item.order,
+					icon: item.icon,
 				});
 			});
 			this.controller
@@ -147,7 +142,7 @@ export default class DropDownHandler {
 	}
 
 	/**
-	 * Function for returning the color configured for the relevant allocation id
+	 * Function for returning the color configured for the relevant allocation id - if any === white
 	 * @param allocationId TimeAllocation ID string key
 	 * @returns hex color (defaults white)
 	 */
@@ -157,9 +152,26 @@ export default class DropDownHandler {
 			const parentGroup = this.getTimeAllocationGroupById(
 				timeAlloc.allocationGroupId
 			);
-			return parentGroup?.color ? parentGroup.color : "#FFFFFF";
+			return timeAlloc.hex ? timeAlloc.hex : parentGroup?.color ? parentGroup.color : "#FFFFFF";
 		} else {
 			return "#FFFFFF";
+		}
+	}
+
+	/**
+	 * Function for returning the icon configured for the relevant allocation id - if any
+	 * @param allocationId TimeAllocation ID string key
+	 * @returns hex color (defaults white)
+	 */
+	public getTimeAllocationIcon(allocationId: string): string {
+		const timeAlloc = this.getTimeAllocationById(allocationId);
+		if (timeAlloc) {
+			const parentGroup = this.getTimeAllocationGroupById(
+				timeAlloc.allocationGroupId
+			);
+			return timeAlloc.icon ? timeAlloc.icon : parentGroup?.icon ? parentGroup.icon : null;
+		} else {
+			return null;
 		}
 	}
 
