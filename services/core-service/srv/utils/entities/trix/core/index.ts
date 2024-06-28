@@ -49,6 +49,8 @@ export function _TimeAllocationAspect<TBase extends new (...args: any[]) => obje
         description?: string | null;
         isAbsence?: boolean | null;
         allocationGroupId?: string | null;
+        hex?: string | null;
+        icon?: string | null;
         allocationGroup?: __.Association.to<TimeAllocationGroup> | null;
         allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<User2Allocation_>;
@@ -68,8 +70,6 @@ export function _UserAspect<TBase extends new (...args: any[]) => object>(Base: 
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
-        substitute?: __.Association.to<User> | null;
-        substitute_userID?: string | null;
     /**
     * Type for an association to Countries
     * 
@@ -77,6 +77,8 @@ export function _UserAspect<TBase extends new (...args: any[]) => object>(Base: 
     */
         country?: _.Country | null;
         country_code?: string | null;
+        substitute?: __.Association.to<User> | null;
+        substitute_userID?: string | null;
         team?: __.Association.to<Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<User> | null;

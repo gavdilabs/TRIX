@@ -3,16 +3,13 @@ import {
   WorkWeek,
 } from "../utils/entities/trix/core";
 import { Repository } from "@dxfrontier/cds-ts-dispatcher";
-import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import cds from "@sap/cds";
 
 const { WorkSchedule } = cds.entities;
 
 @Repository()
-export default class WorkScheduleRepository extends BaseRepository<EntityData> {
-  constructor() {
-    super(EntityData);
-  }
+export default class WorkScheduleRepository {
+  constructor() {}
 
   public async getUsersWorkSchedule(
     userId: string,

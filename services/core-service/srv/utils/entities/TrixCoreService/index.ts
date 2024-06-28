@@ -1,7 +1,7 @@
 // This is an automatically generated file. Please do not change its contents manually!
 import * as _trix_core from './../trix/core';
-import * as __ from './../_';
 import * as _ from './..';
+import * as __ from './../_';
 import * as _sap_common from './../sap/common';
 import * as _trix_common_types from './../trix/common/types';
 export default { name: 'TrixCoreService' }
@@ -12,8 +12,6 @@ export function _UserSetAspect<TBase extends new (...args: any[]) => object>(Bas
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
-        substitute?: __.Association.to<_trix_core.User> | null;
-        substitute_userID?: string | null;
     /**
     * Type for an association to Countries
     * 
@@ -21,6 +19,8 @@ export function _UserSetAspect<TBase extends new (...args: any[]) => object>(Bas
     */
         country?: _.Country | null;
         country_code?: string | null;
+        substitute?: __.Association.to<_trix_core.User> | null;
+        substitute_userID?: string | null;
         team?: __.Association.to<_trix_core.Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<_trix_core.User> | null;
@@ -42,8 +42,6 @@ export function _ManagerSetAspect<TBase extends new (...args: any[]) => object>(
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
-        substitute?: __.Association.to<_trix_core.User> | null;
-        substitute_userID?: string | null;
     /**
     * Type for an association to Countries
     * 
@@ -51,6 +49,8 @@ export function _ManagerSetAspect<TBase extends new (...args: any[]) => object>(
     */
         country?: _.Country | null;
         country_code?: string | null;
+        substitute?: __.Association.to<_trix_core.User> | null;
+        substitute_userID?: string | null;
         team?: __.Association.to<_trix_core.Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<_trix_core.User> | null;
@@ -70,6 +70,8 @@ export function _TimeAllocationSetAspect<TBase extends new (...args: any[]) => o
         description?: string | null;
         isAbsence?: boolean | null;
         allocationGroupId?: string | null;
+        hex?: string | null;
+        icon?: string | null;
         allocationGroup?: __.Association.to<_trix_core.TimeAllocationGroup> | null;
         allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<_trix_core.User2Allocation_>;

@@ -1,26 +1,26 @@
 {
   "compilerOptions": {
+    /* Base Options: */
     "esModuleInterop": true,
     "skipLibCheck": true,
     "allowJs": true,
+    "resolveJsonModule": true,
+    "strictNullChecks": true,
     "strictPropertyInitialization": false,
     "forceConsistentCasingInFileNames": true,
     "allowSyntheticDefaultImports": true,
-    "target": "ES2022",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    /* Strictness */
+    "strict": true,
+    /* Decorators */
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true,
-    "strict": true,
+    "target": "ES2021",
+    "module": "NodeNext",
+    "moduleResolution": "NodeNext",
     "lib": [
       "es2022"
     ],
-    "outDir": "./gen/srv",
-    "paths": {
-      "#cds-models/*": [
-        "./@cds-models/*/index.ts"
-      ]
-    }
+    "outDir": "./gen/srv"
   },
   "include": [
     "./srv",
@@ -28,6 +28,7 @@
     "./@cds-models"
   ],
   "exclude": [
+    "node_modules",
     "./node_modules",
     "./srv/utils/entities/"
   ]

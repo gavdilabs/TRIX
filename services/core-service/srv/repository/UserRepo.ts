@@ -5,19 +5,16 @@ import {
   Service,
   SRV,
 } from "@dxfrontier/cds-ts-dispatcher";
-import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import cds from "@sap/cds";
 
 const { User } = cds.entities;
 
 @Repository()
-export default class UserRepository extends BaseRepository<UserEntity> {
+export default class UserRepository {
   @Inject(SRV)
   private srv: Service;
 
-  constructor() {
-    super(UserEntity);
-  }
+  constructor() {}
 
   /**
    * findManagers
@@ -33,5 +30,15 @@ export default class UserRepository extends BaseRepository<UserEntity> {
       .limit(top, skip);
 
     return await this.srv.run(statement);
+  }
+
+  public async findUser(id: string): Promise<UserEntity> {
+    const query = SELECT.from(User).byKey(id);
+    return await cds.run(query);
+  }
+
+  public async create(data: Partial<UserEntity>): Promise<void> {
+    const query = INSERT.into(User).entries([data]);
+    return await cds.run(query);
   }
 }

@@ -13,7 +13,7 @@
     "prettier:format": "prettier --config .prettierrc 'src/**/*.ts' --write",
     "build": "run-s build:clean build:cds clean:ts build:ts",
     "build:prod": "run-s build:clean build:cds:prod cleanup:ts build:ts",
-    "build:cds": "cds build && npm run build:cp",
+    "build:cds": "cds build --production && npm run build:cp",
     "build:cds:prod": "npx cds build --production",
     "build:types": "npx @cap-js/cds-typer '*' --outputDirectory ./srv/utils/entities",
     "build:types:windows": "npx @cap-js/cds-typer * --outputDirectory ./srv/utils/entities",

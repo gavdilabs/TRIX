@@ -19,7 +19,7 @@ export default class UserService {
   }
 
   public async getUserOrGenerate(userId: string): Promise<UserSet | undefined> {
-    const storedUser = await this.userRepo.findOne({ userID: userId });
+    const storedUser = await this.userRepo.findUser(userId);
     if (storedUser) return storedUser;
 
     const xsuaaUser = await this.xsuaa.getUser(userId);
@@ -34,7 +34,7 @@ export default class UserService {
       lastName: xsuaaUser.name.familyName,
     };
 
-    const result = await this.userRepo.create(user);
-    return result.query.INSERT.entries.length <= 0 ? undefined : user;
+    await this.userRepo.create(user);
+    return user;
   }
 }

@@ -70,10 +70,10 @@ modules:
 
   - name: trix-destination-content
     type: com.sap.application.content
-    build-paramters:
+    build-parameters:
       no-source: true
     requires:
-      - name: trix-core-srv-api
+      - name: trix-core-api
       - name: trix-admin-api
       - name: trix-xsuaa-srv
         parameters:
@@ -139,6 +139,7 @@ modules:
       no-route: true
       memory: 380M
     requires:
+      - name: trix-ui-approval-resources
       - name: trix-ui-approval-host
         parameters:
           content-target: true
@@ -160,6 +161,7 @@ modules:
       no-route: true
       memory: 380M
     requires:
+      - name: trix-ui-recording-resources
       - name: trix-ui-recording-host
         parameters:
           content-target: true
@@ -181,6 +183,7 @@ modules:
       no-route: true
       memory: 380M
     requires:
+      - name: trix-ui-reporting-resources
       - name: trix-ui-reporting-host
         parameters:
           content-target: true
@@ -202,6 +205,7 @@ modules:
       no-route: true
       memory: 380M
     requires:
+      - name: trix-ui-timesheet-resources
       - name: trix-ui-timesheet-host
         parameters:
           content-target: true

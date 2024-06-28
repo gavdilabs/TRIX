@@ -5,7 +5,6 @@ import {
   Repository,
   Service,
 } from "@dxfrontier/cds-ts-dispatcher";
-import { BaseRepository } from "@dxfrontier/cds-ts-repository";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import {
   getDateAtEndOfWeek,
@@ -18,15 +17,13 @@ import { entities } from "@sap/cds";
 const { TimeRegistration } = entities;
 
 @Repository()
-export default class TimeRegistrationRepository extends BaseRepository<TimeRegistrationData> {
+export default class TimeRegistrationRepository {
   private logger: Logger;
 
   @Inject(CDS_DISPATCHER.SRV)
   private core: Service;
 
   constructor() {
-    super(TimeRegistrationData);
-
     this.logger = LoggerFactory.createLogger("time-registration-repo");
   }
 
