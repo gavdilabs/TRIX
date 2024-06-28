@@ -13,7 +13,8 @@
 	xmlns:controls="trix.timesheet.controls"
 	xmlns:unified="sap.ui.unified"
 	xmlns:l="sap.ui.layout"
-	xmlns:lf="sap.ui.layout.form">
+	xmlns:lf="sap.ui.layout.form"
+	xmlns:trix="trix.library">
 
 	<!-- Main Page -->
 	<Page title="{i18n>appTitle}" id="page" showHeader="false">
@@ -21,14 +22,10 @@
 			<uxap:headerTitle>
 				<uxap:ObjectPageHeader objectTitle="TRIX">
 					<uxap:actions>
-						<HBox class="sapUiSmallMarginEnd">
+						<HBox class="sapUiSmallMarginEnd" id="trixHeader">
 							<VBox alignItems="End" justifyContent="Center" class="sapUiSmallMarginEnd">
-								<!-- <Text text="John Doe"/> -->
-								<Text text="{/UserSet>/firstName} {/UserSet>lastName}"/>
-								<!-- <Text text="JODO"/> -->
-								<Text text="{UserSet>userID}"/>
-							</VBox>
-							<Avatar />
+								<trix:UserAvatar firstName="{firstName}" lastName="{lastName}" userId="{userID}" press="userPressed"/>
+							</VBox>							
 						</HBox>
 					</uxap:actions>
 				</uxap:ObjectPageHeader>

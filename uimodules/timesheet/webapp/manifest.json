@@ -82,7 +82,12 @@
 					"operationMode": "Server",
 					"autoExpandSelect": true,
 					"earlyRequests": true,
-					"groupId": "$direct"
+					"groupId": "$direct",
+					"groupProperties": {
+						"userGroup": {
+						  	"submit": "API"
+						}
+					}
 				}
 			}
 		},

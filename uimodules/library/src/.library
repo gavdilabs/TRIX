@@ -1,0 +1,14 @@
+<?xml version="1.0" ?>
+<library xmlns="http://www.sap.com/sap.ui.library.xsd">
+	<name>trix.library</name>
+	<vendor>mokgavdilabs</vendor>
+	<version>${version}</version>
+	<copyright>${copyright}</copyright>
+	<title>trix.library</title>
+	<documentation>Some description about trix.library</documentation>
+	<dependencies>
+		<dependency>
+			<libraryName>sap.ui.core</libraryName>
+		</dependency>
+	</dependencies>
+</library>

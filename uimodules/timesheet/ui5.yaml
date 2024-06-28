@@ -33,3 +33,8 @@ server:
       mountPath: /odata/admin
       configuration:
         baseUri: "http://localhost:4005/odata/v4/admin"
+    - name: ui5-middleware-servestatic
+      afterMiddleware: compression
+      mountPath: /library
+      configuration:
+        rootPath: "../library/dist/resources/trix/library"

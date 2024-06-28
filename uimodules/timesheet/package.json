@@ -42,6 +42,7 @@
 		"typescript": "^5.3.3",
 		"ui5-middleware-livereload": "^3.0.2",
 		"ui5-middleware-simpleproxy": "^0.9.1",
+		"ui5-middleware-servestatic": "^3.0.2",
 		"ui5-tooling-transpile": "^3.3.3",
 		"wdio-ui5-service": "^2.0.6",
 		"@ui5/ts-interface-generator": "^0.8.2"

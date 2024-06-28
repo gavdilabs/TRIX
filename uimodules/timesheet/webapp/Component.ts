@@ -2,6 +2,7 @@ import UIComponent from "sap/ui/core/UIComponent";
 import models from "./model/models";
 import Device from "sap/ui/Device";
 
+
 /**
  * @namespace trix.timesheet
  */
@@ -44,4 +45,6 @@ export default class Component extends UIComponent {
 		}
 		return this.contentDensityClass;
 	}
+
+	
 }

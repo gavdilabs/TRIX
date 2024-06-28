@@ -1,4 +1,5 @@
 import Event from "sap/ui/base/Event";
+import Fragment from "sap/ui/core/Fragment";
 import TRIXCalendar from "../controls/TRIXCalendar";
 import ApplicationModelHandler, {
 	CalendarView,
@@ -8,12 +9,24 @@ import TimeRegistrationSetHandler from "../dataHandlers/TimeRegistrationSetHandl
 import TRIXCalendarEventHandler from "../eventHandlers/TRIXCalendarEventHandler";
 import DateHelper from "../utils/DateHelper";
 import BaseController from "./BaseController";
+import ODataContextBinding from "sap/ui/model/odata/v4/ODataContextBinding";
+import HBox from "sap/m/HBox";
+import Dialog from "sap/m/Dialog";
+import { trix } from "../model/entities-core";
+import Context from "sap/ui/model/odata/v4/Context";
+import Filter from "sap/ui/model/Filter";
+import FilterOperator from "sap/ui/model/FilterOperator";
+import List from "sap/m/List";
+import ODataListBinding from "sap/ui/model/odata/v4/ODataListBinding";
+import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 
 /**
  * @namespace trix.timesheet.controller
  */
 export default class Main extends BaseController {
-	private ddHandler: DropDownHandler = undefined;
+    private ddHandler: DropDownHandler = undefined;
+	private editingUserID: string;
+	private _userDialog: Dialog;
 
 	/**
 	 * UI5 Hook Function - Called once on initialization
@@ -26,6 +39,23 @@ export default class Main extends BaseController {
 			}, this);
 	}
 
+	public async getActiveUser(): Promise<trix.core.IUser> {
+		const oBinding = this.getView().getModel().bindContext("/getActiveUser(...)") as ODataContextBinding;
+		await oBinding.execute();
+		return await oBinding.requestObject() as trix.core.IUser;	
+	}
+
+	private async setUser() {
+		const activeUser = await this.getActiveUser();
+		const header = this.getView().byId("trixHeader") as HBox;
+		header.bindElement({ 
+			path: `/UserSet('${activeUser.userID}')`,
+			parameters: {
+				$$updateGroupId: "userGroup"
+			}
+		});
+	}
+
 	/**
 	 * Routing target - only firing if url has /Main
 	 */
@@ -35,6 +65,8 @@ export default class Main extends BaseController {
 			this,
 			this.getResourceBundle()
 		);
+
+		await this.setUser();
 
 		//Initialize the Data handler(s)
 		void (await TimeRegistrationSetHandler.initialize(
@@ -63,6 +95,37 @@ export default class Main extends BaseController {
 		);
 	}
 
+	public async userPressed(oEvent:Event) {
+		this._userDialog ??= await Fragment.load({ name: "trix.library.fragments.UserDialog", controller: this }) as Dialog;
+		this.getView().addDependent(this._userDialog);
+        
+		const oContext = (oEvent.getSource().getEventingParent() as HBox).getBindingContext() as Context;
+		this.editingUserID = oContext.getProperty("userID") as string;
+		this._userDialog.setBindingContext(oContext);		
+		this._userDialog.open();
+		
+		const oFilter = new Filter("user_userID", FilterOperator.EQ,this.editingUserID);
+		const oListBinding = (this.byId("WorkScheduleList") as List).getBinding("items") as ODataListBinding;
+		oListBinding.filter(oFilter);
+		oListBinding.isSuspended() ? oListBinding.resume() : oListBinding.refresh();		
+	}
+
+	public onSaveUser(oEvent:Event) {
+		const oModel = this.getView().getModel() as ODataModel;
+		this.getView().setBusy(true);
+		try {
+			void oModel.submitBatch("userGroup").then(() => {
+				this.getView().setBusy(false);	
+				this._userDialog.close();		  
+			});
+		} catch (oError) {
+			this.getView().setBusy(false);
+		}
+	}	
+
+	onCloseEditUser(oEvent: Event) {
+		(oEvent.getSource().getEventingParent() as Dialog).close();
+	}
 	/**
 	 * Function for gettting a ref to the Calendar Control
 	 * @returns an instance of a TRIXCalendar UI Control

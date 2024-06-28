@@ -1,0 +1,16 @@
+specVersion: "3.0"
+metadata:
+  name: trix.library
+type: library
+resources:
+  configuration:
+    paths:
+      src: dist/resources/trix/library/
+      test: dist/test-resources/trix/library/
+framework:
+  name: OpenUI5
+  version: 1.125.0
+  libraries:
+    - name: sap.ui.core
+    - name: themelib_sap_horizon
+    - name: themelib_sap_fiori_3
