@@ -34,11 +34,11 @@ service TrixCoreService {
     },
     {
       grant: ['READ'],
-      where: 'allocatedUsers.substitute.userID = $user.id'
+      where: 'allocatedUsers.user.manager.substitute.userID = $user.id'
     },
     {
       grant: ['READ'],
-      where: 'allocatedUsers.manager.userID = $user.id'
+      where: 'allocatedUsers.user.manager.userID = $user.id'
     },
     {
       grant: ['*'],
@@ -53,16 +53,7 @@ service TrixCoreService {
   entity TimeAllocationGroupSet @(restrict: [
     {
       grant: ['READ'],
-      to   : ['TimeUser'],
-      where: 'allocatedUsers.userID = $user.id'
-    },
-    {
-      grant: ['READ'],
-      where: 'allocatedUsers.substitute.userID = $user.id'
-    },
-    {
-      grant: ['READ'],
-      where: 'allocatedUsers.manager.userID = $user.id'
+      to   : ['TimeUser']
     },
     {
       grant: ['*'],
@@ -82,11 +73,11 @@ service TrixCoreService {
     },
     {
       grant: ['READ'],
-      where: 'allocation.allocatedUsers.manager.userID = $user.id'
+      where: 'manager.userID = $user.id'
     },
     {
       grant: ['READ'],
-      where: 'allocation.allocatedUsers.substitute.userID = $user.id'
+      where: 'manager.substitute.userID = $user.id'
     },
     {
       grant: ['*'],
@@ -201,7 +192,7 @@ service TrixCoreService {
     },
     {
       grant: ['*'],
-      where: 'manager.substitute.userID = $user.id'
+      where: 'manager.substitute_userID = $user.id'
     },
     {
       grant: ['*'],
@@ -210,10 +201,11 @@ service TrixCoreService {
         'TeamManagement'
       ]
     }
-  ])                as projection on model.Team actions {
-                         function getTeamSize() returns Integer;
-                       };
+  ])                as projection on model.Team;
 
+  extend TeamSet with actions {
+    function getTeamSize() returns Integer;
+  };
 
   /** FUNCTION IMPORTS **/
   function getRecordStatuses()       returns many types.EnumPair;
