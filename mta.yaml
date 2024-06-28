@@ -215,7 +215,6 @@ resources:
     type: org.cloudfoundry.managed-service
     parameters:
       service: postgresql-db
-      service-name: crx-postgresql ## TODO: REMOVE THIS BEFORE RELEASE!!!!!!!
       service-plan: free
       skip-service-updates:
         parameters: true
