@@ -3,6 +3,7 @@ import AllocationTypesHandler from "./controller/functions/getAllocationTypes";
 import RecordStatusHandler from "./controller/functions/getRecordStatuses";
 import RegistrationTypesHandler from "./controller/functions/getRegistrationTypes";
 import RegistrationStatusHandler from "./controller/functions/getRegistrationStatuses";
+import GetActiveUserHandler from "./controller/functions/getActiveUserHandler";
 
 export = new CDSDispatcher([
   // Entities
@@ -11,5 +12,6 @@ export = new CDSDispatcher([
   RecordStatusHandler,
   RegistrationStatusHandler,
   RegistrationTypesHandler,
+  GetActiveUserHandler,
   // Actions
 ]).initialize();

@@ -12,6 +12,15 @@ export function _UserSetAspect<TBase extends new (...args: any[]) => object>(Bas
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
+        substitute?: __.Association.to<_trix_core.User> | null;
+        substitute_userID?: string | null;
+    /**
+    * Type for an association to Countries
+    * 
+    * See https://cap.cloud.sap/docs/cds/common#type-country
+    */
+        country?: _.Country | null;
+        country_code?: string | null;
         team?: __.Association.to<_trix_core.Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<_trix_core.User> | null;
@@ -33,6 +42,15 @@ export function _ManagerSetAspect<TBase extends new (...args: any[]) => object>(
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
+        substitute?: __.Association.to<_trix_core.User> | null;
+        substitute_userID?: string | null;
+    /**
+    * Type for an association to Countries
+    * 
+    * See https://cap.cloud.sap/docs/cds/common#type-country
+    */
+        country?: _.Country | null;
+        country_code?: string | null;
         team?: __.Association.to<_trix_core.Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<_trix_core.User> | null;
@@ -183,6 +201,23 @@ export class TeamSet_ extends Array<TeamSet> {}
 Object.defineProperty(TeamSet, 'name', { value: 'TrixCoreService.TeamSet' })
 Object.defineProperty(TeamSet_, 'name', { value: 'TrixCoreService.TeamSet' })
 
+/**
+* Code list for countries
+* 
+* See https://cap.cloud.sap/docs/cds/common#entity-countries
+*/
+export function _CountryAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
+  return class Country extends Base {
+        code?: string | null;
+      static actions: {
+    }
+  };
+}
+export class Country extends _sap_common._CodeListAspect(_CountryAspect(__.Entity)) {}
+export class Countries extends Array<Country> {}
+Object.defineProperty(Country, 'name', { value: 'sap.common.Countries' })
+Object.defineProperty(Countries, 'name', { value: 'sap.common.Countries' })
+
 // event
 export class timeRegistrationCreated {
   /**
@@ -227,3 +262,5 @@ export declare const getRegistrationStatuses: { (): Array<_trix_common_types.Enu
 export declare const getRegistrationTypes: { (): Array<_trix_common_types.EnumPair>, __parameters: {}, __returns: Array<_trix_common_types.EnumPair> };
 // action
 export declare const getAllocationTypes: { (): Array<_trix_core.AllocationType>, __parameters: {}, __returns: Array<_trix_core.AllocationType> };
+// action
+export declare const getActiveUser: { (): UserSet | null, __parameters: {}, __returns: UserSet | null };

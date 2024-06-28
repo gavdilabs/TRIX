@@ -57,6 +57,15 @@ export function _UserAspect<TBase extends new (...args: any[]) => object>(Base: 
         lastName?: string | null;
         email?: string | null;
         isManager?: boolean | null;
+        substitute?: __.Association.to<User> | null;
+        substitute_userID?: string | null;
+    /**
+    * Type for an association to Countries
+    * 
+    * See https://cap.cloud.sap/docs/cds/common#type-country
+    */
+        country?: _.Country | null;
+        country_code?: string | null;
         team?: __.Association.to<Team> | null;
         team_ID?: string | null;
         manager?: __.Association.to<User> | null;

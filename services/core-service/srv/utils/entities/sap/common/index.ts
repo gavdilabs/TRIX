@@ -50,7 +50,7 @@ Object.defineProperty(Languages, 'name', { value: 'sap.common.Languages' })
 */
 export function _CountryAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
   return class Country extends Base {
-        code?: string;
+        code?: string | null;
       static actions: {
     }
   };

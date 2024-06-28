@@ -20,6 +20,8 @@ module.exports.WorkDaySet = csn.WorkDaySet
 module.exports.WorkDaySet_ = csn.WorkDaySet
 module.exports.TeamSet = csn.TeamSet
 module.exports.TeamSet_ = csn.TeamSet
+module.exports.Country = csn.Countries
+module.exports.Countries = csn.Countries
 // events
 module.exports.timeRegistrationCreated = 'TrixCoreService.timeRegistrationCreated'
 module.exports.timeRegistrationUpdated = 'TrixCoreService.timeRegistrationUpdated'
@@ -32,4 +34,5 @@ module.exports.getRecordStatuses = 'getRecordStatuses'
 module.exports.getRegistrationStatuses = 'getRegistrationStatuses'
 module.exports.getRegistrationTypes = 'getRegistrationTypes'
 module.exports.getAllocationTypes = 'getAllocationTypes'
+module.exports.getActiveUser = 'getActiveUser'
 // enums
