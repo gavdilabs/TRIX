@@ -58,19 +58,25 @@ Sizing these depends on the number of concurrent and total users that are going 
 
 _To deploy the solution once you have cloned it you need to_
 
-1. bla bla bla
-2. Run the command
+1. Ensure all UI modules and services have their dependencies installed.
+    You can do this by using the following commands:
+    ```shell
+    $ cd uimodules/approval && npm install
+    $ cd uimodules/reporting && npm install
+    $ cd uimodules/recording && npm install
+    $ cd uimodules/timesheet && npm install
+    $ cd services/core-service && npm install
+    $ cd services/admin-service && npm install
+    ```
+2. Once dependencies are install, from the root run the command
    ```sh
-   bla bla bla
+   npm run build
    ```
-3. Then run the command
+3. Then from here, login to your BTP Cloud Foundry subaccount of choice and then run the command:
    ```sh
-   bla bla
+   npm run deploy
    ```
-4. Ensure that you have set up ... 
-   ```js
-   bla bla = [BLA, BLA, BLA];
-   ```
+4.  From here login to your BTP subaccount and ensure that the roles for the solution are assigned to the appropriate role collections in your setup.
 
 Be sure to verify the solution before opening it up to your users by checking:
 
