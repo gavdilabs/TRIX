@@ -1,9 +1,10 @@
-import { Inject } from "@dxfrontier/cds-ts-dispatcher";
+import { Inject, ServiceLogic } from "@dxfrontier/cds-ts-dispatcher";
 import { Logger, LoggerFactory } from "@gavdi/caplog";
 import UserRepository from "../../repository/UserRepo";
 import { UserSet } from "../../utils/entities/TrixCoreService";
 import XsuaaService from "../xsuaa/service";
 
+@ServiceLogic()
 export default class UserService {
   private logger: Logger;
 
