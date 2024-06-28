@@ -45,8 +45,7 @@
 								<controls:TRIXCalendar startDateChange="onCalendarChange" viewChange="onCalendarChange" defaultView="{ApplicationModel>/view}" firstDayOfWeek="1" calendarWeekNumbering="Default" fullDay="false" startHour="{ApplicationModel>/workHours/default/from}" endHour="{ApplicationModel>/workHours/default/to}" enableAppointmentsDragAndDrop="true" appointmentDrop="onAppointmentDrop" cellPress="onCellPress($event, 'CELLPRESS')" dateSelectionMode="SingleSelect" id="trixCalendar" enableAppointmentsResize="true" enableAppointmentsCreate="true" appointmentSelect="onAppointmentSelect($event, 'SELECT')" appointmentResize="onAppointmentResize" appointmentCreate="onAppointmentCreate($event, 'DRAGGED')" appointments="{path:'PeriodRegistrations>/'}" title= "{ApplicationModel>/viewTitle}">
 									<!-- Appointments -->
 									<controls:appointments>
-										<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}" startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}">
-										</unified:CalendarAppointment>
+										<unified:CalendarAppointment color="{parts:['PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentColor'}" icon="{parts:['PeriodRegistrations>allocation/ID'],formatter:'.formatterAppointmentIcon'}" key="{PeriodRegistrations>ID}" title="{PeriodRegistrations>allocation/description}" text="{PeriodRegistrations>allocation/description}"  startDate="{PeriodRegistrations>startDate}" endDate="{PeriodRegistrations>endDate}" />
 									</controls:appointments>
 									<!-- Top-Right Toggle Buttons -->
 									<controls:actions>

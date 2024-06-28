@@ -46,6 +46,8 @@ entity TimeAllocation : cuid, managed, temporal {
   description       : String(1000);
   isAbsence         : Boolean;
   allocationGroupId : String;
+  hex               : String(25);
+  icon              : String(200);
   allocationGroup   : Association to TimeAllocationGroup
                         on allocationGroup.ID = allocationGroupId;
   allocatedUsers    : Association to many User2Allocation
