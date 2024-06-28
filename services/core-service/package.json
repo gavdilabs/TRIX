@@ -129,6 +129,14 @@
           }
         }
       },
+      "xsuaa-api": {
+        "kind": "rest",
+        "[production]": {
+          "credentials": {
+            "destination": "XsuaaApi"
+          }
+        }
+      },
       "[production]": {
         "auth": "xsuaa"
       }

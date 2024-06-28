@@ -220,6 +220,7 @@ service TrixCoreService {
   function getRegistrationStatuses() returns many types.EnumPair;
   function getRegistrationTypes()    returns many types.EnumPair;
   function getAllocationTypes()      returns many String;
+  function getActiveUser()           returns UserSet;
 
 /** ACTION IMPORTS **/
 // NOTE: All unbound actions should go here

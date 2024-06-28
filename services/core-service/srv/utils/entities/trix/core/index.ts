@@ -48,6 +48,7 @@ export function _TimeAllocationAspect<TBase extends new (...args: any[]) => obje
   return class TimeAllocation extends Base {
         description?: string | null;
         isAbsence?: boolean | null;
+        allocationGroupId?: string | null;
         allocationGroup?: __.Association.to<TimeAllocationGroup> | null;
         allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<User2Allocation_>;

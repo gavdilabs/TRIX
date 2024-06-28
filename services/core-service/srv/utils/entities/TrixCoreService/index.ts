@@ -69,6 +69,7 @@ export function _TimeAllocationSetAspect<TBase extends new (...args: any[]) => o
   return class TimeAllocationSet extends Base {
         description?: string | null;
         isAbsence?: boolean | null;
+        allocationGroupId?: string | null;
         allocationGroup?: __.Association.to<_trix_core.TimeAllocationGroup> | null;
         allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<_trix_core.User2Allocation_>;
@@ -280,3 +281,5 @@ export declare const getRegistrationStatuses: { (): Array<_trix_common_types.Enu
 export declare const getRegistrationTypes: { (): Array<_trix_common_types.EnumPair>, __parameters: {}, __returns: Array<_trix_common_types.EnumPair> };
 // action
 export declare const getAllocationTypes: { (): Array<string>, __parameters: {}, __returns: Array<string> };
+// action
+export declare const getActiveUser: { (): UserSet | null, __parameters: {}, __returns: UserSet | null };

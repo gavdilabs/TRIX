@@ -36,4 +36,5 @@ module.exports.getRecordStatuses = 'getRecordStatuses'
 module.exports.getRegistrationStatuses = 'getRegistrationStatuses'
 module.exports.getRegistrationTypes = 'getRegistrationTypes'
 module.exports.getAllocationTypes = 'getAllocationTypes'
+module.exports.getActiveUser = 'getActiveUser'
 // enums
