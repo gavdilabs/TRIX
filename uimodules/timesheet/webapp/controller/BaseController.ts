@@ -83,10 +83,20 @@ export default abstract class BaseController extends Controller {
 	}
 
 	/**
-	 * Tooling funciton for easy access to the Code OdataModel in V4 flavoud
+	 * Tooling funciton for easy access to the CORE OdataModel in V4 flavoud
 	 * @returns
 	 */
 	public getOdataModelCore(): ODataModel {
 		return this.getModel() as ODataModel;
 	}
+
+	/**
+	 * Tooling funciton for easy access to the ADMIN OdataModel in V4 flavoud
+	 * @returns
+	 */
+	public getOdataModelAdmin(): ODataModel {
+		return this.getModel("admin") as ODataModel;
+	}
 }
+
+

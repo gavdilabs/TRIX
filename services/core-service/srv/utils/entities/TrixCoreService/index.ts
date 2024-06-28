@@ -69,7 +69,9 @@ export function _TimeAllocationSetAspect<TBase extends new (...args: any[]) => o
   return class TimeAllocationSet extends Base {
         description?: string | null;
         isAbsence?: boolean | null;
-        allocationType?: _trix_core.AllocationType | null;
+        allocationGroupId?: string | null;
+        allocationGroup?: __.Association.to<_trix_core.TimeAllocationGroup> | null;
+        allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<_trix_core.User2Allocation_>;
       static actions: {
     }
@@ -79,6 +81,23 @@ export class TimeAllocationSet extends _._cuidAspect(_._managedAspect(_._tempora
 export class TimeAllocationSet_ extends Array<TimeAllocationSet> {}
 Object.defineProperty(TimeAllocationSet, 'name', { value: 'TrixCoreService.TimeAllocationSet' })
 Object.defineProperty(TimeAllocationSet_, 'name', { value: 'TrixCoreService.TimeAllocationSet' })
+
+export function _TimeAllocationGroupSetAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
+  return class TimeAllocationGroupSet extends Base {
+        title?: string | null;
+        description?: string | null;
+        hex?: string | null;
+        icon?: string | null;
+        order?: number | null;
+        timeAllocations?: __.Association.to.many<_trix_core.TimeAllocation_>;
+      static actions: {
+    }
+  };
+}
+export class TimeAllocationGroupSet extends _._cuidAspect(_._managedAspect(_._temporalAspect(_TimeAllocationGroupSetAspect(__.Entity)))) {}
+export class TimeAllocationGroupSet_ extends Array<TimeAllocationGroupSet> {}
+Object.defineProperty(TimeAllocationGroupSet, 'name', { value: 'TrixCoreService.TimeAllocationGroupSet' })
+Object.defineProperty(TimeAllocationGroupSet_, 'name', { value: 'TrixCoreService.TimeAllocationGroupSet' })
 
 export function _User2AllocationSetAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
   return class User2AllocationSet extends Base {
@@ -261,6 +280,6 @@ export declare const getRegistrationStatuses: { (): Array<_trix_common_types.Enu
 // action
 export declare const getRegistrationTypes: { (): Array<_trix_common_types.EnumPair>, __parameters: {}, __returns: Array<_trix_common_types.EnumPair> };
 // action
-export declare const getAllocationTypes: { (): Array<_trix_core.AllocationType>, __parameters: {}, __returns: Array<_trix_core.AllocationType> };
+export declare const getAllocationTypes: { (): Array<string>, __parameters: {}, __returns: Array<string> };
 // action
 export declare const getActiveUser: { (): UserSet | null, __parameters: {}, __returns: UserSet | null };

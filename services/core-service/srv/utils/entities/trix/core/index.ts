@@ -27,19 +27,30 @@ export const RegistrationType = {
 } as const;
 export type RegistrationType = 0 | 1
 
-// enum
-export const AllocationType = {
-  Project: "Project",
-  Service: "Service",
-  AbsenceAttendance: "AbsenceAttendance",
-} as const;
-export type AllocationType = "Project" | "Service" | "AbsenceAttendance"
+export function _TimeAllocationGroupAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
+  return class TimeAllocationGroup extends Base {
+        title?: string | null;
+        description?: string | null;
+        hex?: string | null;
+        icon?: string | null;
+        order?: number | null;
+        timeAllocations?: __.Association.to.many<TimeAllocation_>;
+      static actions: {
+    }
+  };
+}
+export class TimeAllocationGroup extends _._cuidAspect(_._managedAspect(_._temporalAspect(_TimeAllocationGroupAspect(__.Entity)))) {}
+export class TimeAllocationGroup_ extends Array<TimeAllocationGroup> {}
+Object.defineProperty(TimeAllocationGroup, 'name', { value: 'trix.core.TimeAllocationGroup' })
+Object.defineProperty(TimeAllocationGroup_, 'name', { value: 'trix.core.TimeAllocationGroup' })
 
 export function _TimeAllocationAspect<TBase extends new (...args: any[]) => object>(Base: TBase) {
   return class TimeAllocation extends Base {
         description?: string | null;
         isAbsence?: boolean | null;
-        allocationType?: AllocationType | null;
+        allocationGroupId?: string | null;
+        allocationGroup?: __.Association.to<TimeAllocationGroup> | null;
+        allocationGroup_ID?: string | null;
         allocatedUsers?: __.Association.to.many<User2Allocation_>;
       static actions: {
     }

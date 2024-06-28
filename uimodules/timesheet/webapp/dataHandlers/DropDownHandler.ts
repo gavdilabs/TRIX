@@ -4,7 +4,6 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import ODataModel from "sap/ui/model/odata/v4/ODataModel";
 import { trix } from "../model/entities-core";
 import ModelDataHelper from "../utils/ModelDataHelper";
-import ApplicationModelHandler from "./ApplicationModelHandler";
 
 /**
  * Interface for the items in the Allocation Tree
@@ -14,13 +13,6 @@ export interface IAllocationTreeItem {
 	key: string;
 	isSelectable: boolean;
 	nodes?: IAllocationTreeItem[];
-}
-
-/**
- * Extension Interface to get access to the allocation navTo on TimeAllocation
- */
-export interface IExtendedTimeAllocation extends trix.core.ITimeAllocation {
-	allocationTypeExtended: trix.core.AllocationType | ExtendedAllocationTypes;
 }
 
 /**
@@ -38,6 +30,7 @@ export interface IAllocationType {
 	key: string;
 	value: string;
 	color: string;
+	order: number;
 }
 
 /**
@@ -71,7 +64,7 @@ export default class DropDownHandler {
 	 */
 	private async refreshListAllocationTypes(
 		forceRefresh: boolean = false
-	): Promise<{ key: string; value: string }[]> {
+	): Promise<IAllocationType[]> {
 		if (
 			this.controller
 				.getView()
@@ -81,32 +74,20 @@ export default class DropDownHandler {
 			return;
 		}
 
-		let data = await ModelDataHelper.getModelData<string[]>(
-			this.odataModel,
-			"/getAllocationTypes()",
-			{}
-		);
-
-		//We Remove the combined absence and attendance and add 2 individual
-		data = data.filter(
-			(dataItem) =>
-				dataItem !== (trix.core.AllocationType.AbsenceAttendance as string)
-		);
-		data.push(ExtendedAllocationTypes.Absence);
-		data.push(ExtendedAllocationTypes.Attendance);
+		const groups = await ModelDataHelper.getModelData<
+			trix.core.ITimeAllocationGroup[]
+		>(this.odataModel, "/TimeAllocationGroupSet", {});
 
 		const parsedTypes: IAllocationType[] = [];
-		if (data && Array.isArray(data)) {
-			data.forEach((itemName) =>
+		if (groups && Array.isArray(groups)) {
+			groups.forEach((item) => {
 				parsedTypes.push({
-					key: itemName,
-					value: this.i18nBundle.getText(`AllocationType${itemName}`),
-					color: ApplicationModelHandler.getInstance().getColorByAllocationType(
-						itemName as trix.core.AllocationType,
-						itemName === (ExtendedAllocationTypes.Attendance as string)
-					),
-				})
-			);
+					key: item.ID,
+					value: item.title,
+					color: item.hex,
+					order: item.order,
+				});
+			});
 			this.controller
 				.getView()
 				.setModel(
@@ -126,20 +107,60 @@ export default class DropDownHandler {
 	 * @param subtypeId allocation subtype from the AllocationType
 	 * @returns boolean true | false
 	 */
-	public isSubtypeAttendance(
-		allocationType: trix.core.AllocationType,
-		subtypeId: string
-	): boolean {
-		const allSubtypes = (
-			this.controller.getView().getModel("ListAllocationSubTypes") as JSONModel
+	public isTimeAllocationAttendance(allocationId: string): boolean {
+		const timeAlloc = this.getTimeAllocationById(allocationId);
+		return timeAlloc && timeAlloc.isAbsence ? false : true;
+	}
+
+	/**
+	 * Function for getting a ITimeAllocation Object from cache
+	 * @param subtypeId id for the allocation suubtype
+	 * @returns ITimeAllocation object or undefined
+	 */
+	private getTimeAllocationById(
+		allocationId: string
+	): trix.core.ITimeAllocation {
+		const allTimeAllocs = (
+			this.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
 		).getData() as trix.core.ITimeAllocation[];
 
-		const subtype = allSubtypes?.find(
-			(subtypeTmp) =>
-				subtypeTmp.ID === subtypeId &&
-				subtypeTmp.allocationType === allocationType
-		);
-		return subtype && subtype.isAbsence ? false : true;
+		return allTimeAllocs?.find((allocTemp) => allocTemp.ID === allocationId);
+	}
+
+	/**
+	 * Function for getting an object ref to a ITimeAllocationGroup object
+	 * @param groupId string group id
+	 * @returns ITimeAllocationGroup data
+	 */
+	private getTimeAllocationGroupById(
+		groupId: string
+	): IAllocationType | undefined {
+		const allTimeAllocGroups = (
+			this.controller
+				.getView()
+				.getModel(DropDownHandler.MODELNAME_ALLOCATION_TYPES) as JSONModel
+		).getData() as IAllocationType[];
+
+		return allTimeAllocGroups.find((groupTmp) => groupTmp.key === groupId);
+	}
+
+	/**
+	 * Function for returning the color configured for the relevant allocation id
+	 * @param allocationId TimeAllocation ID string key
+	 * @returns hex color (defaults white)
+	 */
+	public getTimeAllocationColor(allocationId: string): string {
+		const timeAlloc = this.getTimeAllocationById(allocationId);
+		if (timeAlloc) {
+			const parentGroup = this.getTimeAllocationGroupById(
+				timeAlloc.allocationGroupId
+			);
+			return parentGroup?.color ? parentGroup.color : "#FFFFFF";
+		} else {
+			return "#FFFFFF";
+		}
 	}
 
 	/**
@@ -149,7 +170,7 @@ export default class DropDownHandler {
 	 */
 	private async refreshListAllocationSubTypes(
 		forceRefresh: boolean = false
-	): Promise<IExtendedTimeAllocation[]> {
+	): Promise<trix.core.ITimeAllocation[]> {
 		if (
 			this.controller
 				.getView()
@@ -160,40 +181,25 @@ export default class DropDownHandler {
 				this.controller
 					.getView()
 					.getModel(DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES) as JSONModel
-			).getData() as IExtendedTimeAllocation[];
+			).getData() as trix.core.ITimeAllocation[];
 		}
 
-		const data = await ModelDataHelper.getModelData<IExtendedTimeAllocation[]>(
-			this.odataModel,
-			"/TimeAllocationSet?$orderby=description",
-			{}
-		);
+		const timeAllocations = await ModelDataHelper.getModelData<
+			trix.core.ITimeAllocation[]
+		>(this.odataModel, "/TimeAllocationSet?$orderby=description", {});
 
-		//Make some overrides on Attendance and Absence
-		data.forEach((dataItem) => {
-			if (
-				dataItem.allocationType === trix.core.AllocationType.AbsenceAttendance
-			) {
-				dataItem.allocationTypeExtended = dataItem.isAbsence
-					? ExtendedAllocationTypes.Absence
-					: ExtendedAllocationTypes.Attendance;
-			} else {
-				dataItem.allocationTypeExtended = dataItem.allocationType;
-			}
-		});
-
-		if (data && Array.isArray(data)) {
+		if (timeAllocations && Array.isArray(timeAllocations)) {
 			this.controller
 				.getView()
 				.setModel(
-					new JSONModel(data),
+					new JSONModel(timeAllocations),
 					DropDownHandler.MODELNAME_ALLOCATION_SUB_TYPES
 				);
 
-			return data;
+			return timeAllocations;
+		} else {
+			return [];
 		}
-
-		return [];
 	}
 
 	/**
@@ -251,8 +257,7 @@ export default class DropDownHandler {
 
 			//Link all children to the parent node
 			const subtypes4Parent = subTypes.filter(
-				(item) =>
-					item.allocationTypeExtended === (parentNode.key as trix.core.AllocationType)
+				(item) => item.allocationGroupId === parentNode.key
 			);
 			addSubtypesToParent(parentNode, subtypes4Parent);
 			nodesStructure.push(parentNode);

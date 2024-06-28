@@ -11,40 +11,45 @@ namespace trix.core;
 
 @assert.range
 type RecordStatus       : Integer enum {
-  Awaiting          = 0;
-  Processing        = 1;
-  Complete          = 2;
-  Error             = 3;
+  Awaiting   = 0;
+  Processing = 1;
+  Complete   = 2;
+  Error      = 3;
 }
 
 @assert.range
 type RegistrationStatus : Integer enum {
-  InProcess         = 1; // 10
-  Complete          = 2; // 20
-  Approved          = 3; // 30
-  Rejected          = 4; // 40
+  InProcess  = 1; // 10
+  Complete   = 2; // 20
+  Approved   = 3; // 30
+  Rejected   = 4; // 40
 }
 
 @assert.range
 type RegistrationType   : Integer enum {
-  Manual            = 0;
-  ClockInOut        = 1;
+  Manual     = 0;
+  ClockInOut = 1;
 }
 
-@assert.range
-type AllocationType     : String enum {
-  Project           = 'Project';
-  Service           = 'Service';
-  AbsenceAttendance = 'AbsenceAttendance';
+entity TimeAllocationGroup : cuid, managed, temporal {
+  title           : String(100);
+  description     : String(1000);
+  hex             : String(25);
+  icon            : String(200);
+  order           : Integer;
+  timeAllocations : Association to many TimeAllocation
+                      on timeAllocations.allocationGroupId = ID;
 }
 
 // aka. Project or Worklist
 entity TimeAllocation : cuid, managed, temporal {
-  description    : String(1000);
-  isAbsence      : Boolean;
-  allocationType : AllocationType;
-  allocatedUsers : Association to many User2Allocation
-                     on allocatedUsers.allocationID = ID;
+  description       : String(1000);
+  isAbsence         : Boolean;
+  allocationGroupId : String;
+  allocationGroup   : Association to TimeAllocationGroup
+                        on allocationGroup.ID = allocationGroupId;
+  allocatedUsers    : Association to many User2Allocation
+                        on allocatedUsers.allocationID = ID;
 }
 
 entity User : managed {
